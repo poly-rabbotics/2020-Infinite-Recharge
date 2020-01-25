@@ -14,10 +14,13 @@ public class MechanismsJoystick {
   
   private static Joystick joystick = RobotMap.mechanismsJoystick;
 
-  public static double getChangeTopShooter(){
+  public static double getChangeTopShooter() {
     return joystick.getRawAxis(1);
   }
-  public static double getChangeBottomShooter(){
+  public static double getChangeBottomShooter() {
     return joystick.getRawAxis(5);
+  }
+  public static boolean getToggleClimbingSystem() {
+    return joystick.getRawButton(5) && joystick.getRawButton(6) && joystick.getRawButton(7) && joystick.getRawButton(8);
   }
 }

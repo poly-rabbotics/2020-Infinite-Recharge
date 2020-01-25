@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;;
 
 /**
  * Add your docs here.
@@ -22,6 +23,6 @@ public class RobotMap {
   public static final PWMVictorSPX backL = new PWMVictorSPX(3);
   public static final PWMVictorSPX backR = new PWMVictorSPX(4);
 
-  public static final PWMVictorSPX shooterTopMotor = new PWMVictorSPX(0);
-  public static final PWMVictorSPX shooterBottomMotor = new PWMVictorSPX(1);
+  public static final TalonSRX shooterTopMotor = new TalonSRX(1);
+  public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
 }
