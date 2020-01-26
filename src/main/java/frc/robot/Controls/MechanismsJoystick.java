@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Controls;
+package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
@@ -21,6 +21,13 @@ public class MechanismsJoystick {
     return joystick.getRawAxis(5);
   }
   public static boolean getToggleClimbingSystem() {
-    return joystick.getRawButton(5) && joystick.getRawButton(6) && joystick.getRawButton(7) && joystick.getRawButton(8);
+    return joystick.getRawButton(5) && joystick.getRawButton(6) 
+        && joystick.getRawButton(7) && joystick.getRawButton(8);
+  }
+  public static boolean getIncreaseSpeedRatio() {
+    return joystick.getRawButton(5);
+  }
+  public static boolean getDecreaseSpeedRatio() {
+    return joystick.getRawButton(6);
   }
 }
