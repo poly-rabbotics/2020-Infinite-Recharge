@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Drive drive;
-  Shooter shooter;
+  CalibratableShooter shooter;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
     drive = new Drive();
-    shooter = new Shooter();
+    shooter = new CalibratableShooter();
   }
 
   /**
@@ -92,7 +92,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drive.run();
-    shooter.run();
+    shooter.calibrationRun();
   }
 
   /**
