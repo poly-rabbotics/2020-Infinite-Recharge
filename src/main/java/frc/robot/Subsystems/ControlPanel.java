@@ -10,13 +10,14 @@ package frc.robot.Subsystems;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
+import frc.robot.Controls.Joystick1;
 
 /**
  * Add your docs here.
  */
 public class ControlPanel extends Subsystem {
   private Spark panelMotor;
-  private int panelMotorSpeed;
+  private double panelMotorSpeed;
 
   public ControlPanel(){
 
@@ -25,11 +26,12 @@ public class ControlPanel extends Subsystem {
 
   }
 
-  public void Run(){
-    if(MechanismsJoystick.getChanePanelSpeed() > 0.1 && panelMotorSpeed <= 1) {
+  public void run(){
+    panelMotor.set(panelMotorSpeed);
+    if(Joystick1.getChangePanelSpeed() > 0.1 && panelMotorSpeed <= 1) {
       panelMotorSpeed += .005;
     }
-    else if(MechanismsJoystick.getChangePanelSpeed() < -0.1 && panelMotorSpeed >= 0) {
+    else if(Joystick1.getChangePanelSpeed() < -0.1 && panelMotorSpeed >= 0) {
       panelMotorSpeed -= .005;
     }
   }
