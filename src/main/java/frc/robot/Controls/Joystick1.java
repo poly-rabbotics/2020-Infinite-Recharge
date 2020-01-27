@@ -22,4 +22,8 @@ public class Joystick1{
     double speed = firstJoystick.getRawAxis(4);
     return speed;
   }
+  public static double getChangePanel(){
+    double speed = firstJoystick.getRawAxis(0);
+    return speed;
+  }
 }

@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Spark;
 
 /**
  * Add your docs here.
@@ -21,4 +22,6 @@ public class RobotMap {
   public static final PWMVictorSPX frontR = new PWMVictorSPX(5);
   public static final PWMVictorSPX backL = new PWMVictorSPX(3);
   public static final PWMVictorSPX backR = new PWMVictorSPX(4);
+
+  public static final Spark controlPanelMotor = new Spark(6);
 }
