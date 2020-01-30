@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Controls;
+package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
