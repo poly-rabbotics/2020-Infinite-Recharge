@@ -26,6 +26,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Drive drive;
   Shooter shooter;
+  Climb climber;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     drive = new Drive();
     shooter = new Shooter();
+    climber = new Climb();
   }
 
   /**
@@ -92,7 +94,8 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drive.run();
-    shooter.run();
+    //shooter.run();
+    climber.run();
   }
 
   /**

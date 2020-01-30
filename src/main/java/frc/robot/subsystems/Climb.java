@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.RobotMap;
-import frc.robot.controls.MechanismsJoystick;
+import frc.robot.Controls.MechanismsJoystick;
 
 public class Climb {
     DoubleSolenoid solenoid;

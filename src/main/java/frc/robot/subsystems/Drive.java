@@ -10,7 +10,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.RobotMap;
-import frc.robot.controls.DriveJoystick;
+import frc.robot.Controls.DriveJoystick;
 
 /**
  * Add your docs here.
