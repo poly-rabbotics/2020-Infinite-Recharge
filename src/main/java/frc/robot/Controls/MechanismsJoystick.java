@@ -23,4 +23,10 @@ public class MechanismsJoystick {
   public static boolean getToggleClimbingSystem() {
     return joystick.getRawButton(5) && joystick.getRawButton(6) && joystick.getRawButton(7) && joystick.getRawButton(8);
   }
+  public static boolean getToggleArm() {
+    return joystick.getRawButton(4);
+  }
+  public static double getChangeIntake() {
+    return joystick.getRawAxis(0);
+  }
 }
