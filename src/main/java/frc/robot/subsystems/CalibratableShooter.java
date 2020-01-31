@@ -1,31 +1,44 @@
 package frc.robot.subsystems;
 
 import frc.robot.controls.MechanismsJoystick;
-import frc.robot.partspecs.Falcon500Math;
+import frc.robot.partdata.Falcon500Data;
+import frc.robot.utils.KGains;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 public class CalibratableShooter extends Shooter {
-    double desiredMeanRPM;
-    double topSpeedDividedByBottomSpeed;
-    double acceptablePercentError;
+    private double desiredMeanRPM;
+    private double topSpeedDividedByBottomSpeed;
+    private double acceptablePercentError;
+    private KGains kGainsVelocity;
+
+
     public CalibratableShooter() {
         super();
         desiredMeanRPM = 240;
         topSpeedDividedByBottomSpeed = 0;
         acceptablePercentError = 1;
+        kGainsVelocity = new KGains(0, 0.2, 0, 0);
+        topMotor.config_kF(Falcon500Data.pidLoopIndex, kGainsVelocity.kF);
+        topMotor.config_kP(Falcon500Data.pidLoopIndex, kGainsVelocity.kP);
+        topMotor.config_kI(Falcon500Data.pidLoopIndex, kGainsVelocity.kI);
+        topMotor.config_kD(Falcon500Data.pidLoopIndex, kGainsVelocity.kD);
+        bottomMotor.config_kF(Falcon500Data.pidLoopIndex, kGainsVelocity.kF);
+        bottomMotor.config_kP(Falcon500Data.pidLoopIndex, kGainsVelocity.kP);
+        bottomMotor.config_kI(Falcon500Data.pidLoopIndex, kGainsVelocity.kI);
+        bottomMotor.config_kD(Falcon500Data.pidLoopIndex, kGainsVelocity.kD);
     }
     private void adjustDesiredMeanRPM() {
         if(MechanismsJoystick.getChangeTopShooter() > 0.1 
-          && desiredMeanRPM < Falcon500Math.freeRPM * 0.75) {
-            desiredMeanRPM += Falcon500Math.freeRPM / 5000 
+          && desiredMeanRPM < Falcon500Data.freeRPM * 0.75) {
+            desiredMeanRPM += Falcon500Data.freeRPM / 5000 
                     * Math.pow(MechanismsJoystick.getChangeTopShooter(), 2);
         }
         else if(MechanismsJoystick.getChangeTopShooter() < -0.1
-                && desiredMeanRPM > -Falcon500Math.freeRPM * 0.75) {
-            desiredMeanRPM += Falcon500Math.freeRPM / 5000 
+                && desiredMeanRPM > -Falcon500Data.freeRPM * 0.75) {
+            desiredMeanRPM += Falcon500Data.freeRPM / 5000 
                     * Math.pow(MechanismsJoystick.getChangeTopShooter(), 2);
         }
     }
@@ -62,8 +75,8 @@ public class CalibratableShooter extends Shooter {
     public void calibrationRun() {
         adjustDesiredMeanRPM();
         adjustDesiredSpeedRatio();
-        int desiredTopCountsPerPeriod = Falcon500Math.getCountsPerPeriodFromRPM(100, getDesiredTopSpeed());
-        int desiredBottomCountsPerPeriod = Falcon500Math.getCountsPerPeriodFromRPM(100, getDesiredBottomSpeed());
+        int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
+        int desiredBottomCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredBottomSpeed());
         int topPercentError = 1000; //if unable to set toppercenterror, get some number so that the program doesn't crash
         if (desiredTopCountsPerPeriod != 0) {
             topPercentError = topMotor.getClosedLoopError() / desiredTopCountsPerPeriod * 100;

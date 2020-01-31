@@ -24,7 +24,7 @@ public class Shooter {
           topMotorSpeed -= .005;
         }
         if(MechanismsJoystick.getChangeBottomShooter() > .1 && bottomMotorSpeed <= 1) {
-          bottomMotorSpeed -= .005;
+          bottomMotorSpeed += .005;
         }
         else if(MechanismsJoystick.getChangeBottomShooter() <- .1 && bottomMotorSpeed >= 0) {
           bottomMotorSpeed -= .005;
