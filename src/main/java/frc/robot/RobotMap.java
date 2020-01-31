@@ -9,7 +9,9 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 
 /**
  * Add your docs here.
@@ -18,11 +20,11 @@ public class RobotMap {
   public static final Joystick driveJoystick = new Joystick(0);
   public static final Joystick mechanismsJoystick = new Joystick(1);
 
-  public static final PWMVictorSPX frontL = new PWMVictorSPX(2);
-  public static final PWMVictorSPX frontR = new PWMVictorSPX(5);
-  public static final PWMVictorSPX backL = new PWMVictorSPX(3);
-  public static final PWMVictorSPX backR = new PWMVictorSPX(4);
-
   public static final TalonSRX shooterTopMotor = new TalonSRX(1);
   public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
+
+  public static final CANSparkMax leftFront = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+  public static final CANSparkMax leftBack = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+  public static final CANSparkMax rightFront = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+  public static final CANSparkMax rightBack = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
 }
