@@ -22,15 +22,19 @@ public class Intake extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
   private DoubleSolenoid intakePneumatic;
-  private PWMVictorSPX intakeWheel;
+  private PWMVictorSPX intakeWheel, topConveyorBelt, bottomConveyorBelt;
   boolean out;
-  double motorSpeed;
+  double motorSpeed,topBeltSpeed,bottomBeltSpeed;
 
   public Intake() {
     intakePneumatic = RobotMap.intakeSolenoid;
     intakeWheel = RobotMap.intakeMotor;
+    topConveyorBelt = RobotMap.topBeltMotor;
+    bottomConveyorBelt = RobotMap.bottomBeltMotor; 
     out = false;
     motorSpeed = 0.5;
+    topBeltSpeed = 0;
+    bottomBeltSpeed = 0;
   }
 
   private void runPneumatics() {
@@ -43,7 +47,7 @@ public class Intake extends Subsystem {
       out = false;
     }
   }
-  private void runMotor(){
+  private void runIntakeMotor(){
     intakeWheel.set(motorSpeed);
     if(MechanismsJoystick.getChangeIntake() > 0.1 && motorSpeed < 1){
       motorSpeed += .005;
@@ -52,9 +56,30 @@ public class Intake extends Subsystem {
       motorSpeed -= .005;
     }
   }
+  private void runBeltMotors(){
+    topConveyorBelt.set(topBeltSpeed);
+    bottomConveyorBelt.set(bottomBeltSpeed);
+
+    //toggle top belt
+    if (MechanismsJoystick.getToggleTopBelt() == true && topBeltSpeed == 0){
+      topBeltSpeed = 0.5;
+    }
+    else if (MechanismsJoystick.getToggleTopBelt() == true && topBeltSpeed == 0.5){
+      topBeltSpeed = 0;
+    }
+    //toggle bottom belt
+    if (MechanismsJoystick.getToggleBottomBelt() == true && bottomBeltSpeed == 0) {
+    bottomBeltSpeed = 0.5;
+   }
+   else if (MechanismsJoystick.getToggleBottomBelt() == true && bottomBeltSpeed == 0.5) {
+  bottomBeltSpeed = 0;
+   }
+  
+  }
    public void run(){
-    runMotor();
+    runIntakeMotor();
     runPneumatics();
+    runBeltMotors();
     SmartDashboard.putNumber("Motor Speed: ", motorSpeed);
    }
 

@@ -30,4 +30,6 @@ public class RobotMap {
 
   public static final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0,1);
   public static final PWMVictorSPX intakeMotor = new PWMVictorSPX(6);
+  public static final PWMVictorSPX topBeltMotor = new PWMVictorSPX(7);
+  public static final PWMVictorSPX bottomBeltMotor = new PWMVictorSPX(8); 
 }

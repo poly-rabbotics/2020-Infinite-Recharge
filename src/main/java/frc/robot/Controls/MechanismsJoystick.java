@@ -29,4 +29,10 @@ public class MechanismsJoystick {
   public static double getChangeIntake() {
     return joystick.getRawAxis(0);
   }
+  public static boolean getToggleTopBelt(){
+    return joystick.getRawButton(2);
+  } 
+  public static boolean getToggleBottomBelt(){
+    return joystick.getRawButton(3);
+    }
 }
