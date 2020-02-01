@@ -37,6 +37,7 @@ public class Intake extends Subsystem {
     bottomBeltSpeed = 0;
   }
 
+  //Pneumatics controller
   private void runPneumatics() {
     if (MechanismsJoystick.getToggleArm() == true && out == false) {
       intakePneumatic.set(Value.kForward);
