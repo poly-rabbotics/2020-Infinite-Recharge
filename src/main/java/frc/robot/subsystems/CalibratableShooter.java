@@ -1,7 +1,7 @@
 package frc.robot.subsystems;
 
-import frc.robot.controls.MechanismsJoystick;
-import frc.robot.partdata.Falcon500Data;
+import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.partData.Falcon500Data;
 import frc.robot.utils.KGains;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
