@@ -22,4 +22,8 @@ public class DriveJoystick {
     double speed = joystick.getRawAxis(4);
     return speed;
   }
+
+  public static boolean getFront(){
+    return joystick.getRawButton(3);
+  }
 }

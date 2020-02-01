@@ -18,17 +18,32 @@ import frc.robot.controls.DriveJoystick;
 public class Drive {
   private SpeedControllerGroup left, right;
   private DifferentialDrive drive;
+  static boolean shooterFront;
   public Drive() {
 
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
     right = new SpeedControllerGroup(RobotMap.backL, RobotMap.backR);
     drive = new DifferentialDrive(right,left);
 
+    shooterFront = true;
+
   }
 
   public void run(){
     double move = DriveJoystick.getMove();
     double turn = DriveJoystick.getTurn();
-    drive.arcadeDrive(move, turn);
+  
+    if(DriveJoystick.getFront() == true && shooterFront){
+      shooterFront = false;
+    }
+    else if(DriveJoystick.getFront() == true && shooterFront == false){
+      shooterFront = true;
+    }
+    if (shooterFront == true){
+      drive.arcadeDrive(move, turn);
+    }
+    else{
+      drive.arcadeDrive(-move, turn);
+    }
   }
 }
