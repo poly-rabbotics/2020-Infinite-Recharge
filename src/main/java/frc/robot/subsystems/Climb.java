@@ -10,6 +10,7 @@ public class Climb {
 
     public Climb() {
         solenoid = RobotMap.climbSolenoid;
+        solenoid.set(Value.kReverse);
     }
     public void run() {
         if (MechanismsJoystick.getToggleClimbingSystem()) {
