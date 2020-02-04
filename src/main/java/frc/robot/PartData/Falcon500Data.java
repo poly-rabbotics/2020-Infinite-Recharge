@@ -1,4 +1,4 @@
-package frc.robot.partData;
+package frc.robot.partdata;
 
 public class Falcon500Data {
     public final static int countsPerRevolution = 2048;
