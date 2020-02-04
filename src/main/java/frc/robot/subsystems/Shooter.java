@@ -1,6 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.Controls.MechanismsJoystick;
+import frc.robot.controls.MechanismsJoystick;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
