@@ -1,5 +1,5 @@
 package frc.robot.subsystems;
-
+/*
 import frc.robot.controls.MechanismsJoystick;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
@@ -37,4 +37,4 @@ public class Shooter {
         topMotor.set(ControlMode.PercentOutput, topMotorSpeed);
         bottomMotor.set(ControlMode.PercentOutput, bottomMotorSpeed);
     }
-}
+}*/
