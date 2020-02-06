@@ -13,10 +13,10 @@ camera = RobotMap.camera;
 public void run(){
 
     if(Drive.shooterFront){
-        camera.set(0.0);
+        camera.set(0.27);
     }
     else{
-        camera.set(0.5);
+        camera.set(1.0);
     }
 
 }

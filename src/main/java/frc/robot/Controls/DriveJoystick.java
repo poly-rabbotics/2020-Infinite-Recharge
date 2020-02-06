@@ -24,6 +24,7 @@ public class DriveJoystick {
   }
 
   public static boolean getFront(){
-    return joystick.getRawButton(3);
+    return joystick.getRawButtonPressed(2);
+
   }
 }

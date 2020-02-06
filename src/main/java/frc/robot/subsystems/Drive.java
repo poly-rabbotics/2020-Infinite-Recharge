@@ -9,6 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.controls.DriveJoystick;
 
@@ -32,18 +33,18 @@ public class Drive {
   public void run(){
     double move = DriveJoystick.getMove();
     double turn = DriveJoystick.getTurn();
-  
-    if(DriveJoystick.getFront() == true && shooterFront){
-      shooterFront = false;
+
+    if(DriveJoystick.getFront()) {
+      shooterFront = !shooterFront;
     }
-    else if(DriveJoystick.getFront() == true && shooterFront == false){
-      shooterFront = true;
-    }
-    if (shooterFront == true){
+    
+    if (shooterFront){
       drive.arcadeDrive(move, turn);
     }
     else{
       drive.arcadeDrive(-move, turn);
     }
+    SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
+    SmartDashboard.putBoolean("getFront: ",DriveJoystick.getFront());
   }
 }
