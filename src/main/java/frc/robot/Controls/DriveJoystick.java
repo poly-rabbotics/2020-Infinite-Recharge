@@ -10,6 +10,7 @@ package frc.robot.controls;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
 
+
 public class DriveJoystick {
   
   private static Joystick joystick = RobotMap.driveJoystick;
@@ -21,5 +22,10 @@ public class DriveJoystick {
   public static double getTurn(){
     double speed = joystick.getRawAxis(4);
     return speed;
+  }
+
+  public static boolean getFront(){
+    return joystick.getRawButtonPressed(2);
+
   }
 }
