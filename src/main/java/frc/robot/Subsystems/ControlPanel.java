@@ -7,10 +7,13 @@
 
 package frc.robot.subsystems;
 
+import com.revrobotics.ColorSensorV3;
+
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotMap;
 import frc.robot.controls.DriveJoystick;
 
@@ -19,18 +22,25 @@ import frc.robot.controls.DriveJoystick;
  */
 public class ControlPanel extends Subsystem {
   private Spark panelMotor;
-  private double panelMotorSpeed, requiredRotations;
+  private double panelMotorSpeed, requiredRotations, IR;
   private Encoder encoder;
   private boolean spinning;
+ private ColorSensorV3 colorSensor;
+  private Color detectedColor;
+  
 
 
   public ControlPanel(){
 
     panelMotor = RobotMap.controlPanelMotor;
     panelMotorSpeed = .5;
-    requiredRotations = 1000;
+    requiredRotations = 1000; // must be changed
     encoder = RobotMap.controlPanelEncoder;
     spinning = false;
+    colorSensor = RobotMap.controlPanelColorSensor;
+    detectedColor = colorSensor.getColor();
+    IR = colorSensor.getIR();
+    
 
   }
   public void threeRotation(){
@@ -55,6 +65,13 @@ public class ControlPanel extends Subsystem {
     SmartDashboard.putNumber(" Number of Rotations ", encoder.get());
   }
 
+  public void colorSensor(){
+    detectedColor = colorSensor.getColor();
+    SmartDashboard.putNumber("Red", detectedColor.red);
+    SmartDashboard.putNumber("Green", detectedColor.green);
+    SmartDashboard.putNumber("Blue", detectedColor.blue);
+    SmartDashboard.putNumber("IR", IR);
+  }
 
   public void run(){
     panelMotor.set(panelMotorSpeed);

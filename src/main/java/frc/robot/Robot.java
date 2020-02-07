@@ -95,6 +95,7 @@ public class Robot extends TimedRobot {
     drive.robotDrive();
    // controlPanel.run();
     controlPanel.testRequiredRotation();
+   controlPanel.colorSensor();
     //controlPanel.threeRotation();
 
   }
