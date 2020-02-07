@@ -5,14 +5,14 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Controls;
+package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
 
-public class Joystick1{
+public class DriveJoystick{
   
-  private static Joystick firstJoystick = RobotMap.joystick1;
+  private static Joystick firstJoystick = RobotMap.driveJoystick;
 
   public static double getMove(){
     double speed = firstJoystick.getRawAxis(1);
@@ -25,5 +25,8 @@ public class Joystick1{
   public static double getChangePanelSpeed(){
     double speed = firstJoystick.getRawAxis(0);
     return speed;
+  }
+  public static boolean getToggleRotation(){
+    return firstJoystick.getRawButton(2);
   }
 }

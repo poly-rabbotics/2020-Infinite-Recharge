@@ -5,13 +5,13 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import frc.robot.RobotMap;
-import frc.robot.Controls.Joystick1;
+import frc.robot.controls.DriveJoystick;
 
 /**
  * Add your docs here.
@@ -28,8 +28,8 @@ public class Drive extends Subsystem {
   }
 
   public void robotDrive(){
-    double move = Joystick1.getMove();
-    double turn = Joystick1.getTurn();
+    double move = DriveJoystick.getMove();
+    double turn = DriveJoystick.getTurn();
     drive.arcadeDrive(move, turn);
   }
   @Override

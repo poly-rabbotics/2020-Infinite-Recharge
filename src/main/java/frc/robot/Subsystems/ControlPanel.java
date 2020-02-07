@@ -5,33 +5,63 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.Subsystems;
+package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
-import frc.robot.Controls.Joystick1;
+import frc.robot.controls.DriveJoystick;
 
-/**
+/** 
  * Add your docs here.
  */
 public class ControlPanel extends Subsystem {
   private Spark panelMotor;
-  private double panelMotorSpeed;
+  private double panelMotorSpeed, requiredRotations;
+  private Encoder encoder;
+  private boolean spinning;
+
 
   public ControlPanel(){
 
     panelMotor = RobotMap.controlPanelMotor;
     panelMotorSpeed = .5;
+    requiredRotations = 1000;
+    encoder = RobotMap.controlPanelEncoder;
+    spinning = false;
 
   }
+  public void threeRotation(){
+   if(DriveJoystick.getToggleRotation() == true){
+      panelMotor.set(panelMotorSpeed);
+   }
+   if(encoder.get() > requiredRotations){
+     panelMotor.set(0);
+   }
+   SmartDashboard.putNumber(" Number of Rotations ", encoder.get());
+  }
+
+  public void testRequiredRotation(){
+    if(DriveJoystick.getToggleRotation() == true && spinning == false){
+      panelMotor.set(panelMotorSpeed);
+      spinning = true;
+    }
+    else if(DriveJoystick.getToggleRotation() == true && spinning == true){
+      panelMotor.set(0);
+      spinning = false;
+    }
+    SmartDashboard.putNumber(" Number of Rotations ", encoder.get());
+  }
+
 
   public void run(){
     panelMotor.set(panelMotorSpeed);
-    if(Joystick1.getChangePanelSpeed() > 0.1 && panelMotorSpeed <= 1) {
+    if(DriveJoystick.getChangePanelSpeed() > 0.1 && panelMotorSpeed <= 1) {
       panelMotorSpeed += .005;
     }
-    else if(Joystick1.getChangePanelSpeed() < -0.1 && panelMotorSpeed >= 0) {
+    else if(DriveJoystick.getChangePanelSpeed() < -0.1 && panelMotorSpeed >= 0) {
       panelMotorSpeed -= .005;
     }
   }
