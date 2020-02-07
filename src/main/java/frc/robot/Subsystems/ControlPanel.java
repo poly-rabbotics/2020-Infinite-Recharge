@@ -22,9 +22,9 @@ import frc.robot.controls.DriveJoystick;
  */
 public class ControlPanel extends Subsystem {
   private Spark panelMotor;
-  private double panelMotorSpeed, requiredRotations, IR;
+  private double panelMotorSpeed, requiredRotations, IR, detectedTop, detectedBottom;
   private Encoder encoder;
-  private boolean spinning;
+  private boolean spinning, blue;
  private ColorSensorV3 colorSensor;
   private Color detectedColor;
   
@@ -40,7 +40,9 @@ public class ControlPanel extends Subsystem {
     colorSensor = RobotMap.controlPanelColorSensor;
     detectedColor = colorSensor.getColor();
     IR = colorSensor.getIR();
-    
+    detectedTop = 0.4;
+    detectedBottom = 0.2;
+    blue = false;
 
   }
   public void threeRotation(){
@@ -71,6 +73,15 @@ public class ControlPanel extends Subsystem {
     SmartDashboard.putNumber("Green", detectedColor.green);
     SmartDashboard.putNumber("Blue", detectedColor.blue);
     SmartDashboard.putNumber("IR", IR);
+    SmartDashboard.putBoolean("Is Blue", blue);
+
+    if (detectedColor.blue >= detectedTop && detectedColor.green >= detectedTop && detectedColor.red <= detectedBottom){
+      blue = true;
+    }
+    else{
+      blue = false;
+    }
+
   }
 
   public void run(){
