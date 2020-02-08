@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.AddressableLED;
+import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
 /**
  * Add your docs here.
@@ -23,7 +24,8 @@ public class RobotMap {
   public static final Joystick mechanismsJoystick = new Joystick(1);
 
   //PWM Port
-  public static final AddressableLED led = new AddressableLED(0);
+  public static final AddressableLED led = new AddressableLED(9);
+  public static final AddressableLEDBuffer ledBuffer = new AddressableLEDBuffer(150);
   public static final PWMVictorSPX frontL = new PWMVictorSPX(2);
   public static final PWMVictorSPX frontR = new PWMVictorSPX(5);
   public static final PWMVictorSPX backL = new PWMVictorSPX(3);

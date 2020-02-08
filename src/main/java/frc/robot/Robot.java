@@ -11,6 +11,7 @@ import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.decorations.LED;
 import frc.robot.subsystems.*;
 
 /**
@@ -29,6 +30,7 @@ public class Robot extends TimedRobot {
   Shooter shooter;
   Climb climber;
   CameraServo cameraServo;
+  LED robotLED;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -48,6 +50,7 @@ public class Robot extends TimedRobot {
     shooter = new Shooter();
     climber = new Climb();
     cameraServo = new CameraServo();
+    robotLED = new LED();
   }
 
   /**
@@ -60,6 +63,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    robotLED.run(isEnabled(), isAutonomous());
   }
 
   /**
@@ -105,6 +109,7 @@ public class Robot extends TimedRobot {
     //shooter.run();
     climber.run();
     cameraServo.run();
+    
   }
 
   /**

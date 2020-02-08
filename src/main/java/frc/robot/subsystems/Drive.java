@@ -41,9 +41,11 @@ public class Drive {
     if (shooterFront){
       drive.arcadeDrive(move, turn);
     }
-    else{
+    else 
+    {
       drive.arcadeDrive(-move, turn);
     }
+    
     SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
     SmartDashboard.putBoolean("getFront: ",DriveJoystick.getFront());
   }
