@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -23,7 +24,7 @@ import frc.robot.subsystems.Drive;
 public class Robot extends TimedRobot {
   private static final String kDefaultAuto = "Default";
   private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
+  private String m_autoSelected, gameData;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Drive drive;
   ControlPanel controlPanel;
@@ -39,6 +40,7 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
     drive = new Drive();
     controlPanel =  new ControlPanel();
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
   }
 
   /**
@@ -92,11 +94,35 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
+    if(gameData.length() > 0)
+    {
+      switch (gameData.charAt(0))
+      {
+        case 'B' :
+        controlPanel.dataBlue();
+          break;
+        case 'G' :
+        controlPanel.dataGreen();
+          break;
+        case 'R' :
+        controlPanel.dataRed();
+          break;
+        case 'Y' :
+        controlPanel.dataYellow();
+          break;
+        default :
+          //This is corrupt data
+          break;
+      }
+    }  
+    
     drive.robotDrive();
-   // controlPanel.run();
-    controlPanel.testRequiredRotation();
-   controlPanel.colorSensor();
-    //controlPanel.threeRotation();
+    controlPanel.run();
+    //controlPanel.testRequiredRotation();
+   //controlPanel.colorSensor();
+   //controlPanel.startColorChoice();
+   //controlPanel.colorChoice();
+    //controlPanel.startThreeRotation();
 
   }
 

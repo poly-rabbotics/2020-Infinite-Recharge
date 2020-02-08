@@ -29,4 +29,7 @@ public class DriveJoystick{
   public static boolean getToggleRotation(){
     return firstJoystick.getRawButton(2);
   }
+  public static boolean getToggleColor(){
+    return firstJoystick.getRawButton(3);
+  }
 }
