@@ -12,11 +12,10 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.controls.DriveJoystick;
-import frc.robot.controls.MechanismsJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
-import frc.robot.utils.KGains;
-import edu.wpi.first.wpilibj.controller.PIDController;
+//import edu.wpi.first.wpilibj.controller.PIDController;
+import frc.robot.utils.*;
 
 /**
  * Add your docs here.
@@ -33,21 +32,26 @@ public class Drive {
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
     kGains = new KGains(0.03, 0, 0, 0);
-    turnController = new PIDController(kGains.kP, kGains.kI, kGains.kD, kGains.kI);
+    turnController = new PIDController(kGains, true);
+    //turnController.setTolerance(0.01);
   }
   public void setRotationalSetpoint() {
     turnController.setSetpoint(ahrs.getAngle() + 30); // this is just for testing. Will be replaced with vision.
   }
   public void autoOrient() {
+    SmartDashboard.putNumber("Turn", turnController.calculate(ahrs.getAngle(), 30));
+    SmartDashboard.putNumber("Angle", ahrs.getAngle());
     double turn = turnController.calculate(ahrs.getAngle());
     double move = 0;
     drive.arcadeDrive(move, turn);
   }
   public void run() {
-    if(MechanismsJoystick.getStartAutoOrient()) {
+    SmartDashboard.putNumber("Turn", -1);
+    SmartDashboard.putNumber("Angle", -1);
+    if(DriveJoystick.getStartAutoOrient()) {
       setRotationalSetpoint();
     }
-    if(MechanismsJoystick.getContinueAutoOrient()) {
+    if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
     }
     else {
@@ -55,6 +59,5 @@ public class Drive {
       double turn = DriveJoystick.getTurn();
       drive.arcadeDrive(move, turn);
     }
-    
   }
 }

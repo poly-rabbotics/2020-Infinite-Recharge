@@ -23,10 +23,4 @@ public class MechanismsJoystick {
   public static boolean getToggleClimbingSystem() {
     return joystick.getRawButton(5) && joystick.getRawButton(6) && joystick.getRawButton(7) && joystick.getRawButton(8);
   }
-  public static boolean getStartAutoOrient() {
-    return joystick.getRawButtonPressed(1); //TODO: set to actual button value
-  }
-  public static boolean getContinueAutoOrient() {
-    return joystick.getRawButton(1); //TODO: set to actual button value
-  }
 }

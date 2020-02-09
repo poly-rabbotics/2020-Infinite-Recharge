@@ -21,8 +21,8 @@ public class RobotMap {
 
   public static final AHRS ahrs = new AHRS();
 
-  public static final PWMVictorSPX frontL = new PWMVictorSPX(1);
-  public static final PWMVictorSPX frontR = new PWMVictorSPX(2);
+  public static final PWMVictorSPX frontL = new PWMVictorSPX(2);
+  public static final PWMVictorSPX frontR = new PWMVictorSPX(5);
   public static final PWMVictorSPX backL = new PWMVictorSPX(3);
   public static final PWMVictorSPX backR = new PWMVictorSPX(4);
 

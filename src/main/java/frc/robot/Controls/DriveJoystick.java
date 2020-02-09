@@ -23,4 +23,10 @@ public class DriveJoystick {
     double speed = joystick.getRawAxis(4);
     return speed;
   }
+  public static boolean getStartAutoOrient() {
+    return joystick.getRawButtonPressed(1);
+  }
+  public static boolean getContinueAutoOrient() {
+    return joystick.getRawButton(1);
+  }
 }
