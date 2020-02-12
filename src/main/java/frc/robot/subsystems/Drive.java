@@ -38,9 +38,7 @@ public class Drive {
   public void setRotationalSetpoint() {
     turnController.setSetpoint(ahrs.getAngle() + 30); // this is just for testing. Will be replaced with vision.
   }
-  public void autoOrient() {
-    SmartDashboard.putNumber("Turn", turnController.calculate(ahrs.getAngle(), 30));
-    
+  public void autoOrient() {    
     double turn = turnController.calculate(ahrs.getAngle());
     double move = 0;
     drive.arcadeDrive(move, -turn);
@@ -49,7 +47,7 @@ public class Drive {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
     SmartDashboard.putNumber("setpoint", turnController.getSetpoint());
-    SmartDashboard.putNumber("Accumuluated Error", turnController.getAccumulatedError());
+    SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
     if(DriveJoystick.getStartAutoOrient()) {
       setRotationalSetpoint();
     }

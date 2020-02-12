@@ -52,8 +52,8 @@ public class PIDController {
         System.out.println(getAccumulatedError());
         return getAccumulatedError() * gains.kI;
     }
-    private double restrictToInterval ( double input){
-        double output = Math.max((double)(-1), input);
+    private double restrictToInterval (double input, double lowerBound, double upperBound){
+        double output = Math.min(upperBound, Math.max(lowerBound, input));
         return output;
     }
     private double getDTerm(double measurement) {
@@ -69,13 +69,9 @@ public class PIDController {
         lastMeasurement = measurement;
         return ret;
     }
-    public double calculate(double setpoint, double measurement) {
-        double error = measurement - setpoint;
-        return getPTerm(error) + getITerm(error) + getDTerm(measurement);
-    }
     public double calculate(double measurement) {
         double error = measurement - setpoint;
-        return getPTerm(error) + getITerm(error) + getDTerm(measurement);
+        return restrictToInterval(getPTerm(error) + getITerm(error) + getDTerm(measurement), -1, 1);
     }
 
 }
