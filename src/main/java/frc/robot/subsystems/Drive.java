@@ -31,7 +31,7 @@ public class Drive {
     right = new SpeedControllerGroup(RobotMap.backL, RobotMap.backR);
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
-    kGains = new KGains(0.03, 0, 0, 0);
+    kGains = new KGains(0.0, 0.0001, 0, 0);
     turnController = new PIDController(kGains, true);
     //turnController.setTolerance(0.01);
   }
@@ -40,14 +40,16 @@ public class Drive {
   }
   public void autoOrient() {
     SmartDashboard.putNumber("Turn", turnController.calculate(ahrs.getAngle(), 30));
-    SmartDashboard.putNumber("Angle", ahrs.getAngle());
+    
     double turn = turnController.calculate(ahrs.getAngle());
     double move = 0;
-    drive.arcadeDrive(move, turn);
+    drive.arcadeDrive(move, -turn);
   }
   public void run() {
     SmartDashboard.putNumber("Turn", -1);
-    SmartDashboard.putNumber("Angle", -1);
+    SmartDashboard.putNumber("Angle", ahrs.getAngle());
+    SmartDashboard.putNumber("setpoint", turnController.getSetpoint());
+    SmartDashboard.putNumber("Accumuluated Error", turnController.getAccumulatedError());
     if(DriveJoystick.getStartAutoOrient()) {
       setRotationalSetpoint();
     }

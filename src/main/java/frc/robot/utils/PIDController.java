@@ -1,5 +1,7 @@
 package frc.robot.utils;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 public class PIDController {
     private KGains gains;
     private boolean relationshipIsPositive;
@@ -10,6 +12,7 @@ public class PIDController {
     public PIDController(KGains gains, boolean relationshipIsPositive) {
         this.gains = gains;
         this.relationshipIsPositive = relationshipIsPositive;
+        reset();
     }
     public void reset() {
         lastMeasurementIsMeaningful = false;
@@ -18,24 +21,40 @@ public class PIDController {
     public void setSetpoint(double setpoint) {
         this.setpoint = setpoint;
     }
+    public double getSetpoint() {
+        return setpoint;
+    }
+    public double getAccumulatedError() {
+        return accumulatedError;
+    }
     private double getPTerm(double error) {
         if(!relationshipIsPositive) {
-            return -gains.kP * error;
+            return gains.kP * error;
         }
-        return gains.kP * error;
+        return -gains.kP * error;
     }
     private double getITerm(double error) {
-        if(error * accumulatedError < 0) {
+        SmartDashboard.putNumber("Error at getITerm", error);
+        SmartDashboard.putNumber("accumulated error at getITerm", getAccumulatedError());
+
+        SmartDashboard.putNumber("math", error*getAccumulatedError());
+        
+        if(Math.abs(error) < 1.0) {
             //If the error is opposite of the error that has been accumulated
             //(i.e., we have crossed the setpoint and gone to the other side)
             //then error is zeroed.
             accumulatedError = 0;
         }
-        accumulatedError += error;
-        if(!relationshipIsPositive) {
-            return -gains.kI * error;
+        accumulatedError = error + accumulatedError;
+        if(relationshipIsPositive) {
+            return -gains.kI * getAccumulatedError();
         }
-        return accumulatedError * gains.kI;
+        System.out.println(getAccumulatedError());
+        return getAccumulatedError() * gains.kI;
+    }
+    private double restrictToInterval ( double input){
+        double output = Math.max((double)(-1), input);
+        return output;
     }
     private double getDTerm(double measurement) {
         if(!lastMeasurementIsMeaningful) {
@@ -58,4 +77,5 @@ public class PIDController {
         double error = measurement - setpoint;
         return getPTerm(error) + getITerm(error) + getDTerm(measurement);
     }
+
 }
