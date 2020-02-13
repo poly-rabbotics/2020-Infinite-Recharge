@@ -21,13 +21,14 @@ import frc.robot.controls.MechanismsJoystick;
 public class Intake extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private DoubleSolenoid intakePneumatic;
+  private DoubleSolenoid intakePneumatic, conveyerBeltPneumatic;
   private PWMVictorSPX intakeWheel, topConveyorBelt, bottomConveyorBelt;
   boolean out;
   double motorSpeed,topBeltSpeed,bottomBeltSpeed;
 
   public Intake() {
     intakePneumatic = RobotMap.intakeSolenoid;
+    conveyerBeltPneumatic = RobotMap.conveyerBeltSolenoid;
     intakeWheel = RobotMap.intakeMotor;
     topConveyorBelt = RobotMap.topBeltMotor;
     bottomConveyorBelt = RobotMap.bottomBeltMotor; 
@@ -46,6 +47,12 @@ public class Intake extends Subsystem {
     else if(MechanismsJoystick.getToggleArm() == true && out == true) {
       intakePneumatic.set(Value.kReverse);
       out = false;
+    }
+    if (MechanismsJoystick.getAllowShooter()){
+      conveyerBeltPneumatic.set(Value.kReverse);
+    }
+    else {
+      conveyerBeltPneumatic.set(Value.kForward);
     }
   }
   private void runIntakeMotor(){

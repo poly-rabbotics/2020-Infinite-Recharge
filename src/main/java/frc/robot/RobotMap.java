@@ -28,8 +28,8 @@ public class RobotMap {
   public static final TalonSRX shooterTopMotor = new TalonSRX(1);
   public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
 
-  //intake
   public static final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(0,1);
+  public static final DoubleSolenoid conveyerBeltSolenoid = new DoubleSolenoid(2,3);
   public static final PWMVictorSPX intakeMotor = new PWMVictorSPX(6);
   public static final PWMVictorSPX topBeltMotor = new PWMVictorSPX(7);
   public static final PWMVictorSPX bottomBeltMotor = new PWMVictorSPX(8); 

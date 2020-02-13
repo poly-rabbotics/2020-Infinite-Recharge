@@ -35,4 +35,7 @@ public class MechanismsJoystick {
   public static boolean getToggleBottomBelt(){
     return joystick.getRawButton(3);
     }
+  public static boolean getAllowShooter(){
+    return joystick.getRawButtonPressed(1);
+  }
 }
