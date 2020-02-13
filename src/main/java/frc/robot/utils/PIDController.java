@@ -31,7 +31,7 @@ public class PIDController {
         if(!relationshipIsPositive) {
             return gains.kP * error;
         }
-        return -gains.kP * error;
+        return - gains.kP * error;
     }
     private double getITerm(double error) {
         SmartDashboard.putNumber("Error at getITerm", error);

@@ -31,25 +31,32 @@ public class Drive {
     right = new SpeedControllerGroup(RobotMap.backL, RobotMap.backR);
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
-    kGains = new KGains(0.0, 0.0001, 0, 0);
+    kGains = new KGains(0.03, 0.002, 0.3, 0);
     turnController = new PIDController(kGains, true);
+    reset();
     //turnController.setTolerance(0.01);
   }
-  public void setRotationalSetpoint() {
-    turnController.setSetpoint(ahrs.getAngle() + 30); // this is just for testing. Will be replaced with vision.
+  public void reset() {
+    turnController.setSetpoint(ahrs.getAngle());
+  }
+  public void setRotationalSetpoint(double change) {
+    turnController.setSetpoint(turnController.getSetpoint() + change); // this is just for testing. Will be replaced with vision.
   }
   public void autoOrient() {    
     double turn = turnController.calculate(ahrs.getAngle());
     double move = 0;
-    drive.arcadeDrive(move, -turn);
+    drive.arcadeDrive(move, turn);
   }
   public void run() {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
     SmartDashboard.putNumber("setpoint", turnController.getSetpoint());
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
-    if(DriveJoystick.getStartAutoOrient()) {
-      setRotationalSetpoint();
+    if(DriveJoystick.getStartAutoOrientLeft()) {
+      setRotationalSetpoint(5);
+    }
+    if(DriveJoystick.getStartAutoOrientRight()) {
+      setRotationalSetpoint(-5);
     }
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
@@ -57,6 +64,7 @@ public class Drive {
     else {
       double move = DriveJoystick.getMove();
       double turn = DriveJoystick.getTurn();
+      turnController.setSetpoint(ahrs.getAngle());
       drive.arcadeDrive(move, turn);
     }
   }
