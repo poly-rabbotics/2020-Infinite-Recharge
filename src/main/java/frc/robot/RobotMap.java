@@ -13,6 +13,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 
@@ -38,5 +39,7 @@ public class RobotMap {
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
   public static final Servo camera = new Servo(8);
   public static final Spark controlPanelMotor = new Spark(7);
+
+  public static final Timer timer = new Timer();
 
 }

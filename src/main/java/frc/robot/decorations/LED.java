@@ -2,13 +2,19 @@ package frc.robot.decorations;
 
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
+import edu.wpi.first.wpilibj.Timer;
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.AnalogInput;
 
 //tikTokLights is the name of the instancevariables in this class, but led is the name in the robot map
 public class LED {
     AddressableLED tikTokLights;
     AddressableLEDBuffer tikTokLightsBuffer;
-    int rainbowFirstPixelHue, change1;
+    int rainbowFirstPixelHue;
+    Double timeLED;
+    boolean lightsOne;
+    Timer tikTokLightsTimer;
+    AnalogInput microphone;
 
     public LED(){
         tikTokLights = RobotMap.led;
@@ -17,8 +23,17 @@ public class LED {
         tikTokLights.setData(tikTokLightsBuffer);
         tikTokLights.start();
         rainbowFirstPixelHue = 0;
-        change1 = 1;
+        timeLED = 5.0;
+        lightsOne = true;
+        tikTokLightsTimer = RobotMap.timer;
+        tikTokLightsTimer.start();
+        microphone = new AnalogInput(0);
 
+    }
+
+    double intensity()
+    {
+      return (microphone.getVoltage()-.3)/3.5 ;
     }
 
     public void cycle(){
@@ -40,7 +55,7 @@ public class LED {
       public void oneColor(){
         for (var i = 0; i < tikTokLightsBuffer.getLength(); i++) {
             // Sets the specified LED to the RGB values for red
-            tikTokLightsBuffer.setRGB(i, 0, 255, 0);
+            tikTokLightsBuffer.setRGB(i, (int)(255*intensity()), (int)(255*intensity()), 0);
          }
          tikTokLights.setData(tikTokLightsBuffer);
       }
@@ -68,36 +83,57 @@ public class LED {
          tikTokLights.setData(tikTokLightsBuffer);
       }
 
+      public void oneColorAlternating(){
+        if(lightsOne == true && tikTokLightsTimer.get()%timeLED == 0){
+        for (var i = 0; i < tikTokLightsBuffer.getLength(); i++) {
+          tikTokLightsBuffer.setRGB(i, 0, 255, 0);
+       }
+       lightsOne = false;
+      }
+      else if(lightsOne == true && tikTokLightsTimer.get()%timeLED == 0){
+       for (var i = 0; i < tikTokLightsBuffer.getLength(); i++) {
+        tikTokLightsBuffer.setRGB(i, 255, 255, 0);
+       }
+       lightsOne = true;
+     }
+     tikTokLights.setData(tikTokLightsBuffer);
+     
+      }
+
       public void twoColorsAlternating(){
-          if(change1 %2 == 0){
+         
+      if(lightsOne == true && tikTokLightsTimer.get()%timeLED == 0){
+
         for (var i = 0; i < tikTokLightsBuffer.getLength(); i++) {
             if(i%2 == 0){
-            tikTokLightsBuffer.setRGB(i, 0, 0, 255);
+            tikTokLightsBuffer.setRGB(i, 0, 255, 0);
             }
             else{
-            tikTokLightsBuffer.setRGB(i, 255, 0, 0);
+            tikTokLightsBuffer.setRGB(i, 255, 255, 0);
             }
          }
+         lightsOne = false;
         }
-        if(change1 %2 == 1){
+        else if(lightsOne == false && tikTokLightsTimer.get()%timeLED == 0){
             for (var i = 0; i < tikTokLightsBuffer.getLength(); i++) {
                 if(i%2 == 0){
-                tikTokLightsBuffer.setRGB(i, 255, 0, 0);
+                tikTokLightsBuffer.setRGB(i, 255, 255, 0);
                 }
                 else{
-                tikTokLightsBuffer.setRGB(i, 0, 0, 255);
+                tikTokLightsBuffer.setRGB(i, 0, 255, 0);
                 }
              }
+            lightsOne = true;
         }
-        change1 += 1;
          tikTokLights.setData(tikTokLightsBuffer);
       }
 
     public void run(boolean isEnabled, boolean isAutonomous){
      if(isEnabled && isAutonomous == false){
-        twoColorsAlternating();
+       // oneColorAlternating();
+        oneColor();
      }
-    if(isEnabled && isAutonomous){
+    else if(isEnabled && isAutonomous){
         oneColor();
     }
     else{
