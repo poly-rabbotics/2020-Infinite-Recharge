@@ -8,20 +8,45 @@ import frc.robot.utils.KGains;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 
+//TODO: Calibrate presets
+ShooterPreset TARGET_ZONE_PRESET = new ShooterPreset(300, 0.3, false);
+ShooterPreset INITIATION_LINE_PRESET = new ShooterPreset(500, 0.5, true);
+ShooterPreset TRENCH_RUN_CLOSE_PRESET = new ShooterPreset(2000, 1.75, true);
+
+class ShooterPreset() {
+    private double meanSpeed, speedRatio;
+    private boolean shallowAnglePosition;
+    public ShooterPreset(double meanSpeed, double speedRatio, boolean shallowAnglePosition) {
+        this.meanSpeed = meanSpeed;
+        this.speedRatio = speedRatio;
+        this.shallowAnglePosition = shallowAnglePosition;
+    }
+    public double getMeanSpeed() {
+        return meanSpeed;
+    }
+    public double getSpeedRatio() {
+        return speedRatio;
+    }
+    public boolean getShallowAnglePosition() {
+        return shallowAnglePosition;
+    }
+}
+    
 public class CalibratableShooter extends Shooter {
     private double desiredMeanRPM;
     private double topSpeedDividedByBottomSpeed;
     private double acceptablePercentError;
+    private boolean shallowAnglePosition;
     private KGains kGainsVelocity;
-
-    
 
     public CalibratableShooter() {
         super();
         desiredMeanRPM = 240;
         topSpeedDividedByBottomSpeed = 0;
         acceptablePercentError = 1;
+        shallowAnglePosition = true;
         kGainsVelocity = new KGains(0, 0.00025, 0, 0);
         topMotor.config_kF(Falcon500Data.pidLoopIndex, kGainsVelocity.kF);
         topMotor.config_kP(Falcon500Data.pidLoopIndex, kGainsVelocity.kP);
@@ -74,12 +99,33 @@ public class CalibratableShooter extends Shooter {
     private double getDesiredTopSpeed() {
         return getDesiredBottomSpeed() * topSpeedDividedByBottomSpeed;
     }
+    private boolean getUserInput() {
+        ShooterPreset chosen = null;
+        if(MechanismsJoystick.getShooterPreset(PresetNames.TARGET_ZONE)) {
+            chosen = TARGET_ZONE_PRESET;
+        }
+        else if(MechanismsJoystick.getShooterPreset(PresetNames.INITIATION_LINE)) {
+            chosen = INITIATION_LINE_PRESET;
+        }
+        else if(MechanismsJoystick.getShooterPreset(PresetNames.TRENCH_RUN_CLOSE)) {
+            chosen = TRENCH_RUN_CLOSE_PRESET;
+        }
+        if(chosen != null) {
+            desiredMeanRPM = chosen.getMeanSpeed;
+            topSpeedDividedByBottomSpeed = chosen.getSpeedRatio;
+            shallowAnglePosition = chosen.getShallowAnglePosition;
+            return true;
+        }
+        return false;
+    }
     public void run() {
-        if(MechanismsJoystick.getShooterPreset(PresetNames.TARGETZONE)) {
-
+        if (getUserInput()) {
+            shoot();
         }
     }
-    public boolean getOkayToShoot(int desiredTopCountsPerPeriod, int desiredBottomCountsPerPeriod, boolean verbose) {
+    public boolean getOkayToShoot(boolean verbose) {
+        int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
+        int desiredBottomCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredBottomSpeed());
         int topPercentError = 0; //if unable to set toppercenterror, get some number so that the program doesn't crash
         if (desiredTopCountsPerPeriod != 0) {
             topPercentError = topMotor.getClosedLoopError() / desiredTopCountsPerPeriod * 100;
@@ -104,14 +150,22 @@ public class CalibratableShooter extends Shooter {
             return false;
         }
     }
-    
+    private void shoot() {
+        int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
+        int desiredBottomCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredBottomSpeed());
+        topMotor.set(ControlMode.Velocity, desiredTopCountsPerPeriod);
+        bottomMotor.set(ControlMode.Velocity, desiredBottomCountsPerPeriod);
+        if(shallowAnglePosition) {
+            solenoid.set(Value.kForward);
+        }
+        else {
+            solenoid.set(Value.kReverse);
+        }
+    }
     public void calibrationRun() {
         adjustDesiredMeanRPM();
         adjustDesiredSpeedRatio();
-        int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
-        int desiredBottomCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredBottomSpeed());
-        getOkayToShoot(desiredTopCountsPerPeriod, desiredBottomCountsPerPeriod, true);
-        topMotor.set(ControlMode.Velocity, desiredTopCountsPerPeriod);
-        bottomMotor.set(ControlMode.Velocity, desiredBottomCountsPerPeriod);
+        shoot();
+        getOkayToShoot(true);
     }
 }
