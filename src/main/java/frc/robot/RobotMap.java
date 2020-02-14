@@ -25,4 +25,6 @@ public class RobotMap {
 
   public static final TalonSRX shooterTopMotor = new TalonSRX(5);
   public static final TalonSRX shooterBottomMotor = new TalonSRX(6);
+  
+  public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(0); //TODO: CHANGE TO ACTUAL PORT #
 }
