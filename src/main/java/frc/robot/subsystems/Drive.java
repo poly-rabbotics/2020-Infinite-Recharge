@@ -26,9 +26,11 @@ public class Drive {
   private AHRS ahrs;
   private KGains kGains;
   private PIDController turnController;
+  static boolean shooterFront;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
     right = new SpeedControllerGroup(RobotMap.backL, RobotMap.backR);
+    shooterFront = true;
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
     kGains = new KGains(0.03, 0.002, 0.3, 0);
@@ -47,6 +49,7 @@ public class Drive {
     double move = 0;
     drive.arcadeDrive(move, turn);
   }
+
   public void run() {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
@@ -62,10 +65,22 @@ public class Drive {
       autoOrient();
     }
     else {
+      turnController.setSetpoint(ahrs.getAngle());
       double move = DriveJoystick.getMove();
       double turn = DriveJoystick.getTurn();
-      turnController.setSetpoint(ahrs.getAngle());
-      drive.arcadeDrive(move, turn);
+
+      if(DriveJoystick.getFront()) {
+        shooterFront = !shooterFront;
+      }
+    
+      if (shooterFront){
+        drive.arcadeDrive(move, turn);
+      }
+      else{
+        drive.arcadeDrive(-move, turn);
+      }
+      SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
+      SmartDashboard.putBoolean("getFront: ", DriveJoystick.getFront());
     }
   }
 }

@@ -7,6 +7,7 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -25,7 +26,9 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Drive drive;
-  //Shooter shooter;
+  Shooter shooter;
+  Climb climber;
+  CameraServo cameraServo;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -36,8 +39,16 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    /*server = CameraServer.getInstance();
+    server.setquality(50);
+    server.startAutomaticCapture("cam0");
+    */
+    CameraServer.getInstance().startAutomaticCapture();
     drive = new Drive();
-    //shooter = new Shooter();
+
+    shooter = new Shooter();
+    climber = new Climb();
+    cameraServo = new CameraServo();
   }
 
   /**
@@ -98,7 +109,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drive.run();
-    //shooter.run();
+    shooter.run();
+    climber.run();
+    cameraServo.run();
   }
 
   /**

@@ -41,3 +41,9 @@ public class DriveJoystick {
     //return joystick.getRawButton(5) || joystick.getRawButton(6);
   }
 }
+
+  public static boolean getFront(){
+    return joystick.getRawButtonPressed(2);
+
+  }
+}
