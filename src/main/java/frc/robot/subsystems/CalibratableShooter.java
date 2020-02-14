@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import frc.robot.controls.MechanismsJoystick;
+import frc.robot.controls.MechanismsJoystick.PresetNames;
 import frc.robot.partdata.Falcon500Data;
 import frc.robot.utils.KGains;
 
@@ -14,6 +15,7 @@ public class CalibratableShooter extends Shooter {
     private double acceptablePercentError;
     private KGains kGainsVelocity;
 
+    
 
     public CalibratableShooter() {
         super();
@@ -72,30 +74,43 @@ public class CalibratableShooter extends Shooter {
     private double getDesiredTopSpeed() {
         return getDesiredBottomSpeed() * topSpeedDividedByBottomSpeed;
     }
+    public void run() {
+        if(MechanismsJoystick.getShooterPreset(PresetNames.TARGETZONE)) {
+
+        }
+    }
+    public boolean getOkayToShoot(int desiredTopCountsPerPeriod, int desiredBottomCountsPerPeriod, boolean verbose) {
+        int topPercentError = 0; //if unable to set toppercenterror, get some number so that the program doesn't crash
+        if (desiredTopCountsPerPeriod != 0) {
+            topPercentError = topMotor.getClosedLoopError() / desiredTopCountsPerPeriod * 100;
+        }
+        int bottomPercentError = 0;
+        if (desiredBottomCountsPerPeriod != 0) {
+            bottomPercentError = bottomMotor.getClosedLoopError() / desiredBottomCountsPerPeriod * 100;
+        }
+        if(verbose) {
+            SmartDashboard.putNumber("Desired mean RPM", desiredMeanRPM);
+            SmartDashboard.putNumber("Desired top RPM", getDesiredTopSpeed());
+            SmartDashboard.putNumber("Desired bottom RPM", getDesiredBottomSpeed());
+            SmartDashboard.putNumber("Top percent error", topPercentError);
+            SmartDashboard.putNumber("Bottom percent error", bottomPercentError);
+        }
+        if (topPercentError < acceptablePercentError && bottomPercentError < acceptablePercentError) {
+            SmartDashboard.putBoolean("OK to shoot", true);
+            return true;
+        }
+        else {
+            SmartDashboard.putBoolean("OK to shoot", false);
+            return false;
+        }
+    }
+    
     public void calibrationRun() {
         adjustDesiredMeanRPM();
         adjustDesiredSpeedRatio();
         int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
         int desiredBottomCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredBottomSpeed());
-        int topPercentError = 0; //if unable to set toppercenterror, get some number so that the program doesn't crash
-        if (desiredTopCountsPerPeriod != 0) {
-            topPercentError = topMotor.getClosedLoopError() / desiredTopCountsPerPeriod * 100;
-        }
-        int bottomPercentError = 1000;
-        if (desiredBottomCountsPerPeriod != 0) {
-            bottomPercentError = bottomMotor.getClosedLoopError() / desiredBottomCountsPerPeriod * 100;
-        }
-        SmartDashboard.putNumber("Desired mean RPM", desiredMeanRPM);
-        SmartDashboard.putNumber("Desired top RPM", getDesiredTopSpeed());
-        SmartDashboard.putNumber("Desired bottom RPM", getDesiredBottomSpeed());
-        SmartDashboard.putNumber("Top percent error", topPercentError);
-        SmartDashboard.putNumber("Bottom percent error", bottomPercentError);
-        if (topPercentError < acceptablePercentError && bottomPercentError < acceptablePercentError) {
-            SmartDashboard.putString("OK to shoot", "OK");
-        }
-        else {
-            SmartDashboard.putString("OK to shoot", "STOP");
-        }
+        getOkayToShoot(desiredTopCountsPerPeriod, desiredBottomCountsPerPeriod, true);
         topMotor.set(ControlMode.Velocity, desiredTopCountsPerPeriod);
         bottomMotor.set(ControlMode.Velocity, desiredBottomCountsPerPeriod);
     }

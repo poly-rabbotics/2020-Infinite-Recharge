@@ -11,6 +11,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
 
 public class MechanismsJoystick {
+  public enum PresetNames {
+    TARGETZONE, INITIATIONLINE, TRENCHRUNCLOSE
+  }
   
   private static Joystick joystick = RobotMap.mechanismsJoystick;
 
@@ -29,5 +32,20 @@ public class MechanismsJoystick {
   }
   public static boolean getDecreaseSpeedRatio() {
     return joystick.getRawButton(6);
+  }
+
+  public static boolean getShooterPreset(PresetNames presetName) {
+    //TODO: change to actual channel numbers
+    switch(presetName) {
+      case TARGETZONE:
+        return joystick.getRawButton(-1);
+      case INITIATIONLINE:
+        return joystick.getRawButton(-2);
+      case TRENCHRUNCLOSE:
+        return joystick.getRawButton(-3);
+      default:
+        //default to TRENCHRUNCLOSE. Note that this default should never be used, and is only included for robustness.
+        return joystick.getRawButton(-3);
+    }
   }
 }
