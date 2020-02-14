@@ -6,15 +6,18 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.RobotMap;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 public class Shooter {
     protected TalonSRX topMotor, bottomMotor;
+    protected DoubleSolenoid solenoid;
     private double topMotorSpeed, bottomMotorSpeed;
     public Shooter() {
       topMotorSpeed = 0.3;
       bottomMotorSpeed = 0.3;
       topMotor = RobotMap.shooterTopMotor;
       bottomMotor = RobotMap.shooterBottomMotor;
+      solenoid = RobotMap.shooterSolenoid;
     }
     private void adjustSpeeds() {
         if(MechanismsJoystick.getChangeTopShooter() > 0.1 && topMotorSpeed <= 1) {
