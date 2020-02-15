@@ -35,4 +35,7 @@ public class RobotMap {
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
   public static final Servo camera = new Servo(8);
   public static final Spark controlPanelMotor = new Spark(7);
+
+  public static final int IMG_WIDTH = 240;
+  public static final int IMG_HEIGHT = 180;
 }

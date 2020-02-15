@@ -31,6 +31,9 @@ public class DriveJoystick {
   public static boolean getStartAutoOrientRight() {
     return joystick.getRawButtonPressed(6);
   }
+  public static boolean getStartAutoOrientVision() {
+    return joystick.getRawButtonPressed(4); //TODO: SET TO ACTUAL CHANNEL NUMBER
+  }
   public static boolean getContinueAutoOrient() {
     if (Math.abs(getMove()) > 0.05 || Math.abs(getTurn()) > 0.05) {
       //Robot has moved
@@ -43,6 +46,5 @@ public class DriveJoystick {
 
   public static boolean getFront(){
     return joystick.getRawButtonPressed(2);
-
   }
 }
