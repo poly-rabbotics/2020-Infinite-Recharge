@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
@@ -35,4 +37,11 @@ public class RobotMap {
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
   public static final Servo camera = new Servo(8);
   public static final Spark controlPanelMotor = new Spark(7);
+
+  public static final PWMVictorSPX lowerConveyorMotor = new PWMVictorSPX(3);
+  public static final PWMVictorSPX upperConveyorMotor = new PWMVictorSPX(4);
+
+  public static final DigitalInput intakeSensorOne = new DigitalInput(5);
+  public static final DigitalInput intakeSensorTwo = new DigitalInput(7);
+  public static final DigitalInput shooterSensor = new DigitalInput(6);
 }

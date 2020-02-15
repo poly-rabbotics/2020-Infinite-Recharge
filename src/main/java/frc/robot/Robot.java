@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Drive drive;
-  Shooter shooter;
+  //Shooter shooter;
   Climb climber;
   CameraServo cameraServo;
 
@@ -46,7 +46,7 @@ public class Robot extends TimedRobot {
     CameraServer.getInstance().startAutomaticCapture();
     drive = new Drive();
 
-    shooter = new Shooter();
+    //shooter = new Shooter();
     climber = new Climb();
     cameraServo = new CameraServo();
   }
@@ -109,7 +109,7 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     drive.run();
-    shooter.run();
+   // shooter.run();
     climber.run();
     cameraServo.run();
   }

@@ -20,7 +20,13 @@ public class MechanismsJoystick {
   public static double getChangeBottomShooter() {
     return joystick.getRawAxis(5);
   }
+  public static boolean getToggleShooter(){
+    return joystick.getRawButtonPressed(1);
+  }
   public static boolean getToggleClimbingSystem() {
     return joystick.getRawButtonPressed(5) && joystick.getRawButtonPressed(6) && joystick.getRawButtonPressed(7) && joystick.getRawButtonPressed(8);
+  }
+  public static boolean getToggleConveyorOverride(){
+    return joystick.getRawButton(2);
   }
 }
