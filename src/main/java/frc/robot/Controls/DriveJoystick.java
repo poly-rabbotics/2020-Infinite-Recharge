@@ -40,7 +40,6 @@ public class DriveJoystick {
     return Timer.getFPGATimestamp() - lastMoveTime > 0.75;
     //return joystick.getRawButton(5) || joystick.getRawButton(6);
   }
-}
 
   public static boolean getFront(){
     return joystick.getRawButtonPressed(2);

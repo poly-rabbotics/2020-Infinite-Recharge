@@ -23,4 +23,8 @@ public class MechanismsJoystick {
   public static boolean getToggleClimbingSystem() {
     return joystick.getRawButtonPressed(5) && joystick.getRawButtonPressed(6) && joystick.getRawButtonPressed(7) && joystick.getRawButtonPressed(8);
   }
+  public static double getChangePanelSpeed(){
+    double speed = joystick.getRawAxis(0);
+    return speed;
+  }
 }

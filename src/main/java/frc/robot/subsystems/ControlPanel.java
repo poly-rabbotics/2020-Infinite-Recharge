@@ -15,7 +15,7 @@ import frc.robot.controls.MechanismsJoystick;
 /**
  * Add your docs here.
  */
-/*public class ControlPanel extends Subsystem {
+public class ControlPanel extends Subsystem {
   private Spark panelMotor;
   private double panelMotorSpeed;
 
@@ -44,4 +44,3 @@ import frc.robot.controls.MechanismsJoystick;
     // setDefaultCommand(new MySpecialCommand());
   }
 }
-*/
