@@ -24,15 +24,15 @@ public class RobotMap {
 
   public static final AHRS ahrs = new AHRS();
 
-  public static final PWMVictorSPX frontL = new PWMVictorSPX(2);
-  public static final PWMVictorSPX frontR = new PWMVictorSPX(5);
-  public static final PWMVictorSPX backL = new PWMVictorSPX(3);
-  public static final PWMVictorSPX backR = new PWMVictorSPX(4);
+  public static final PWMVictorSPX frontL = new PWMVictorSPX(5);
+  public static final PWMVictorSPX frontR = new PWMVictorSPX(7);
+  public static final PWMVictorSPX backL = new PWMVictorSPX(6);
+  public static final PWMVictorSPX backR = new PWMVictorSPX(8);
 
-  public static final TalonSRX shooterTopMotor = new TalonSRX(1);
-  public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
+  //public static final TalonSRX shooterTopMotor = new TalonSRX(1);
+  //public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
   
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
-  public static final Servo camera = new Servo(8);
-  public static final Spark controlPanelMotor = new Spark(7);
+  //public static final Servo camera = new Servo(8);
+  //public static final Spark controlPanelMotor = new Spark(7);
 }

@@ -3,7 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.wpilibj.Servo;
 import frc.robot.RobotMap;
 
-public class CameraServo {
+/*public class CameraServo implements Subsystem {
 
 Servo camera;
 
@@ -20,7 +20,9 @@ public void run(){
     }
 
 }
+public void reset() {}
 
 
 
 }
+*/

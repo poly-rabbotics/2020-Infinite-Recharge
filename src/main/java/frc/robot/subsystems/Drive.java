@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
@@ -20,7 +21,7 @@ import frc.robot.utils.*;
 /**
  * Add your docs here.
  */
-public class Drive {
+public class Drive implements Subsystem {
   private SpeedControllerGroup left, right;
   private DifferentialDrive drive;
   private AHRS ahrs;
@@ -35,19 +36,19 @@ public class Drive {
     ahrs = RobotMap.ahrs;
     kGains = new KGains(0.03, 0.002, 0.3, 0);
     turnController = new PIDController(kGains, true);
-    reset();
     //turnController.setTolerance(0.01);
   }
   public void reset() {
     turnController.setSetpoint(ahrs.getAngle());
   }
-  public void setRotationalSetpoint(double change) {
-    turnController.setSetpoint(turnController.getSetpoint() + change); // this is just for testing. Will be replaced with vision.
+  protected void setRotationalSetpoint(double change) {
+    turnController.setSetpoint(turnController.getSetpoint() + change);
   }
-  public void autoOrient() {    
+  protected boolean autoOrient(double tolerance) {    
     double turn = turnController.calculate(ahrs.getAngle());
     double move = 0;
     drive.arcadeDrive(move, turn);
+    return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
   }
 
   public void run() {
@@ -62,7 +63,7 @@ public class Drive {
       setRotationalSetpoint(-5);
     }
     if(DriveJoystick.getContinueAutoOrient()) {
-      autoOrient();
+      autoOrient(0);
     }
     else {
       turnController.setSetpoint(ahrs.getAngle());

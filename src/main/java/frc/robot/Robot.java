@@ -25,10 +25,7 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  Drive drive;
-  Shooter shooter;
-  Climb climber;
-  CameraServo cameraServo;
+  Subsystem subsystems[];
 
   /**
    * This function is run when the robot is first started up and should be
@@ -44,11 +41,10 @@ public class Robot extends TimedRobot {
     server.startAutomaticCapture("cam0");
     */
     CameraServer.getInstance().startAutomaticCapture();
-    drive = new Drive();
-
-    shooter = new Shooter();
-    climber = new Climb();
-    cameraServo = new CameraServo();
+    subsystems = new Subsystem[]{new Drive()/*, new Shooter(), new Climb(), new CameraServo()*/};
+    for(Subsystem subsystem: subsystems) {
+      subsystem.reset();
+    }
   }
 
   /**
@@ -79,28 +75,24 @@ public class Robot extends TimedRobot {
     m_autoSelected = m_chooser.getSelected();
     // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
     System.out.println("Auto selected: " + m_autoSelected);
-    drive.reset();
+    for(Subsystem subsystem: subsystems) {
+      subsystem.reset();
+    }
   }
   @Override
   public void teleopInit() {
     // TODO Auto-generated method stub
     super.teleopInit();
-    drive.reset();
+    for(Subsystem subsystem: subsystems) {
+      subsystem.reset();
+    }
   }
   /**
    * This function is called periodically during autonomous.
    */
   @Override
   public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
-    }
+    (new AutoDrive()).turn(15.0, 4.0, (() -> {System.out.println("AutoDrive Callback!");}));
   }
 
   /**
@@ -108,10 +100,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    drive.run();
-    shooter.run();
-    climber.run();
-    cameraServo.run();
+    for(Subsystem subsystem: subsystems) {
+      subsystem.run();
+    }
   }
 
   /**
