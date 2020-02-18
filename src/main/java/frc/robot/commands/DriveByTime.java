@@ -23,4 +23,9 @@ public class DriveByTime extends Command {
     protected boolean isFinished() {
         return Timer.getFPGATimestamp() - startTime >= time;
     }
+    @Override
+    protected void onFinish() {
+        super.onFinish();
+        drive.setDriveForward(0);
+    }
 }

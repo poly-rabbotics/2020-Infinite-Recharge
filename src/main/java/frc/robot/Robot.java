@@ -8,6 +8,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.commands.TurnByDegrees;
 import frc.robot.subsystems.*;
 
 /**
@@ -21,16 +22,17 @@ public class Robot extends TimedRobot {
 
   Subsystem subsystems[];
   AutoSubsystem autoSubsystems[];
+  Drive drive;
 
   @Override
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
-
-    subsystems = new Subsystem[]{new Drive()/*, new Shooter(), new Climb(), new CameraServo()*/};
+    drive = new Drive(); 
+    subsystems = new Subsystem[]{drive/*, new Shooter(), new Climb(), new CameraServo()*/};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
-    autoSubsystems = new AutoSubsystem[]{new Drive()};
+    autoSubsystems = new AutoSubsystem[]{drive};
     for(Subsystem auto: autoSubsystems) {
       auto.reset();
     }
@@ -53,6 +55,7 @@ public class Robot extends TimedRobot {
     for(AutoSubsystem auto: autoSubsystems) {
       auto.reset();
     }
+    (new TurnByDegrees(drive, 45, 1, "rotate-45-degrees", 20)).run();
   }
   @Override
   public void teleopInit() {

@@ -9,14 +9,14 @@ public class TurnByDegrees extends Command {
     private int lowErrorCount;
     private double acceptableError;
 
-    public TurnByDegrees(Drive drive, double degrees, int acceptableError, String name, int periodInMillis, boolean verbose) {
+    public TurnByDegrees(Drive drive, double degrees, double acceptableError, String name, int periodInMillis, boolean verbose) {
         super(name, periodInMillis, verbose);
         this.drive = drive;
         this.degrees = degrees;
         this.acceptableError = acceptableError;
         lowErrorCount = 0;
     }
-    public TurnByDegrees(Drive drive, double degrees, int acceptableError, String name, int periodInMillis) {
+    public TurnByDegrees(Drive drive, double degrees, double acceptableError, String name, int periodInMillis) {
         this(drive, degrees, acceptableError, name, periodInMillis, false);
     }
     protected void onStart() {

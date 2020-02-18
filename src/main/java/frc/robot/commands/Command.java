@@ -14,15 +14,18 @@ public abstract class Command extends Thread {
     }
     protected abstract void whileRunning();
     protected abstract boolean isFinished();
-    private void onStart() {
+    protected void onStart() {
         if(verbose) {
             System.out.println(getName() + "_STARTING*********");
         }
     }
-    private void onFinish() {
+    protected void onFinish() {
         if(verbose) {
             System.out.println(getName() + "_FINISHED***********");
         }
+    }
+    protected void onInterrupted() {
+        System.out.println(getName() + " INTERRUPTED*********");
     }
     public void run() {
         onStart();
@@ -36,7 +39,7 @@ public abstract class Command extends Thread {
                 Thread.sleep(period);
             }
             catch(InterruptedException e) {
-                System.out.println(getName() + " INTERRUPTED*********");
+                onInterrupted();
             }
         }
         onFinish();
