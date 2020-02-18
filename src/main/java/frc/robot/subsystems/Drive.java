@@ -21,13 +21,14 @@ import frc.robot.utils.*;
 /**
  * Add your docs here.
  */
-public class Drive implements Subsystem {
+public class Drive implements Subsystem, AutoSubsystem {
   private SpeedControllerGroup left, right;
   private DifferentialDrive drive;
   private AHRS ahrs;
   private KGains kGains;
   private PIDController turnController;
   static boolean shooterFront;
+  private double speed, rotation;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
     right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
@@ -44,20 +45,17 @@ public class Drive implements Subsystem {
     turnController.reset();
     turnController.setSetpoint(ahrs.getAngle());
   }
-  protected void setRotationalSetpoint(double change) {
+  public void setRotationalSetpoint(double change) {
     turnController.setSetpoint(turnController.getSetpoint() + change);
+  }
+  public void setDriveForward(double speed) {
+    this.speed = speed;
   }
   protected boolean aligned(double tolerance) {
     return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
   }
   protected void autoOrient() {
-    SmartDashboard.putNumber("rotational setpoint", turnController.getSetpoint());
-    SmartDashboard.putNumber("angle", ahrs.getAngle());
-    double turn = turnController.calculate(ahrs.getAngle());
-    double move = 0;
-    SmartDashboard.putNumber("turn", turn);
-    System.out.println("I am updating frequently enough!");
-    drive.arcadeDrive(move, turn);
+    rotation = turnController.calculate(ahrs.getAngle());
   }
   public double getAngle() {
     return ahrs.getAngle();
@@ -65,11 +63,20 @@ public class Drive implements Subsystem {
   public double getSetpoint() {
     return turnController.getSetpoint();
   }
-  public void run() {
+  public double getError() {
+    return getAngle() - getSetpoint();
+  }
+  private void move() {
+    drive.arcadeDrive(speed, rotation);
+  }
+  public void printState() {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
     SmartDashboard.putNumber("setpoint", turnController.getSetpoint());
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
+    SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
+  }
+  private void getControllerInput() {
     if(DriveJoystick.getStartAutoOrientLeft()) {
       setRotationalSetpoint(5);
     }
@@ -81,21 +88,20 @@ public class Drive implements Subsystem {
     }
     else {
       turnController.setSetpoint(ahrs.getAngle());
-      double move = DriveJoystick.getMove();
-      double turn = DriveJoystick.getTurn();
-
+      speed = shooterFront ? DriveJoystick.getMove() : -DriveJoystick.getMove();
+      rotation = DriveJoystick.getTurn();
       if(DriveJoystick.getFront()) {
         shooterFront = !shooterFront;
       }
-    
-      if (shooterFront){
-        drive.arcadeDrive(move, turn);
-      }
-      else{
-        drive.arcadeDrive(-move, turn);
-      }
-      SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
-      SmartDashboard.putBoolean("getFront: ", DriveJoystick.getFront());
     }
+  }
+  public void run() {
+    printState();
+    getControllerInput();
+    move();
+  }
+  public void autoRun() {
+    autoOrient();
+    move();
   }
 }

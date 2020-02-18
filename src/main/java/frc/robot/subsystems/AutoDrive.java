@@ -1,8 +1,6 @@
 package frc.robot.subsystems;
 
-import frc.robot.auto.AutoSubsystem;
-
-public class AutoDrive extends Drive implements AutoSubsystem {
+public class AutoDrive extends Drive {
     private boolean enabled;
     public AutoDrive() {
         super();
