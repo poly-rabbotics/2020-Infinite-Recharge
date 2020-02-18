@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
+import frc.robot.auto.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,8 +26,8 @@ public class Robot extends TimedRobot {
   private static final String kCustomAuto = "My Auto";
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  Subsystem subsystems[];
 
+  Subsystem subsystems[];
   /**
    * This function is run when the robot is first started up and should be
    * used for any initialization code.
@@ -41,6 +42,7 @@ public class Robot extends TimedRobot {
     server.startAutomaticCapture("cam0");
     */
     CameraServer.getInstance().startAutomaticCapture();
+
     subsystems = new Subsystem[]{new Drive()/*, new Shooter(), new Climb(), new CameraServo()*/};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
@@ -78,6 +80,9 @@ public class Robot extends TimedRobot {
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
+    AutoDrive autoDrive = new AutoDrive();
+    autoDrive.enable();
+    autoDrive.turn(15.0, 4.0, (() -> {System.out.println("AutoDrive Callback!");}));
   }
   @Override
   public void teleopInit() {
@@ -92,7 +97,6 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void autonomousPeriodic() {
-    (new AutoDrive()).turn(15.0, 4.0, (() -> {System.out.println("AutoDrive Callback!");}));
   }
 
   /**

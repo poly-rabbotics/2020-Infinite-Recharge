@@ -30,27 +30,41 @@ public class Drive implements Subsystem {
   static boolean shooterFront;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
-    right = new SpeedControllerGroup(RobotMap.backL, RobotMap.backR);
+    right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
     shooterFront = true;
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
-    kGains = new KGains(0.03, 0.002, 0.3, 0);
+    kGains = new KGains(0.01, 0.002, 1, 0);
+    //kGains = new KGains(0.03, 0, 0, 0);
     turnController = new PIDController(kGains, true);
     //turnController.setTolerance(0.01);
+    reset();
   }
   public void reset() {
+    turnController.reset();
     turnController.setSetpoint(ahrs.getAngle());
   }
   protected void setRotationalSetpoint(double change) {
     turnController.setSetpoint(turnController.getSetpoint() + change);
   }
-  protected boolean autoOrient(double tolerance) {    
-    double turn = turnController.calculate(ahrs.getAngle());
-    double move = 0;
-    drive.arcadeDrive(move, turn);
+  protected boolean aligned(double tolerance) {
     return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
   }
-
+  protected void autoOrient() {
+    SmartDashboard.putNumber("rotational setpoint", turnController.getSetpoint());
+    SmartDashboard.putNumber("angle", ahrs.getAngle());
+    double turn = turnController.calculate(ahrs.getAngle());
+    double move = 0;
+    SmartDashboard.putNumber("turn", turn);
+    System.out.println("I am updating frequently enough!");
+    drive.arcadeDrive(move, turn);
+  }
+  public double getAngle() {
+    return ahrs.getAngle();
+  }
+  public double getSetpoint() {
+    return turnController.getSetpoint();
+  }
   public void run() {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
@@ -63,7 +77,7 @@ public class Drive implements Subsystem {
       setRotationalSetpoint(-5);
     }
     if(DriveJoystick.getContinueAutoOrient()) {
-      autoOrient(0);
+      autoOrient();
     }
     else {
       turnController.setSetpoint(ahrs.getAngle());
