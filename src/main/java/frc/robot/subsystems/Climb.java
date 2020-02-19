@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
-public class Climb {
+public class Climb implements Subsystem {
     DoubleSolenoid solenoid;
 
     public Climb() {
@@ -22,4 +22,5 @@ public class Climb {
             }
         }
     }
+    public void reset() {}
 }

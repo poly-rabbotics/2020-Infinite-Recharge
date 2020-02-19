@@ -4,13 +4,13 @@
 /* must be accompanied by the FIRST BSD license file in the root directory of */
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
-
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.commands.DriveByTime;
+import frc.robot.commands.DriveInRegularPolygonSequence;
+import frc.robot.commands.TurnByDegrees;
 import frc.robot.subsystems.*;
 
 /**
@@ -21,34 +21,23 @@ import frc.robot.subsystems.*;
  * project.
  */
 public class Robot extends TimedRobot {
-  private static final String kDefaultAuto = "Default";
-  private static final String kCustomAuto = "My Auto";
-  private String m_autoSelected;
-  private final SendableChooser<String> m_chooser = new SendableChooser<>();
-  Drive drive;
-  Shooter shooter;
-  Climb climber;
-  CameraServo cameraServo;
 
-  /**
-   * This function is run when the robot is first started up and should be
-   * used for any initialization code.
-   */
+  Subsystem subsystems[];
+  AutoSubsystem autoSubsystems[];
+  Drive drive;
+
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
-    /*server = CameraServer.getInstance();
-    server.setquality(50);
-    server.startAutomaticCapture("cam0");
-    */
     CameraServer.getInstance().startAutomaticCapture();
-    drive = new Drive();
-
-    shooter = new Shooter();
-    climber = new Climb();
-    cameraServo = new CameraServo();
+    drive = new Drive(); 
+    subsystems = new Subsystem[]{drive/*, new Shooter(), new Climb(), new CameraServo()*/};
+    for(Subsystem subsystem: subsystems) {
+      subsystem.reset();
+    }
+    autoSubsystems = new AutoSubsystem[]{drive};
+    for(Subsystem auto: autoSubsystems) {
+      auto.reset();
+    }
   }
 
   /**
@@ -63,60 +52,37 @@ public class Robot extends TimedRobot {
   public void robotPeriodic() {
   }
 
-  /**
-   * This autonomous (along with the chooser code above) shows how to select
-   * between different autonomous modes using the dashboard. The sendable
-   * chooser code works with the Java SmartDashboard. If you prefer the
-   * LabVIEW Dashboard, remove all of the chooser code and uncomment the
-   * getString line to get the auto name from the text box below the Gyro
-   *
-   * <p>You can add additional auto modes by adding additional comparisons to
-   * the switch structure below with additional strings. If using the
-   * SendableChooser make sure to add them to the chooser code above as well.
-   */
   @Override
   public void autonomousInit() {
-    m_autoSelected = m_chooser.getSelected();
-    // m_autoSelected = SmartDashboard.getString("Auto Selector", kDefaultAuto);
-    System.out.println("Auto selected: " + m_autoSelected);
-    drive.reset();
+    for(AutoSubsystem auto: autoSubsystems) {
+      auto.reset();
+    }
+    //(new DriveByTime(drive, 10, 0.5, "Driving Forward", 20)).start();
+    System.out.println("END AUTONOMOUS INIT*****************************************************************************************");
+    (new DriveInRegularPolygonSequence(drive, 2, 0.5, 2, 4, "Drive in Square", 20, false)).start();
   }
   @Override
   public void teleopInit() {
-    // TODO Auto-generated method stub
     super.teleopInit();
-    drive.reset();
-  }
-  /**
-   * This function is called periodically during autonomous.
-   */
-  @Override
-  public void autonomousPeriodic() {
-    switch (m_autoSelected) {
-      case kCustomAuto:
-        // Put custom auto code here
-        break;
-      case kDefaultAuto:
-      default:
-        // Put default auto code here
-        break;
+    for(Subsystem subsystem: subsystems) {
+      subsystem.reset();
     }
   }
 
-  /**
-   * This function is called periodically during operator control.
-   */
   @Override
-  public void teleopPeriodic() {
-    drive.run();
-    shooter.run();
-    climber.run();
-    cameraServo.run();
+  public void autonomousPeriodic() {
+    for(AutoSubsystem auto: autoSubsystems) {
+      auto.autoRun();
+    }
   }
 
-  /**
-   * This function is called periodically during test mode.
-   */
+  @Override
+  public void teleopPeriodic() {
+    for(Subsystem subsystem: subsystems) {
+      subsystem.run();
+    }
+  }
+
   @Override
   public void testPeriodic() {
   }

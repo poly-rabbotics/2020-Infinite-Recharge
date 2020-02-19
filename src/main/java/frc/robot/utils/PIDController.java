@@ -39,7 +39,7 @@ public class PIDController {
 
         SmartDashboard.putNumber("math", error*getAccumulatedError());
         
-        if(Math.abs(error) < 1.0) {
+        if(error * accumulatedError < 0) {
             //If the error is opposite of the error that has been accumulated
             //(i.e., we have crossed the setpoint and gone to the other side)
             //then error is zeroed.

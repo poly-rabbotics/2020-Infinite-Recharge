@@ -8,14 +8,13 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Spark;
-import edu.wpi.first.wpilibj.command.Subsystem;
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
 /**
  * Add your docs here.
  */
-public class ControlPanel extends Subsystem {
+/*public class ControlPanel implements Subsystem {
   private Spark panelMotor;
   private double panelMotorSpeed;
 
@@ -35,12 +34,5 @@ public class ControlPanel extends Subsystem {
       panelMotorSpeed -= .005;
     }
   }
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
-  }
-}
+  public void reset() {}
+}*/

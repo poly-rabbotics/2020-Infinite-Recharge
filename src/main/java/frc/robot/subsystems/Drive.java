@@ -8,6 +8,7 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
@@ -20,41 +21,64 @@ import frc.robot.utils.*;
 /**
  * Add your docs here.
  */
-public class Drive {
+public class Drive implements Subsystem, AutoSubsystem {
   private SpeedControllerGroup left, right;
   private DifferentialDrive drive;
   private AHRS ahrs;
   private KGains kGains;
   private PIDController turnController;
   static boolean shooterFront;
+  private double speed, rotation;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
-    right = new SpeedControllerGroup(RobotMap.backL, RobotMap.backR);
+    right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
     shooterFront = true;
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
-    kGains = new KGains(0.03, 0.002, 0.3, 0);
+    kGains = new KGains(0.01, 0.002, 1, 0);
+    //kGains = new KGains(0.03, 0, 0, 0);
     turnController = new PIDController(kGains, true);
-    reset();
     //turnController.setTolerance(0.01);
+    reset();
   }
   public void reset() {
+    turnController.reset();
     turnController.setSetpoint(ahrs.getAngle());
   }
   public void setRotationalSetpoint(double change) {
-    turnController.setSetpoint(turnController.getSetpoint() + change); // this is just for testing. Will be replaced with vision.
+    turnController.setSetpoint(turnController.getSetpoint() + change);
   }
-  public void autoOrient() {    
-    double turn = turnController.calculate(ahrs.getAngle());
-    double move = 0;
-    drive.arcadeDrive(move, turn);
+  public void setDriveForward(double speed) {
+    //System.out.print("Setting drive forward to ");
+    //System.out.println(speed);
+    this.speed = speed;
   }
-
-  public void run() {
+  protected boolean aligned(double tolerance) {
+    return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
+  }
+  protected void autoOrient() {
+    rotation = turnController.calculate(ahrs.getAngle());
+  }
+  public double getAngle() {
+    return ahrs.getAngle();
+  }
+  public double getSetpoint() {
+    return turnController.getSetpoint();
+  }
+  public double getError() {
+    return getAngle() - getSetpoint();
+  }
+  private void move() {
+    drive.arcadeDrive(speed, rotation);
+  }
+  public void printState() {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
     SmartDashboard.putNumber("setpoint", turnController.getSetpoint());
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
+    SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
+  }
+  private void getControllerInput() {
     if(DriveJoystick.getStartAutoOrientLeft()) {
       setRotationalSetpoint(5);
     }
@@ -66,21 +90,21 @@ public class Drive {
     }
     else {
       turnController.setSetpoint(ahrs.getAngle());
-      double move = DriveJoystick.getMove();
-      double turn = DriveJoystick.getTurn();
-
+      speed = shooterFront ? DriveJoystick.getMove() : -DriveJoystick.getMove();
+      rotation = DriveJoystick.getTurn();
       if(DriveJoystick.getFront()) {
         shooterFront = !shooterFront;
       }
-    
-      if (shooterFront){
-        drive.arcadeDrive(move, turn);
-      }
-      else{
-        drive.arcadeDrive(-move, turn);
-      }
-      SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
-      SmartDashboard.putBoolean("getFront: ", DriveJoystick.getFront());
     }
+  }
+  public void run() {
+    printState();
+    getControllerInput();
+    move();
+  }
+  public void autoRun() {
+    //System.out.println(speed);
+    autoOrient();
+    move();
   }
 }
