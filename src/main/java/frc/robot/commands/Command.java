@@ -44,6 +44,8 @@ public abstract class Command extends Thread {
     * This is where any nested Commands should be started by calling the .start() method.
     * Any other initialization code (setting initial PID setpoints, etc.) that doesn't belong
     * in the constructor should be place here.
+    * If you override onStart(), it is highly recommended that you still call it inside the 
+    * child class version of the method using super.onStart().
     */
     protected void onStart() {
         if(verbose) {
@@ -53,6 +55,8 @@ public abstract class Command extends Thread {
     /*
     * Tie up any loose ends here. For instance, if a Command makes a mechanism move, then 
     * when the Command finishes, you may want to make the mechanism stop moving.
+    * If you override onFinish(), it is highly recommended that you still call it inside the 
+    * child class version of the method using super.onFinish().
     */
     protected void onFinish() {
         if(verbose) {
@@ -70,6 +74,7 @@ public abstract class Command extends Thread {
     * Overrides the run() method of the parent class Thread. Do not call run() directly, 
     * even though it is public. Call start() instead, in order to start the life cycle of
     * the Thread.
+    * It should never be necessary to override run() in child classes of Command.
     */
     @Override
     public void run() {
