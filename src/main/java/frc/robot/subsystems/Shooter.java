@@ -7,7 +7,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.RobotMap;
 
-/*public class Shooter implements Subsystem {
+public class Shooter implements Subsystem {
     private TalonSRX topMotor, bottomMotor;
     private double topMotorSpeed, bottomMotorSpeed;
     public Shooter() {
@@ -38,4 +38,4 @@ import frc.robot.RobotMap;
         bottomMotor.set(ControlMode.PercentOutput, bottomMotorSpeed);
     }
     public void reset() {}
-}*/
+}
