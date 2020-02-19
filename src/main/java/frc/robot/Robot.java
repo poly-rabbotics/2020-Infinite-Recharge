@@ -8,6 +8,8 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.commands.DriveByTime;
+import frc.robot.commands.DriveInRegularPolygonSequence;
 import frc.robot.commands.TurnByDegrees;
 import frc.robot.subsystems.*;
 
@@ -55,7 +57,9 @@ public class Robot extends TimedRobot {
     for(AutoSubsystem auto: autoSubsystems) {
       auto.reset();
     }
-    (new TurnByDegrees(drive, 45, 1, "rotate-45-degrees", 20)).run();
+    //(new DriveByTime(drive, 10, 0.5, "Driving Forward", 20)).start();
+    System.out.println("END AUTONOMOUS INIT*****************************************************************************************");
+    (new DriveInRegularPolygonSequence(drive, 2, 0.5, 2, 4, "Drive in Square", 20, false)).start();
   }
   @Override
   public void teleopInit() {

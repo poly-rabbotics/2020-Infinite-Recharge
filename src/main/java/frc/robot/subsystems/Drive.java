@@ -49,6 +49,8 @@ public class Drive implements Subsystem, AutoSubsystem {
     turnController.setSetpoint(turnController.getSetpoint() + change);
   }
   public void setDriveForward(double speed) {
+    //System.out.print("Setting drive forward to ");
+    //System.out.println(speed);
     this.speed = speed;
   }
   protected boolean aligned(double tolerance) {
@@ -101,6 +103,7 @@ public class Drive implements Subsystem, AutoSubsystem {
     move();
   }
   public void autoRun() {
+    //System.out.println(speed);
     autoOrient();
     move();
   }

@@ -8,7 +8,9 @@ public class TurnByDegrees extends Command {
     private double degrees;
     private int lowErrorCount;
     private double acceptableError;
-
+    private double abs(double num) {
+        return num > 0 ? num : -num;
+    }
     public TurnByDegrees(Drive drive, double degrees, double acceptableError, String name, int periodInMillis, boolean verbose) {
         super(name, periodInMillis, verbose);
         this.drive = drive;
@@ -20,10 +22,12 @@ public class TurnByDegrees extends Command {
         this(drive, degrees, acceptableError, name, periodInMillis, false);
     }
     protected void onStart() {
+        super.onStart();
         drive.setRotationalSetpoint(degrees);
     }
     protected void whileRunning() {
-        if(drive.getError() <= acceptableError) {
+        if(abs(drive.getError()) <= acceptableError) {
+            System.out.println(drive.getError());
             lowErrorCount++;
         }
         else {
@@ -31,6 +35,7 @@ public class TurnByDegrees extends Command {
         }
     }
     protected boolean isFinished() {
+        System.out.println(lowErrorCount);
         return lowErrorCount >= REQUIRED_CYCLES_OF_LOW_ERROR;
     }
 }

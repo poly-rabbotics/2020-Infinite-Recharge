@@ -10,11 +10,13 @@ public class DriveByTime extends Command {
         super(name, periodInMillis, verbose);
         this.drive = drive;
         this.time = timeInSeconds;
+        this.speed = speed;
     }
     public DriveByTime(Drive drive, double timeInSeconds, double speed, String name, int periodInMillis) {
         this(drive, timeInSeconds, speed, name, periodInMillis, false);
     }
     protected void onStart() {
+        super.onStart();
         this.startTime = Timer.getFPGATimestamp();
     }
     protected void whileRunning() {

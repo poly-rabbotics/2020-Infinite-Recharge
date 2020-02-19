@@ -10,26 +10,28 @@ public class DriveInRegularPolygonSequence extends Command {
         super(name, periodInMillis, verbose);
         driveByTime = new DriveByTime[4];
         for(int i = 0; i < numVertices; i++) {
-            driveByTime[i] = new DriveByTime(drive, timeInSeconds, speed, name + "-drive-" + i, periodInMillis);
+            driveByTime[i] = new DriveByTime(drive, timeInSeconds, speed, name + "-drive-" + i, periodInMillis, verbose);
         }
         turn = new TurnByDegrees[4];
         for(int i = 0; i < numVertices; i++) {
-            turn[i] = new TurnByDegrees(drive, 360 / numVertices, acceptableError, name + "-turn-" + i, periodInMillis);
+            turn[i] = new TurnByDegrees(drive, 360 / numVertices, acceptableError, name + "-turn-" + i, periodInMillis, verbose);
         }
     }
     protected void onStart() {
         super.onStart();
         for(int i = 0; i < turn.length; i++) {
-            driveByTime[i].run();
+            driveByTime[i].start();
             try {
                 driveByTime[i].join();
             }
             catch(InterruptedException e) {
                 onInterrupted();
             }
-            turn[i].run();
+            turn[i].start();
             try {
                 turn[i].join();
+                System.out.print("Turn ");
+                System.out.println(i);
             }
             catch(InterruptedException e) {
                 onInterrupted();
