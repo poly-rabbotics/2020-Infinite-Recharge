@@ -27,7 +27,7 @@ public class Robot extends TimedRobot {
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Drive drive;
   Shooter shooter;
-  CameraServo cameraServo;
+  Cameras cameras;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -45,7 +45,7 @@ public class Robot extends TimedRobot {
     CameraServer.getInstance().startAutomaticCapture();
     drive = new Drive();
     shooter = new Shooter();
-    cameraServo = new CameraServo();
+    cameras = new Cameras();
   }
 
   /**
@@ -101,7 +101,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     drive.run();
     //shooter.run();
-    cameraServo.run();
+    cameras.run();
   }
 
   /**

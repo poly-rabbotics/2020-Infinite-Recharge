@@ -20,6 +20,9 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;;
  * Add your docs here.
  */
 public class RobotMap {
+  public static final int IMG_WIDTH = 320;
+  public static final int IMG_HEIGHT = 240;
+
   public static final Joystick driveJoystick = new Joystick(0);
   public static final Joystick mechanismsJoystick = new Joystick(1);
 
