@@ -8,7 +8,7 @@ public class CameraServo implements Subsystem {
 Servo camera;
 
 public CameraServo(){
-camera = RobotMap.camera;
+//camera = RobotMap.camera;
 }
 public void run(){
 

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import frc.robot.commands.DriveByTime;
 import frc.robot.commands.DriveInRegularPolygonSequence;
 import frc.robot.commands.TurnByDegrees;
+import frc.robot.controls.ButtonPanel;
 import frc.robot.subsystems.*;
 
 /**
@@ -28,22 +29,25 @@ public class Robot extends TimedRobot {
   Shooter shooter;
   Climb climb;
   CameraServo cameraServo;
+  ButtonPanel buttonPanel;
 
   @Override
   public void robotInit() {
-    CameraServer.getInstance().startAutomaticCapture();
+   // CameraServer.getInstance().startAutomaticCapture();
     drive = new Drive(); 
     shooter = new Shooter();
     climb = new Climb();
-    cameraServo = new CameraServo();
-    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
+   // cameraServo = new CameraServo();
+    buttonPanel = new ButtonPanel();
+    
+   /* subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
     autoSubsystems = new AutoSubsystem[]{drive};
     for(Subsystem auto: autoSubsystems) {
       auto.reset();
-    }
+    }*/
   }
 
   /**
@@ -56,6 +60,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
+    buttonPanel.autoSwitches();
   }
 
   @Override
@@ -68,9 +73,9 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopInit() {
     super.teleopInit();
-    for(Subsystem subsystem: subsystems) {
+   /* for(Subsystem subsystem: subsystems) {
       subsystem.reset();
-    }
+    }*/
   }
 
   @Override
@@ -82,9 +87,9 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
-    for(Subsystem subsystem: subsystems) {
+    /*for(Subsystem subsystem: subsystems) {
       subsystem.run();
-    }
+    }*/
   }
 
   @Override

@@ -10,10 +10,13 @@ package frc.robot;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
-import com.kauailabs.navx.frc.AHRS;
+
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
+import com.kauailabs.navx.frc.*;
+
 
 /**
  * Add your docs here.
@@ -33,6 +36,8 @@ public class RobotMap {
   public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
   
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
-  public static final Servo camera = new Servo(8);
-  public static final Spark controlPanelMotor = new Spark(7);
+ static final Servo camera = new Servo(2);
+  public static final Spark controlPanelMotor = new Spark(1);
+
+
 }
