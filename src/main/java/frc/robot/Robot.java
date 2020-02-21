@@ -25,7 +25,7 @@ public class Robot extends TimedRobot {
   Subsystem subsystems[];
   AutoSubsystem autoSubsystems[];
   Drive drive;
-  Shooter shooter;
+  //Shooter shooter;
   Climb climb;
   CameraServo cameraServo;
 
@@ -33,10 +33,10 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
     drive = new Drive(); 
-    shooter = new Shooter();
+    //shooter = new Shooter();
     climb = new Climb();
     cameraServo = new CameraServo();
-    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
+    subsystems = new Subsystem[]{drive, /*shooter, */climb, cameraServo};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }

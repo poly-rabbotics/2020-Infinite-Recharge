@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.RobotMap;
-
+/*
 public class Shooter implements Subsystem {
     private TalonSRX topMotor, bottomMotor;
     private double topMotorSpeed, bottomMotorSpeed;
@@ -38,4 +38,4 @@ public class Shooter implements Subsystem {
         bottomMotor.set(ControlMode.PercentOutput, bottomMotorSpeed);
     }
     public void reset() {}
-}
+}*/

@@ -17,7 +17,7 @@ import frc.robot.controls.DriveJoystick;
 import com.kauailabs.navx.frc.AHRS;
 //import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.utils.*;
-
+import frc.robot.sensors.ShooterCamera;
 /**
  * Add your docs here.
  */
@@ -29,6 +29,7 @@ public class Drive implements Subsystem, AutoSubsystem {
   private PIDController turnController;
   static boolean shooterFront;
   private double speed, rotation;
+  private ShooterCamera camera;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
     right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
@@ -39,6 +40,7 @@ public class Drive implements Subsystem, AutoSubsystem {
     //kGains = new KGains(0.03, 0, 0, 0);
     turnController = new PIDController(kGains, true);
     //turnController.setTolerance(0.01);
+    camera = new ShooterCamera(RobotMap.shooterCameraName);
     reset();
   }
   public void reset() {
@@ -85,6 +87,10 @@ public class Drive implements Subsystem, AutoSubsystem {
     if(DriveJoystick.getStartAutoOrientRight()) {
       setRotationalSetpoint(-5);
     }
+    if(DriveJoystick.getCameraOrient()) {
+      System.out.println("CAMERA ORIENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+      setRotationalSetpoint(camera.getYaw());
+    }
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
     }
@@ -98,6 +104,7 @@ public class Drive implements Subsystem, AutoSubsystem {
     }
   }
   public void run() {
+    System.out.println(camera.getYaw());
     printState();
     getControllerInput();
     move();
