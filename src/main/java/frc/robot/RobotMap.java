@@ -33,6 +33,8 @@ public class RobotMap {
   public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
   
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
-  public static final Servo camera = new Servo(8);
-  public static final Spark controlPanelMotor = new Spark(7);
+  public static final Servo camera = new Servo(10);
+  public static final Spark controlPanelMotor = new Spark(9);
+
+  public static final String shooterCameraName = "Microsoft LifeCam HD-3000";
 }
