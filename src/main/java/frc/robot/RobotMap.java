@@ -29,8 +29,8 @@ public class RobotMap {
   public static final PWMVictorSPX backL = new PWMVictorSPX(6);
   public static final PWMVictorSPX backR = new PWMVictorSPX(8);
 
-  //public static final TalonSRX shooterTopMotor = new TalonSRX(1);
-  //public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
+  public static final TalonSRX shooterTopMotor = new TalonSRX(1);
+  public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
   
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
   public static final Servo camera = new Servo(10);
