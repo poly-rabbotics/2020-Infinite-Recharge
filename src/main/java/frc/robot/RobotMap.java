@@ -9,7 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
 
 /**
  * Add your docs here.
@@ -26,5 +27,5 @@ public class RobotMap {
   public static final TalonSRX shooterTopMotor = new TalonSRX(5);
   public static final TalonSRX shooterBottomMotor = new TalonSRX(6);
   
-  public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(0); //TODO: CHANGE TO ACTUAL PORT #
+  public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(0, 1); //TODO: CHANGE TO ACTUAL PORT #
 }
