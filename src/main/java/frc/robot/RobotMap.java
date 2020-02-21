@@ -32,4 +32,5 @@ public class RobotMap {
   public static final Encoder controlPanelEncoder = new Encoder(0, 1);
 
   public static final ColorSensorV3 controlPanelColorSensor = new ColorSensorV3(i2cPort);
+
 }

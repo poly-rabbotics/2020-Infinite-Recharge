@@ -17,11 +17,14 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import frc.robot.RobotMap;
 import frc.robot.controls.DriveJoystick;
+import frc.robot.partdata.CompliantWheel4in;
+import frc.robot.fielddata.ControlPanelData;
+
 
 /**
  * Add your docs here.
  */
-public class ControlPanel extends Subsystem {
+public class ControlPanel {
   private Spark panelMotor;
   private double panelMotorSpeed, requiredRotations, IR, detectedTop, detectedBottom, detectedMiddle, colorCalled;
   private Encoder encoder;
@@ -34,16 +37,19 @@ public class ControlPanel extends Subsystem {
 
     panelMotor = RobotMap.controlPanelMotor;
     panelMotorSpeed = .5;
-    requiredRotations = 100; // must be changed
+    requiredRotations = 4; //Actually 3-5
     encoder = RobotMap.controlPanelEncoder;
+    //This is the number of rotations of the control panel.
+    // x pulses times (1 rot of compliant wheel / 44.4 pulses) * (distance / rot of compliant wheel) * (rot of control panel / distance)
+    encoder.setDistancePerPulse((1 / 44.4) * (CompliantWheel4in.CIRCUMFERENCE / 1) * (1 / ControlPanelData.CIRCUMFERENCE));
     spinningOn = false;
     colorOn = false;
     rotationOn = false;
     colorSensor = RobotMap.controlPanelColorSensor;
     detectedColor = colorSensor.getColor();
     IR = colorSensor.getIR();
-    detectedTop = 0.4;
-    detectedBottom = 0.2;
+    detectedTop = 0.4; //Min strength of match for a color to be considered to have been detected
+    detectedBottom = 0.2; //Max strength of match for a color to be considered to NOT have been detected
     detectedMiddle = 0.35;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
   }
@@ -51,7 +57,7 @@ public class ControlPanel extends Subsystem {
   public void startThreeRotation() {
     SmartDashboard.putBoolean("Rotations are going", rotationOn);
     SmartDashboard.putNumber(" Number of Rotations ", encoder.get());
-    if (DriveJoystick.getToggleRotation() == true) {
+    if (DriveJoystick.getToggleRotation()) {
       panelMotor.set(panelMotorSpeed);
       rotationOn = true;
     }
@@ -62,10 +68,10 @@ public class ControlPanel extends Subsystem {
   }
 
   public void testRequiredRotation() {
-    if (DriveJoystick.getToggleRotation() == true && spinningOn == false) {
+    if (DriveJoystick.getToggleRotation() && !spinningOn) {
       panelMotor.set(panelMotorSpeed);
       spinningOn = true;
-    } else if (DriveJoystick.getToggleRotation() == true && spinningOn == true) {
+    } else if (DriveJoystick.getToggleRotation() && spinningOn) {
       panelMotor.set(0);
       spinningOn = false;
     }
@@ -160,13 +166,13 @@ public class ControlPanel extends Subsystem {
   }
 
   public void startColorChoice(){
-   if(DriveJoystick.getToggleColor() == true && colorOn == false){
+   if(DriveJoystick.getToggleColor() && !colorOn){
     colorOn = true;
   }
-  else if(DriveJoystick.getToggleColor() == false && colorOn == true){
+  else if(!DriveJoystick.getToggleColor() && colorOn){
     colorChoice();
   }
-  else if (DriveJoystick.getToggleColor() == true && colorOn == true){
+  else if (DriveJoystick.getToggleColor() && colorOn){
     panelMotor.set(0);
     colorOn = false;
   }
@@ -223,13 +229,5 @@ public class ControlPanel extends Subsystem {
     startThreeRotation();
     startColorChoice();
     colorSensor();
-  }
-  // Put methods for controlling this subsystem
-  // here. Call these from Commands.
-
-  @Override
-  public void initDefaultCommand() {
-    // Set the default command for a subsystem here.
-    // setDefaultCommand(new MySpecialCommand());
   }
 }
