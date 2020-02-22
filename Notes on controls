@@ -1,0 +1,26 @@
+Buttons
+- 3 green shooter presets. Just press the shooter preset, and the shooter will shoot all of the balls in the system
+- 3 yellow for the wheel. One manual, one for 3-5 spins, and one for the color. The manual one can stop the other two. 
+  if the other 
+- 1 red - arms up/down
+- 1 blue - climb
+- 2 white for undefined purposes
+- one of the switches should enable the climb button
+
+
+Bottom conveyor belt
+- The bottom conveyor belt turns on iff there is a ball just outside of the conveyor belt. This should be the 
+  only control needed for the bottom conveyor belt, except when shooting balls. If we are shooting balls, then the 
+  bottom conveyor belt should move.
+
+Top conveyor belt
+- The top conveyor belt functions the same way as the bottom conveyor belt. It has a beam break sensor at the bottom that
+  serves the same purpose as the beam break sensor at the front of the bottom conveyor belt. 
+    - Like the bottom conveyor belt, the top conveyor belt should move when we are trying to shoot. Its speed should be
+      adjusted such that the shooter has time to return to the correct speed before the next ball is shot.
+- The exception that makes it different from the bottom conveyor belt is that it must stop if there is a ball at its top,
+  unless we are trying to shoot.
+  
+  Shooter
+  - Double ratio between the two wheel speeds, double mean wheel speed, and boolean steep shoot angle position with air 
+    cylinder are associated with preset. There are 3 presets. It starts when the button corresponding to a preset is pressed.

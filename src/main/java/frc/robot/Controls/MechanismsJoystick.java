@@ -35,4 +35,8 @@ public class MechanismsJoystick {
         return joystick.getRawButton(-3);
     }
   }
+  public static double getChangePanelSpeed(){
+    double speed = joystick.getRawAxis(0);
+    return speed;
+  }
 }
