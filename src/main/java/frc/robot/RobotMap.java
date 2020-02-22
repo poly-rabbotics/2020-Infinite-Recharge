@@ -16,6 +16,8 @@ import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.DigitalInput;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel;
 /**
  * Add your docs here.
  */
@@ -24,11 +26,6 @@ public class RobotMap {
   public static final Joystick mechanismsJoystick = new Joystick(1);
 
   public static final AHRS ahrs = new AHRS();
-
-  public static final PWMVictorSPX frontL = new PWMVictorSPX(5);
-  public static final PWMVictorSPX frontR = new PWMVictorSPX(7);
-  public static final PWMVictorSPX backL = new PWMVictorSPX(6);
-  public static final PWMVictorSPX backR = new PWMVictorSPX(8);
 
   public static final TalonSRX shooterTopMotor = new TalonSRX(1);
   public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
@@ -46,4 +43,9 @@ public class RobotMap {
   public static final DigitalInput intakeSensorOne = new DigitalInput(5);
   public static final DigitalInput intakeSensorTwo = new DigitalInput(7);
   public static final DigitalInput shooterSensor = new DigitalInput(6);
+
+  public static final CANSparkMax leftFront = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
+  public static final CANSparkMax leftBack = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
+  public static final CANSparkMax rightFront = new CANSparkMax(5, CANSparkMaxLowLevel.MotorType.kBrushless);
+  public static final CANSparkMax rightBack = new CANSparkMax(6, CANSparkMaxLowLevel.MotorType.kBrushless);
 }

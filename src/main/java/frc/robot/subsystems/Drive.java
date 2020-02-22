@@ -8,38 +8,49 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.controls.DriveJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANPIDController;
+
 //import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.utils.*;
 import frc.robot.sensors.ShooterCamera;
+
+
 /**
  * Add your docs here.
  */
 public class Drive implements Subsystem, AutoSubsystem {
-  private SpeedControllerGroup left, right;
   private DifferentialDrive drive;
   private AHRS ahrs;
-  private KGains kGains;
   private PIDController turnController;
   static boolean shooterFront;
   private double speed, rotation;
   private ShooterCamera camera;
+  private DriveMotor[] leftMotors, rightMotors;
   public Drive() {
-    left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
-    right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
-    shooterFront = true;
-    drive = new DifferentialDrive(right, left);
-    ahrs = RobotMap.ahrs;
-    kGains = new KGains(0.01, 0.002, 1, 0);
-    //kGains = new KGains(0.03, 0, 0, 0);
-    turnController = new PIDController(kGains, true);
+    //Initialize left and right motors
+    leftMotors  = new DriveMotor[]{new DriveMotor(RobotMap.leftFront), new DriveMotor(RobotMap.leftBack)};
+    rightMotors = new DriveMotor[]{new DriveMotor(RobotMap.leftFront), new DriveMotor(RobotMap.leftBack)};
+    //Pass left and right motors on to drive
+    SpeedControllerGroup left = new SpeedControllerGroup(leftMotors[0].getMotor(), leftMotors[1].getMotor());
+    SpeedControllerGroup right = new SpeedControllerGroup(rightMotors[0].getMotor(), rightMotors[1].getMotor());
+    this.drive = new DifferentialDrive(right, left);
+
+    //Initial default values
+    this.shooterFront = true;
+    
+    //Set up turn controller
+    KGains kGains = new KGains(0.01, 0.002, 1, 0);
+    this.turnController = new PIDController(kGains, true);
     //turnController.setTolerance(0.01);
+
+    //Set up inputs
+    this.ahrs = RobotMap.ahrs;
     camera = new ShooterCamera(RobotMap.shooterCameraName);
     reset();
   }
@@ -103,6 +114,7 @@ public class Drive implements Subsystem, AutoSubsystem {
       }
     }
   }
+  
   public void run() {
     System.out.println(camera.getYaw());
     printState();
