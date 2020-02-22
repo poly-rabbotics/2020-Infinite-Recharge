@@ -94,4 +94,7 @@ public abstract class Command extends Thread {
         }
         onFinish();
     }
+    public boolean getVerbose() {
+        return verbose;
+    }
 }

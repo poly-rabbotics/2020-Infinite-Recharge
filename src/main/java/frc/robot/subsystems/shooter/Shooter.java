@@ -1,4 +1,4 @@
-package frc.robot.subsystems;
+package frc.robot.subsystems.shooter;
 
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
@@ -12,6 +12,7 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import frc.robot.subsystems.AutoSubsystem;
 
 public class Shooter implements AutoSubsystem {
     //TODO: Calibrate presets
@@ -20,25 +21,6 @@ public class Shooter implements AutoSubsystem {
     private static final ShooterPreset TRENCH_RUN_CLOSE_PRESET = new ShooterPreset(2000, 1.75, true);
 
     private static final double ACCEPTABLE_PERCENT_ERROR = 1;
-
-    static class ShooterPreset {
-        private double meanSpeed, speedRatio;
-        private boolean shallowAnglePosition;
-        public ShooterPreset(double meanSpeed, double speedRatio, boolean shallowAnglePosition) {
-            this.meanSpeed = meanSpeed;
-            this.speedRatio = speedRatio;
-            this.shallowAnglePosition = shallowAnglePosition;
-        }
-        public double getMeanSpeed() {
-            return meanSpeed;
-        }
-        public double getSpeedRatio() {
-            return speedRatio;
-        }
-        public boolean getShallowAnglePosition() {
-            return shallowAnglePosition;
-        }
-    }
 
     private double desiredMeanRPM;
     private double topSpeedDividedByBottomSpeed;
@@ -171,6 +153,7 @@ public class Shooter implements AutoSubsystem {
         runMechanism();
     }
     public void autoRun() {
+        applyPreset();
         runMechanism();
     }
     public void setStopped() {
