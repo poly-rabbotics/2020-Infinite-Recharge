@@ -12,6 +12,7 @@ import frc.robot.commands.DriveByTime;
 import frc.robot.commands.DriveInRegularPolygonSequence;
 import frc.robot.commands.TurnByDegrees;
 import frc.robot.subsystems.*;
+import frc.robot.subsystems.shooter.Shooter;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -25,12 +26,18 @@ public class Robot extends TimedRobot {
   Subsystem subsystems[];
   AutoSubsystem autoSubsystems[];
   Drive drive;
+  Shooter shooter;
+  Climb climb;
+  CameraServo cameraServo;
 
   @Override
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
     drive = new Drive(); 
-    subsystems = new Subsystem[]{drive/*, new Shooter(), new Climb(), new CameraServo()*/};
+    shooter = new Shooter();
+    climb = new Climb();
+    cameraServo = new CameraServo();
+    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
@@ -57,9 +64,7 @@ public class Robot extends TimedRobot {
     for(AutoSubsystem auto: autoSubsystems) {
       auto.reset();
     }
-    //(new DriveByTime(drive, 10, 0.5, "Driving Forward", 20)).start();
-    System.out.println("END AUTONOMOUS INIT*****************************************************************************************");
-    (new DriveInRegularPolygonSequence(drive, 2, 0.5, 2, 4, "Drive in Square", 20, false)).start();
+    //Put auto commands here
   }
   @Override
   public void teleopInit() {

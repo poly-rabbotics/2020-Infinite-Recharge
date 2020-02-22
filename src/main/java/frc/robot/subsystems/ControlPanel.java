@@ -14,7 +14,7 @@ import frc.robot.controls.MechanismsJoystick;
 /**
  * Add your docs here.
  */
-/*public class ControlPanel implements Subsystem {
+public class ControlPanel implements Subsystem {
   private Spark panelMotor;
   private double panelMotorSpeed;
 
@@ -35,4 +35,4 @@ import frc.robot.controls.MechanismsJoystick;
     }
   }
   public void reset() {}
-}*/
+}

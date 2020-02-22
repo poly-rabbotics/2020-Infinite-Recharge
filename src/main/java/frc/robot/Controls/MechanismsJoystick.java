@@ -11,20 +11,35 @@ import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.RobotMap;
 
 public class MechanismsJoystick {
+  public enum PresetNames {
+    TARGET_ZONE, INITIATION_LINE, TRENCH_RUN_CLOSE
+  }
   
   private static Joystick joystick = RobotMap.mechanismsJoystick;
-
-  public static double getChangeTopShooter() {
-    return joystick.getRawAxis(1);
-  }
-  public static double getChangeBottomShooter() {
-    return joystick.getRawAxis(5);
-  }
   public static boolean getToggleClimbingSystem() {
-    return joystick.getRawButtonPressed(5) && joystick.getRawButtonPressed(6) && joystick.getRawButtonPressed(7) && joystick.getRawButtonPressed(8);
+    return joystick.getRawButton(5) && joystick.getRawButton(6) 
+        && joystick.getRawButton(7) && joystick.getRawButton(8);
+  }
+
+  public static boolean getShooterPreset(PresetNames presetName) {
+    //TODO: change to actual channel numbers
+    switch(presetName) {
+      case TARGET_ZONE:
+        return joystick.getRawButton(-1);
+      case INITIATION_LINE:
+        return joystick.getRawButton(-2);
+      case TRENCH_RUN_CLOSE:
+        return joystick.getRawButton(-3);
+      default:
+        //default to TRENCHRUNCLOSE. Note that this default should never be used, and is only included for robustness.
+        return joystick.getRawButton(-3);
+    }
   }
   public static double getChangePanelSpeed(){
     double speed = joystick.getRawAxis(0);
     return speed;
+  }
+  public static boolean getToggleConveyorOverride(){
+    return joystick.getRawButton(2);
   }
 }
