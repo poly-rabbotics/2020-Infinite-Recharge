@@ -14,6 +14,7 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj.Spark;
+import edu.wpi.first.wpilibj.DigitalInput;
 
 /**
  * Add your docs here.
@@ -38,4 +39,11 @@ public class RobotMap {
   public static final Spark controlPanelMotor = new Spark(9);
 
   public static final String shooterCameraName = "Microsoft LifeCam HD-3000";
+
+  public static final PWMVictorSPX lowerConveyorMotor = new PWMVictorSPX(3);
+  public static final PWMVictorSPX upperConveyorMotor = new PWMVictorSPX(4);
+
+  public static final DigitalInput intakeSensorOne = new DigitalInput(5);
+  public static final DigitalInput intakeSensorTwo = new DigitalInput(7);
+  public static final DigitalInput shooterSensor = new DigitalInput(6);
 }

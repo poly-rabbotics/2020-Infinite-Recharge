@@ -39,4 +39,7 @@ public class MechanismsJoystick {
     double speed = joystick.getRawAxis(0);
     return speed;
   }
+  public static boolean getToggleConveyorOverride(){
+    return joystick.getRawButton(2);
+  }
 }
