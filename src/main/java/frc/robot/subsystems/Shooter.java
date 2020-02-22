@@ -13,12 +13,14 @@ import edu.wpi.first.wpilibj.smartdashboard.*;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 
-public class Shooter {
+public class Shooter implements AutoSubsystem {
     //TODO: Calibrate presets
     private static final ShooterPreset TARGET_ZONE_PRESET = new ShooterPreset(300, 0.3, false);
     private static ShooterPreset INITIATION_LINE_PRESET = new ShooterPreset(500, 0.5, true);
     private static final ShooterPreset TRENCH_RUN_CLOSE_PRESET = new ShooterPreset(2000, 1.75, true);
-    
+
+    private static final double ACCEPTABLE_PERCENT_ERROR = 1;
+
     static class ShooterPreset {
         private double meanSpeed, speedRatio;
         private boolean shallowAnglePosition;
@@ -40,30 +42,17 @@ public class Shooter {
 
     private double desiredMeanRPM;
     private double topSpeedDividedByBottomSpeed;
-    private double acceptablePercentError;
     private boolean shallowAnglePosition;
     private KGains kGainsVelocity;
     private TalonSRX topMotor, bottomMotor;
     private DoubleSolenoid solenoid;
+    private ShooterPreset preset;
 
 
     public Shooter() {
-        desiredMeanRPM = 240;
-        topSpeedDividedByBottomSpeed = 0;
-        acceptablePercentError = 1;
-        shallowAnglePosition = true;
-        kGainsVelocity = new KGains(0, 0.00025, 0, 0);
         topMotor = RobotMap.shooterTopMotor;
         bottomMotor = RobotMap.shooterBottomMotor;
         solenoid = RobotMap.shooterSolenoid;
-        topMotor.config_kF(Falcon500Data.pidLoopIndex, kGainsVelocity.kF);
-        topMotor.config_kP(Falcon500Data.pidLoopIndex, kGainsVelocity.kP);
-        topMotor.config_kI(Falcon500Data.pidLoopIndex, kGainsVelocity.kI);
-        topMotor.config_kD(Falcon500Data.pidLoopIndex, kGainsVelocity.kD);
-        bottomMotor.config_kF(Falcon500Data.pidLoopIndex, kGainsVelocity.kF);
-        bottomMotor.config_kP(Falcon500Data.pidLoopIndex, kGainsVelocity.kP);
-        bottomMotor.config_kI(Falcon500Data.pidLoopIndex, kGainsVelocity.kI);
-        bottomMotor.config_kD(Falcon500Data.pidLoopIndex, kGainsVelocity.kD);
     }
     /*private void adjustDesiredMeanRPM() {
         if(MechanismsJoystick.getChangeTopShooter() > 0.1 
@@ -119,12 +108,21 @@ public class Shooter {
             chosen = TRENCH_RUN_CLOSE_PRESET;
         }
         if(chosen != null) {
-            desiredMeanRPM = chosen.getMeanSpeed();
-            topSpeedDividedByBottomSpeed = chosen.getSpeedRatio();
-            shallowAnglePosition = chosen.getShallowAnglePosition();
+            preset = chosen;
+            applyPreset();
             return true;
         }
         return false;
+    }
+    private void applyPreset() {
+        if(preset == null) {
+            setStopped();
+        }
+        else {
+            desiredMeanRPM = preset.getMeanSpeed();
+            topSpeedDividedByBottomSpeed = preset.getSpeedRatio();
+            shallowAnglePosition = preset.getShallowAnglePosition();
+        }
     }
     public boolean getOkayToShoot(boolean verbose) {
         int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
@@ -144,7 +142,7 @@ public class Shooter {
             SmartDashboard.putNumber("Top percent error", topPercentError);
             SmartDashboard.putNumber("Bottom percent error", bottomPercentError);
         }
-        if (topPercentError < acceptablePercentError && bottomPercentError < acceptablePercentError) {
+        if (topPercentError < ACCEPTABLE_PERCENT_ERROR && bottomPercentError < ACCEPTABLE_PERCENT_ERROR) {
             SmartDashboard.putBoolean("OK to shoot", true);
             return true;
         }
@@ -153,7 +151,7 @@ public class Shooter {
             return false;
         }
     }
-    private void shoot() {
+    private void runMechanism() {
         int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
         int desiredBottomCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredBottomSpeed());
         topMotor.set(ControlMode.Velocity, desiredTopCountsPerPeriod);
@@ -165,9 +163,35 @@ public class Shooter {
             solenoid.set(Value.kReverse);
         }
     }
+    public void setPreset(ShooterPreset preset) {
+        this.preset = preset;
+    }
     public void run() {
         getUserInput();
-        shoot();
-        getOkayToShoot(true);
+        runMechanism();
+    }
+    public void autoRun() {
+        runMechanism();
+    }
+    public void setStopped() {
+        //reset behaviors
+        preset = null;
+        desiredMeanRPM = 0;
+        topSpeedDividedByBottomSpeed = 0;
+        shallowAnglePosition = false;
+    }
+    public void reset() {
+        setStopped();
+        //Set up PID gains
+        kGainsVelocity = new KGains(0, 0.00025, 0, 0);
+        //Configure PIDF gains
+        topMotor.config_kF(Falcon500Data.pidLoopIndex, kGainsVelocity.kF);
+        topMotor.config_kP(Falcon500Data.pidLoopIndex, kGainsVelocity.kP);
+        topMotor.config_kI(Falcon500Data.pidLoopIndex, kGainsVelocity.kI);
+        topMotor.config_kD(Falcon500Data.pidLoopIndex, kGainsVelocity.kD);
+        bottomMotor.config_kF(Falcon500Data.pidLoopIndex, kGainsVelocity.kF);
+        bottomMotor.config_kP(Falcon500Data.pidLoopIndex, kGainsVelocity.kP);
+        bottomMotor.config_kI(Falcon500Data.pidLoopIndex, kGainsVelocity.kI);
+        bottomMotor.config_kD(Falcon500Data.pidLoopIndex, kGainsVelocity.kD);
     }
 }
