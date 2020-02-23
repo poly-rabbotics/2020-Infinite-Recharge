@@ -22,14 +22,14 @@ public class DriveJoystick{
     double speed = firstJoystick.getRawAxis(4);
     return speed;
   }
+
   public static double getChangePanelSpeed(){
-    double speed = firstJoystick.getRawAxis(0);
-    return speed;
+    return firstJoystick.getRawAxis(0);
   }
   public static boolean getToggleRotation(){
-    return firstJoystick.getRawButton(2);
+    return firstJoystick.getRawAxis(1) < -0.5;
   }
   public static boolean getToggleColor(){
-    return firstJoystick.getRawButton(3);
+    return firstJoystick.getRawAxis(1) > 0.5;
   }
 }

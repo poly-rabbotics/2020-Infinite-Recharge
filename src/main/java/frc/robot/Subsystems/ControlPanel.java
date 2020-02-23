@@ -25,8 +25,10 @@ import frc.robot.fielddata.ControlPanelData;
  * Add your docs here.
  */
 public class ControlPanel {
+  public static final double SPEED = 0.75;
+  public static final double REQUIRED_ROTATIONS = 4;
   private Spark panelMotor;
-  private double panelMotorSpeed, requiredRotations, IR, detectedTop, detectedBottom, detectedMiddle, colorCalled;
+  private double currentSpeed, startDistance, IR, detectedTop, detectedBottom, detectedMiddle, colorCalled;
   private Encoder encoder;
   private boolean spinningOn, rotationOn, colorOn, blueCall, redCall, greenCall, yellowCall, blueRun, redRun, greenRun, yellowRun;
   private ColorSensorV3 colorSensor;
@@ -36,8 +38,6 @@ public class ControlPanel {
   public ControlPanel() {
 
     panelMotor = RobotMap.controlPanelMotor;
-    panelMotorSpeed = .5;
-    requiredRotations = 4; //Actually 3-5
     encoder = RobotMap.controlPanelEncoder;
     //This is the number of rotations of the control panel.
     // x pulses times (1 rot of compliant wheel / 44.4 pulses) * (distance / rot of compliant wheel) * (rot of control panel / distance)
@@ -52,30 +52,57 @@ public class ControlPanel {
     detectedBottom = 0.2; //Max strength of match for a color to be considered to NOT have been detected
     detectedMiddle = 0.35;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
+    currentSpeed = 0;
   }
-
+  public void getColorCalled() {
+    if(gameData.length() > 0 && colorCalled == -1) {
+      switch (gameData.charAt(0))
+      {
+        case 'B' :
+          colorCalled = 1;
+          break;
+        case 'G' :
+          colorCalled = 2;
+          break;
+        case 'R' :
+          colorCalled = 3;
+          break;
+        case 'Y' :
+          colorCalled = 4;
+          break;
+        default :
+          //This is corrupt data
+          break;
+      }
+      if(colorCalled != -1) {
+        colorCalled = (colorCalled + 2) % 4;
+      }
+    }
+  }
   public void startThreeRotation() {
     SmartDashboard.putBoolean("Rotations are going", rotationOn);
-    SmartDashboard.putNumber(" Number of Rotations ", encoder.get());
+    SmartDashboard.putNumber(" Number of Rotations ", encoder.getDistance());
     if (DriveJoystick.getToggleRotation()) {
-      panelMotor.set(panelMotorSpeed);
       rotationOn = true;
+      startDistance = encoder.getDistance();
     }
-    if (encoder.get() > requiredRotations) {
-      panelMotor.set(0);
+    if (encoder.getDistance() - startDistance < REQUIRED_ROTATIONS && rotationOn) {
+      currentSpeed = SPEED;
+    }
+    else {
       rotationOn = false;
     }
   }
 
   public void testRequiredRotation() {
     if (DriveJoystick.getToggleRotation() && !spinningOn) {
-      panelMotor.set(panelMotorSpeed);
+      panelMotor.set(SPEED);
       spinningOn = true;
     } else if (DriveJoystick.getToggleRotation() && spinningOn) {
       panelMotor.set(0);
       spinningOn = false;
     }
-    SmartDashboard.putNumber(" Number of Rotations ", encoder.get());
+    SmartDashboard.putNumber(" Number of Rotations ", encoder.getDistance());
   }
 
   public void colorSensor() {
@@ -133,35 +160,38 @@ public class ControlPanel {
   public void colorChoice(){
     if(colorCalled == 1){
       if (blueRun == false) {
-        panelMotor.set(panelMotorSpeed);
-      }
+        currentSpeed = SPEED;
+      }/*
       else {
         panelMotor.set(0);
-      }
+      }*/
     }
     else if(colorCalled == 2){
       if (greenRun == false) {
-        panelMotor.set(panelMotorSpeed);
-      } 
+        currentSpeed = SPEED;
+      }/*
       else {
-        panelMotor.set(0);
-      }
+        currentSpeed = 0;
+      }*/
      }
      else if(colorCalled == 3){
       if (redRun == false) {
-        panelMotor.set(panelMotorSpeed);
-      } 
+        currentSpeed = SPEED;
+      }/*
       else {
-        panelMotor.set(0);
-      }
+        currentSpeed = 0;
+      }*/
      }
      else if(colorCalled == 4){
-      if (yellowRun == false) {
-        panelMotor.set(panelMotorSpeed);
-      } 
+      if(yellowRun == false) {
+        currentSpeed = SPEED;
+      }/*
       else if(yellowRun == true) {
-        panelMotor.set(0);
-      }
+        currentSpeed = 0;
+      }*/
+     }
+     else {
+       currentSpeed = 0; //Game data not yet received
      }
   }
 
@@ -173,7 +203,7 @@ public class ControlPanel {
     colorChoice();
   }
   else if (DriveJoystick.getToggleColor() && colorOn){
-    panelMotor.set(0);
+    currentSpeed = 0;
     colorOn = false;
   }
 }
@@ -214,20 +244,30 @@ public class ControlPanel {
     
   }
   
-  public void testMotorSpeeds(){
-    panelMotor.set(panelMotorSpeed);
-
-    if(DriveJoystick.getChangePanelSpeed() > 0.1 && panelMotorSpeed <= 1) {
-      panelMotorSpeed += .005;
+  public void manualMotorSpeeds(){
+    if(DriveJoystick.getChangePanelSpeed() > 0.1) {
+      currentSpeed = SPEED;
     }
-    else if(DriveJoystick.getChangePanelSpeed() < -0.1 && panelMotorSpeed >= 0) {
-      panelMotorSpeed -= .005;
+    else if(DriveJoystick.getChangePanelSpeed() < -0.1) {
+      currentSpeed = -SPEED;
     }
   }
 
-  public void run(){
+  public void run() {
+    getColorCalled();
+
+    currentSpeed = 100;
+    System.out.println("start sequence");
     startThreeRotation();
+    System.out.println(currentSpeed);
     startColorChoice();
+    System.out.println(currentSpeed);
+    manualMotorSpeeds();
+    System.out.println(currentSpeed);
     colorSensor();
+    if(currentSpeed == 100) {
+      currentSpeed = 0;
+    }
+    panelMotor.set(currentSpeed);
   }
 }
