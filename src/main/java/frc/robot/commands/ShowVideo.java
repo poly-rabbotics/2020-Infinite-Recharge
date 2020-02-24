@@ -19,6 +19,12 @@ public class ShowVideo extends Command {
     protected void whileRunning() {
         if(enabled) {
             cameraStream.grabFrame(image);
+            //Debugging
+            System.out.print("image.rows: ");
+            System.out.println(image.rows());
+            System.out.print("image.cols: ");
+            System.out.println(image.cols());
+            
             outputStream.putFrame(image);
         }
     }

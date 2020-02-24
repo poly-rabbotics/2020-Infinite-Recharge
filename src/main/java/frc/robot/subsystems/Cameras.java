@@ -21,15 +21,25 @@ boolean intaking;
 ShowVideo shooterVideo, intakeVideo;
 CvSource outputStream;
 
-public Cameras(){
+public Cameras() {
     cameraServo = RobotMap.cameraServo;
-    RobotMap.intakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    RobotMap.intakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
-    CvSink intakeCameraFeed = CameraServer.getInstance().getVideo(RobotMap.intakeCamera);
-    CvSink shooterCameraFeed = CameraServer.getInstance().getVideo(RobotMap.shooterCamera);
+    //RobotMap.intakeCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    //RobotMap.shooterCamera.setConnectionStrategy(ConnectionStrategy.kKeepOpen);
+    RobotMap.intakeCamera.setResolution(RobotMap.IMG_WIDTH, RobotMap.IMG_HEIGHT);
+    RobotMap.shooterCamera.setResolution(RobotMap.IMG_WIDTH, RobotMap.IMG_HEIGHT);
+    RobotMap.intakeCamera.setFPS(30);
+    RobotMap.shooterCamera.setFPS(30);
+    //CvSink intakeCameraFeed = CameraServer.getInstance().getVideo(RobotMap.intakeCamera);
+    //CvSink shooterCameraFeed = CameraServer.getInstance().getVideo(RobotMap.shooterCamera);
+    CvSink intakeCameraFeed = new CvSink("Intake");
+    intakeCameraFeed.setSource(RobotMap.intakeCamera);
+    intakeCameraFeed.setEnabled(true);
+    CvSink shooterCameraFeed = new CvSink("Shooter");
+    shooterCameraFeed.setSource(RobotMap.shooterCamera);
+    shooterCameraFeed.setEnabled(true);
     outputStream = CameraServer.getInstance().putVideo("Main Camera Stream", RobotMap.IMG_WIDTH, RobotMap.IMG_HEIGHT);
-    intakeVideo = new ShowVideo(intakeCameraFeed, outputStream, "Intake Video", 80, true);
-    shooterVideo = new ShowVideo(shooterCameraFeed, outputStream, "Intake Video", 80, true);
+    intakeVideo = new ShowVideo(intakeCameraFeed, outputStream, "Intake Video", 20, true);
+    shooterVideo = new ShowVideo(shooterCameraFeed, outputStream, "Intake Video", 20, true);
     intakeVideo.start();
     shooterVideo.start();
     cameraServo.set(0);
