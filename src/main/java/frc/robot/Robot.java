@@ -8,6 +8,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import frc.robot.commands.DriveByDistance;
 import frc.robot.commands.DriveByTime;
 import frc.robot.commands.DriveInRegularPolygonSequence;
 import frc.robot.commands.TurnByDegrees;
@@ -65,6 +66,7 @@ public class Robot extends TimedRobot {
       auto.reset();
     }
     //Put auto commands here
+    (new DriveByDistance(drive, 8, 10, "Drive forward 8 feet, quit after max 10 seconds", 20)).start();
   }
   @Override
   public void teleopInit() {

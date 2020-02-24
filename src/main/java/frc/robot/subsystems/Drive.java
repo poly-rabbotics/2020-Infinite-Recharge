@@ -14,7 +14,6 @@ import frc.robot.RobotMap;
 import frc.robot.controls.DriveJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
-import com.revrobotics.CANPIDController;
 
 //import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.utils.*;
@@ -25,10 +24,11 @@ import frc.robot.sensors.ShooterCamera;
  * Add your docs here.
  */
 public class Drive extends AutoSubsystem {
+  static boolean shooterFront = true;
+
   private DifferentialDrive drive;
   private AHRS ahrs;
   private PIDController turnController;
-  static boolean shooterFront;
   private double speed, rotation;
   private ShooterCamera camera;
   private DriveMotor[] leftMotors, rightMotors;
@@ -40,9 +40,6 @@ public class Drive extends AutoSubsystem {
     SpeedControllerGroup left = new SpeedControllerGroup(leftMotors[0].getMotor(), leftMotors[1].getMotor());
     SpeedControllerGroup right = new SpeedControllerGroup(rightMotors[0].getMotor(), rightMotors[1].getMotor());
     this.drive = new DifferentialDrive(right, left);
-
-    //Initial default values
-    this.shooterFront = true;
     
     //Set up turn controller
     KGains kGains = new KGains(0.01, 0.002, 1, 0);

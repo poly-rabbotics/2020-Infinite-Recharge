@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
-public class Climb implements Subsystem {
+public class Climb extends Subsystem {
     DoubleSolenoid solenoid;
 
     public Climb() {
