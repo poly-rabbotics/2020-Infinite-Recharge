@@ -14,7 +14,7 @@ import frc.robot.controls.MechanismsJoystick;
 /**
  * Add your docs here.
  */
-public class ControlPanel implements Subsystem {
+public class ControlPanel extends Subsystem {
   private Spark panelMotor;
   private double panelMotorSpeed;
 

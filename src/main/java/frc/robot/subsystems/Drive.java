@@ -24,7 +24,7 @@ import frc.robot.sensors.ShooterCamera;
 /**
  * Add your docs here.
  */
-public class Drive implements Subsystem, AutoSubsystem {
+public class Drive extends AutoSubsystem {
   private DifferentialDrive drive;
   private AHRS ahrs;
   private PIDController turnController;
@@ -65,6 +65,18 @@ public class Drive implements Subsystem, AutoSubsystem {
     //System.out.print("Setting drive forward to ");
     //System.out.println(speed);
     this.speed = speed;
+  }
+  public void setTranslationalSetpoint(double change) {
+    for(DriveMotor motor : leftMotors) {
+      motor.setSmartTranslationSetpoint(change);
+    }
+    for(DriveMotor motor : rightMotors) {
+      motor.setSmartTranslationSetpoint(change);
+    }
+  }
+  public double getPosition() { //return mean position of all drive motors
+    return (leftMotors[0].getPosition() + leftMotors[1].getPosition() 
+            + rightMotors[0].getPosition() + rightMotors[1].getPosition()) / 4;
   }
   protected boolean aligned(double tolerance) {
     return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
@@ -118,12 +130,16 @@ public class Drive implements Subsystem, AutoSubsystem {
   public void run() {
     System.out.println(camera.getYaw());
     printState();
-    getControllerInput();
-    move();
+    if(!getLocked()) {
+      getControllerInput();
+      move();
+    }
   }
   public void autoRun() {
     //System.out.println(speed);
-    autoOrient();
-    move();
+    if(!getLocked()) {
+      autoOrient();
+      move();
+    }
   }
 }

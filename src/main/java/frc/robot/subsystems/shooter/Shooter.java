@@ -14,7 +14,7 @@ import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import frc.robot.subsystems.AutoSubsystem;
 
-public class Shooter implements AutoSubsystem {
+public class Shooter extends AutoSubsystem {
     //TODO: Calibrate presets
     private static final ShooterPreset TARGET_ZONE_PRESET = new ShooterPreset(300, 0.3, false);
     private static ShooterPreset INITIATION_LINE_PRESET = new ShooterPreset(500, 0.5, true);

@@ -17,7 +17,7 @@ import frc.robot.controls.MechanismsJoystick;
 /**
  * Add your docs here.
  */
-public class ConveyorBelt implements AutoSubsystem {
+public class ConveyorBelt extends AutoSubsystem {
  public static double INTAKE_SPEED = 0.5;
  public static double SHOOT_SPEED = 0.3;
  SpeedControllerGroup motors;
