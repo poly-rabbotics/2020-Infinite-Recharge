@@ -32,4 +32,9 @@ public class DriveJoystick{
   public static boolean getToggleColor(){
     return firstJoystick.getRawAxis(1) > 0.5;
   }
+
+  public static boolean getToggleManualMotor(){
+    return firstJoystick.getRawButton(4);
+  }
+
 }

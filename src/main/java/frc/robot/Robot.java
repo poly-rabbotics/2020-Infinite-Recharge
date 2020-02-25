@@ -35,9 +35,9 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotInit() {
-    m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
-    m_chooser.addOption("My Auto", kCustomAuto);
-    SmartDashboard.putData("Auto choices", m_chooser);
+    //m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
+    //m_chooser.addOption("My Auto", kCustomAuto);
+    //SmartDashboard.putData("Auto choices", m_chooser);
     drive = new Drive();
     controlPanel =  new ControlPanel();
     gameData = DriverStation.getInstance().getGameSpecificMessage();
@@ -94,27 +94,7 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    if(gameData.length() > 0)
-    {
-      switch (gameData.charAt(0))
-      {
-        case 'B' :
-        controlPanel.dataBlue();
-          break;
-        case 'G' :
-        controlPanel.dataGreen();
-          break;
-        case 'R' :
-        controlPanel.dataRed();
-          break;
-        case 'Y' :
-        controlPanel.dataYellow();
-          break;
-        default :
-          //This is corrupt data
-          break;
-      }
-    }  
+  
     
     drive.robotDrive();
     controlPanel.run();

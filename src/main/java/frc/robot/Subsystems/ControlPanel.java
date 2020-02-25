@@ -11,6 +11,7 @@ import com.revrobotics.ColorSensorV3;
 
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Encoder;
+import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.Spark;
 import edu.wpi.first.wpilibj.command.Subsystem;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -27,7 +28,7 @@ import frc.robot.fielddata.ControlPanelData;
 public class ControlPanel {
   public static final double SPEED = 0.75;
   public static final double REQUIRED_ROTATIONS = 4;
-  private Spark panelMotor;
+  private PWMVictorSPX panelMotor;
   private double currentSpeed, startDistance, IR, detectedTop, detectedBottom, detectedMiddle, colorCalled;
   private Encoder encoder;
   private boolean spinningOn, rotationOn, colorOn, blueCall, redCall, greenCall, yellowCall, blueRun, redRun, greenRun, yellowRun;
@@ -161,18 +162,22 @@ public class ControlPanel {
     if(colorCalled == 1){
       if (blueRun == false) {
         currentSpeed = SPEED;
+        
       }/*
       else {
         panelMotor.set(0);
       }*/
+
     }
     else if(colorCalled == 2){
       if (greenRun == false) {
         currentSpeed = SPEED;
+        
       }/*
       else {
         currentSpeed = 0;
       }*/
+
      }
      else if(colorCalled == 3){
       if (redRun == false) {
@@ -181,6 +186,7 @@ public class ControlPanel {
       else {
         currentSpeed = 0;
       }*/
+
      }
      else if(colorCalled == 4){
       if(yellowRun == false) {
@@ -189,6 +195,7 @@ public class ControlPanel {
       else if(yellowRun == true) {
         currentSpeed = 0;
       }*/
+   
      }
      else {
        currentSpeed = 0; //Game data not yet received
@@ -202,7 +209,7 @@ public class ControlPanel {
   else if(!DriveJoystick.getToggleColor() && colorOn){
     colorChoice();
   }
-  else if (DriveJoystick.getToggleColor() && colorOn){
+  else if (DriveJoystick.getToggleColor() && colorOn ){
     currentSpeed = 0;
     colorOn = false;
   }
@@ -253,7 +260,38 @@ public class ControlPanel {
     }
   }
 
+  public void manualMotor(){
+    if(DriveJoystick.getToggleManualMotor()){
+      currentSpeed = SPEED;
+    }
+  }
+
+  public void checkGameData(){
+    if(gameData.length() > 0)
+    {
+      switch (gameData.charAt(0))
+      {
+        case 'B' :
+        dataBlue();
+          break;
+        case 'G' :
+        dataGreen();
+          break;
+        case 'R' :
+        dataRed();
+          break;
+        case 'Y' :
+        dataYellow();
+          break;
+        default :
+          //This is corrupt data
+          break;
+      }
+    }  
+  }
+
   public void run() {
+    checkGameData();
     getColorCalled();
 
     currentSpeed = 100;
@@ -265,6 +303,7 @@ public class ControlPanel {
     manualMotorSpeeds();
     System.out.println(currentSpeed);
     colorSensor();
+    manualMotor();
     if(currentSpeed == 100) {
       currentSpeed = 0;
     }
