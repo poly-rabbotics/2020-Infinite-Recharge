@@ -31,12 +31,14 @@ public class RobotMap {
   public static final PWMVictorSPX backL = new PWMVictorSPX(3);
   public static final PWMVictorSPX backR = new PWMVictorSPX(4);
 
-  public static final TalonSRX shooterTopMotor = new TalonSRX(1);
-  public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
+  //public static final TalonSRX shooterTopMotor = new TalonSRX(1);
+  //public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
 
-  public static final Servo cameraServo = new Servo(8);
-  public static final UsbCamera intakeCamera = CameraServer.getInstance().startAutomaticCapture(0);
-  public static final UsbCamera shooterCamera = CameraServer.getInstance().startAutomaticCapture(1);
+  //public static final Servo cameraServo = new Servo(8);
+  //public static UsbCamera intakeCamera = new UsbCamera("Intake camera", 0);
+  //public static UsbCamera shooterCamera = new UsbCamera("Shooter camera", 1);
+  public static final int intakeCameraPath = 0;
+  public static final int shooterCameraPath = 1;
   public static final Spark controlPanelMotor = new Spark(7);
 
 }

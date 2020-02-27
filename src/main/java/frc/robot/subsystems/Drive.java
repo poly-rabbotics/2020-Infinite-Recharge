@@ -19,7 +19,7 @@ import frc.robot.controls.DriveJoystick;
 public class Drive {
   private SpeedControllerGroup left, right;
   private DifferentialDrive drive;
-  static boolean shooterFront;
+  public static boolean shooterFront;
   public Drive() {
 
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);

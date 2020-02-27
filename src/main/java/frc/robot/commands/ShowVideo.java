@@ -15,6 +15,7 @@ public class ShowVideo extends Command {
         this.outputStream = outputStream;
         this.cameraStream = cameraStream;
         this.enabled = false;
+        image = new Mat();
     }
     protected void whileRunning() {
         if(enabled) {

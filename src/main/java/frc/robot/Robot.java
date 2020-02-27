@@ -13,6 +13,8 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
 
+
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -26,7 +28,7 @@ public class Robot extends TimedRobot {
   private String m_autoSelected;
   private final SendableChooser<String> m_chooser = new SendableChooser<>();
   Drive drive;
-  Shooter shooter;
+  //Shooter shooter;
   Cameras cameras;
 
   /**
@@ -38,13 +40,14 @@ public class Robot extends TimedRobot {
     m_chooser.setDefaultOption("Default Auto", kDefaultAuto);
     m_chooser.addOption("My Auto", kCustomAuto);
     SmartDashboard.putData("Auto choices", m_chooser);
+    //RobotMap.intakeCamera = CameraServer.getInstance().startAutomaticCapture(0);
     /*server = CameraServer.getInstance();
     server.setquality(50);
     server.startAutomaticCapture("cam0");
     */
     CameraServer.getInstance().startAutomaticCapture();
     drive = new Drive();
-    shooter = new Shooter();
+    //shooter = new Shooter();
     cameras = new Cameras();
   }
 
@@ -101,7 +104,7 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     drive.run();
     //shooter.run();
-    cameras.run();
+    //cameras.run();
   }
 
   /**
