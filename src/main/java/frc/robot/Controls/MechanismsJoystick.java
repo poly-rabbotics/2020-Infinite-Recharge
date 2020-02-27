@@ -21,7 +21,11 @@ public class MechanismsJoystick {
     return joystick.getRawAxis(5);
   }
   public static boolean getToggleClimbingSystem() {
-    return joystick.getRawButtonPressed(5) && joystick.getRawButtonPressed(6) && joystick.getRawButtonPressed(7) && joystick.getRawButtonPressed(8);
+    if(joystick.getRawButton(4)&&joystick.getRawButtonPressed(10))
+    return true;
+    else{
+     return false;
+    }
   }
  
   public static boolean getToggleColor(){
