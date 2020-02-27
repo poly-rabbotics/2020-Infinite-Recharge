@@ -163,38 +163,38 @@ public class ControlPanel {
       if (blueRun == false) {
         currentSpeed = SPEED;
         
-      }/*
+      }
       else {
-        panelMotor.set(0);
-      }*/
+        colorOn = false;
 
     }
+  }
     else if(colorCalled == 2){
       if (greenRun == false) {
         currentSpeed = SPEED;
         
-      }/*
+      }
       else {
-        currentSpeed = 0;
-      }*/
+        colorOn = false;
+      }
 
      }
      else if(colorCalled == 3){
       if (redRun == false) {
         currentSpeed = SPEED;
-      }/*
+      }
       else {
-        currentSpeed = 0;
-      }*/
+        colorOn = false;
+      }
 
      }
      else if(colorCalled == 4){
       if(yellowRun == false) {
         currentSpeed = SPEED;
-      }/*
+      }
       else if(yellowRun == true) {
-        currentSpeed = 0;
-      }*/
+        colorOn = false;
+      }
    
      }
      else {
@@ -213,6 +213,7 @@ public class ControlPanel {
     currentSpeed = 0;
     colorOn = false;
   }
+
 }
 
   public void dataBlue() {

@@ -34,7 +34,7 @@ public class DriveJoystick{
   }
 
   public static boolean getToggleManualMotor(){
-    return firstJoystick.getRawButton(4);
+    return firstJoystick.getRawButton(12);
   }
 
 }
