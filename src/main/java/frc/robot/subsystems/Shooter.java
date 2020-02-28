@@ -1,6 +1,8 @@
 package frc.robot.subsystems;
 
 import frc.robot.controls.MechanismsJoystick;
+import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj.smartdashboard.*;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
@@ -9,12 +11,20 @@ import frc.robot.RobotMap;
 
 public class Shooter implements Subsystem {
     private TalonSRX topMotor, bottomMotor;
-    private double topMotorSpeed, bottomMotorSpeed;
+    private double topMotorSpeed, bottomMotorSpeed, lowSpeed, highSpeed, bothSpeed;
+    private DoubleSolenoid solenoid;
+    private boolean solenoidOut;
+  
     public Shooter() {
       topMotorSpeed = 0.3;
       bottomMotorSpeed = 0.3;
       topMotor = RobotMap.shooterTopMotor;
       bottomMotor = RobotMap.shooterBottomMotor;
+      lowSpeed = 0.3;
+      highSpeed = 0.5;
+      bothSpeed = 0.35;
+      solenoid = RobotMap.shooterSolenoid;
+      solenoidOut = false;
     }
     private void adjustSpeeds() {
         if(MechanismsJoystick.getChangeTopShooter() > 0.1 && topMotorSpeed <= 1) {
@@ -30,12 +40,45 @@ public class Shooter implements Subsystem {
           bottomMotorSpeed -= .005;
         }
     }
+
+    public void manual(){
+      
+    }
+
     public void run() {
+      if(MechanismsJoystick.isManual() == false){
         adjustSpeeds();
         SmartDashboard.putNumber("Top Shooter:", topMotorSpeed);
         SmartDashboard.putNumber("Bottom Shooter:", bottomMotorSpeed);
         topMotor.set(ControlMode.PercentOutput, topMotorSpeed);
         bottomMotor.set(ControlMode.PercentOutput, bottomMotorSpeed);
+      }
+      else{
+        if(MechanismsJoystick.getToggleManShootOne()){
+          topMotor.set(ControlMode.PercentOutput, bothSpeed);
+          bottomMotor.set(ControlMode.PercentOutput, bothSpeed);
+        }
+        else if(MechanismsJoystick.getToggleManShootTwo()){
+          topMotor.set(ControlMode.PercentOutput, highSpeed);
+          bottomMotor.set(ControlMode.PercentOutput, lowSpeed);
+        }
+        else if(MechanismsJoystick.getToggleManShootThree()){
+          topMotor.set(ControlMode.PercentOutput, lowSpeed);
+          bottomMotor.set(ControlMode.PercentOutput, highSpeed);
+        }
+        else{
+          topMotor.set(ControlMode.PercentOutput, 0);
+          bottomMotor.set(ControlMode.PercentOutput, 0);
+        }
+        if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == false){
+          solenoid.set(Value.kForward);
+          solenoidOut = true;
+        }
+        else if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == true){
+          solenoid.set(Value.kReverse);
+          solenoidOut = false;
+        }
+      }
     }
     public void reset() {}
 }

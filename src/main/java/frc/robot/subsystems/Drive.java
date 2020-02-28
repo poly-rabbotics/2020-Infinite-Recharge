@@ -108,6 +108,7 @@ public class Drive implements Subsystem, AutoSubsystem {
     printState();
     getControllerInput();
     move();
+
   }
   public void autoRun() {
     //System.out.println(speed);

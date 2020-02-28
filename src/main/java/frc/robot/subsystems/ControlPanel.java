@@ -252,8 +252,15 @@ public class ControlPanel {
     
   }
 
+
+
   public void manualMotor(){
     if(MechanismsJoystick.getToggleManualMotor()){
+      currentSpeed = SPEED;
+    }
+  }
+  public void manualMotorM(){
+    if(MechanismsJoystick.getToggleManColorWheel()){
       currentSpeed = SPEED;
     }
   }
@@ -283,6 +290,7 @@ public class ControlPanel {
   }
 
   public void run() {
+    if(!MechanismsJoystick.isManual()){
     checkGameData();
     getColorCalled();
 
@@ -299,5 +307,9 @@ public class ControlPanel {
       currentSpeed = 0;
     }
     panelMotor.set(currentSpeed);
+  }
+  else{
+    manualMotorM();
+  }
   }
 }
