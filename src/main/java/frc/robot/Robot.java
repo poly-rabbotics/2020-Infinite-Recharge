@@ -9,6 +9,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.subsystems.*;
@@ -29,6 +30,8 @@ public class Robot extends TimedRobot {
   //Shooter shooter;
   Climb climber;
   CameraServo cameraServo;
+  ConveyorBelt conveyorBelt;
+  public static Timer timer;
 
   /**
    * This function is run when the robot is first started up and should be
@@ -49,6 +52,8 @@ public class Robot extends TimedRobot {
     //shooter = new Shooter();
     climber = new Climb();
     cameraServo = new CameraServo();
+    conveyorBelt = new ConveyorBelt();
+    timer = new Timer();
   }
 
   /**
@@ -86,6 +91,8 @@ public class Robot extends TimedRobot {
     // TODO Auto-generated method stub
     super.teleopInit();
     drive.reset();
+    timer.start();
+ 
   }
   /**
    * This function is called periodically during autonomous.
@@ -112,6 +119,7 @@ public class Robot extends TimedRobot {
    // shooter.run();
     climber.run();
     cameraServo.run();
+    conveyorBelt.run();
   }
 
   /**
