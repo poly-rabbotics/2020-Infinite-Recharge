@@ -22,5 +22,8 @@ public class Climb implements Subsystem {
             }
         }
     }
-    public void reset() {}
+    @Override
+    public void reset() {
+        
+    }
 }
