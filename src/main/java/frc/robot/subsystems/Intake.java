@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
@@ -21,49 +22,57 @@ import frc.robot.controls.MechanismsJoystick;
 public class Intake extends Subsystem {
   // Put methods for controlling this subsystem
   // here. Call these from Commands.
-  private DoubleSolenoid intakePneumatic, conveyerBeltPneumatic;
-  private PWMVictorSPX intakeWheel, topConveyorBelt, bottomConveyorBelt;
+  private PWMVictorSPX intakeWheel, topConveyorBelt, bottomConveyorBelt, leftArm, rightArm;
   boolean out;
-  double motorSpeed,topBeltSpeed,bottomBeltSpeed;
+  double intakeSpeed, armSpeed, topBeltSpeed,bottomBeltSpeed;
+  DigitalInput one, two;
 
   public Intake() {
-    intakePneumatic = RobotMap.intakeSolenoid;
-    conveyerBeltPneumatic = RobotMap.conveyerBeltSolenoid;
+    leftArm = RobotMap.armMotorOne;
+    rightArm = RobotMap.armMotorTwo;
     intakeWheel = RobotMap.intakeMotor;
     topConveyorBelt = RobotMap.topBeltMotor;
     bottomConveyorBelt = RobotMap.bottomBeltMotor; 
     out = false;
-    motorSpeed = 0.5;
+    intakeSpeed = 0.5;
+    armSpeed = 0.5;
     topBeltSpeed = 0;
     bottomBeltSpeed = 0;
+    one = RobotMap.limitSwitchOne;
+    two = RobotMap.limitSwitchTwo;
   }
 
   //Pneumatics controller
-  private void runPneumatics() {
-    if (MechanismsJoystick.getToggleArm() == true && out == false) {
-      intakePneumatic.set(Value.kForward);
-      out = true;
-    }
-    else if(MechanismsJoystick.getToggleArm() == true && out == true) {
-      intakePneumatic.set(Value.kReverse);
-      out = false;
-    }
-    if (MechanismsJoystick.getAllowShooter()){
-      conveyerBeltPneumatic.set(Value.kReverse);
-    }
-    else {
-      conveyerBeltPneumatic.set(Value.kForward);
-    }
-  }
+ 
   private void runIntakeMotor(){
-    intakeWheel.set(motorSpeed);
-    if(MechanismsJoystick.getChangeIntake() > 0.1 && motorSpeed < 1){
-      motorSpeed += .005;
+    intakeWheel.set(intakeSpeed);
+    if(MechanismsJoystick.getChangeIntake() > 0.1 && intakeSpeed < 1){
+      intakeSpeed += .005;
     }
-    else if(MechanismsJoystick.getChangeIntake() < -0.1 && motorSpeed > 0){
-      motorSpeed -= .005;
+    else if(MechanismsJoystick.getChangeIntake() < -0.1 && intakeSpeed > 0){
+      intakeSpeed -= .005;
     }
   }
+
+private void runArmMotors(){
+
+  if(MechanismsJoystick.getToggleArm() && out == false && !one.get()){
+    leftArm.set(armSpeed);
+    rightArm.set(-armSpeed);
+    out = true;
+  }
+  else if(MechanismsJoystick.getToggleArm() && out == true && !two.get()){
+    leftArm.set(-armSpeed);
+    rightArm.set(armSpeed);
+    out = false;
+  }
+  else{
+    leftArm.set(0);
+    rightArm.set(0);
+  }
+
+}
+
   private void runBeltMotors(){
     topConveyorBelt.set(topBeltSpeed);
     bottomConveyorBelt.set(bottomBeltSpeed);
@@ -86,9 +95,9 @@ public class Intake extends Subsystem {
   }
    public void run(){
     runIntakeMotor();
-    runPneumatics();
+    runArmMotors();
     runBeltMotors();
-    SmartDashboard.putNumber("Motor Speed: ", motorSpeed);
+    SmartDashboard.putNumber("Motor Speed: ", armSpeed);
    }
 
   
