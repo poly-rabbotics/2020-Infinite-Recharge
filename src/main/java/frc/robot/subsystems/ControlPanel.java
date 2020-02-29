@@ -31,10 +31,11 @@ public class ControlPanel {
   private PWMVictorSPX panelMotor;
   private double currentSpeed, startDistance, IR, detectedTop, detectedBottom, detectedMiddle, colorCalled;
   private Encoder encoder;
-  private boolean spinningOn, rotationOn, colorOn, blueCall, redCall, greenCall, yellowCall, blueRun, redRun, greenRun, yellowRun;
+  public static boolean spinningOn, rotationOn, colorOn, blueCall, redCall, greenCall, yellowCall, blueRun, redRun, greenRun, yellowRun;
   private ColorSensorV3 colorSensor;
-  private Color detectedColor;
+  public static Color detectedColor;
   String gameData;
+  public static String colorCalledName, colorDetectedName;
 
   public ControlPanel() {
 
@@ -54,6 +55,8 @@ public class ControlPanel {
     detectedMiddle = 0.35;
     gameData = DriverStation.getInstance().getGameSpecificMessage();
     currentSpeed = 0;
+    colorCalledName = "none";
+    colorDetectedName = "none";
   }
   public void getColorCalled() {
     if(gameData.length() > 0 && colorCalled == -1) {
@@ -81,7 +84,6 @@ public class ControlPanel {
     }
   }
   public void startThreeRotation() {
-    SmartDashboard.putBoolean("Rotations are going", rotationOn);
     SmartDashboard.putNumber(" Number of Rotations ", encoder.getDistance());
     if (MechanismsJoystick.getToggleRotation()) {
       rotationOn = true;
@@ -103,33 +105,16 @@ public class ControlPanel {
       panelMotor.set(0);
       spinningOn = false;
     }
-    SmartDashboard.putNumber(" Number of Rotations ", encoder.getDistance());
   }
 
   public void colorSensor() {
 
     detectedColor = colorSensor.getColor();
-    // displaying color numbers to smart dashboard
-    SmartDashboard.putNumber("Red", detectedColor.red);
-    SmartDashboard.putNumber("Green", detectedColor.green);
-    SmartDashboard.putNumber("Blue", detectedColor.blue);
-    SmartDashboard.putNumber("IR", IR);
-
-    SmartDashboard.putBoolean("Called Blue", blueCall);
-    SmartDashboard.putBoolean("Called Green", greenCall);
-    SmartDashboard.putBoolean("Called Red", redCall);
-    SmartDashboard.putBoolean("Called Yellow", yellowCall);
-
-    SmartDashboard.putBoolean("Running Blue", blueRun);
-    SmartDashboard.putBoolean("Running Green", greenRun);
-    SmartDashboard.putBoolean("Running Red", redRun);
-    SmartDashboard.putBoolean("Running Yellow", yellowRun);
-
-    SmartDashboard.putBoolean("The Color Choice Method is On", colorOn);
     // blue
     if (detectedColor.blue >= detectedTop && detectedColor.green >= detectedTop
         && detectedColor.red <= detectedBottom) {
       blueRun = true;
+      colorDetectedName = "Blue";
     } else {
       blueRun = false;
     }
@@ -137,13 +122,15 @@ public class ControlPanel {
     if (detectedColor.blue <= detectedMiddle && detectedColor.green >= detectedTop
         && detectedColor.red <= detectedBottom) {
       greenRun = true;
+      colorDetectedName = "Green";
     } else {
       greenRun = false;
     }
     // red
     if (detectedColor.blue <= detectedBottom && detectedColor.green <= detectedMiddle
         && detectedColor.red >= detectedTop) {
-      redRun = true;
+      redRun = true;      
+      colorDetectedName = "Red";
     } else {
       redRun = false;
     }
@@ -152,8 +139,13 @@ public class ControlPanel {
     if (detectedColor.blue <= detectedBottom && detectedColor.green >= detectedTop
         && detectedColor.red >= detectedBottom) {
       yellowRun = true;
+      colorDetectedName = "Yellow";
     } else {
       yellowRun = false;
+    }
+
+    if(!blueRun && !greenRun && !redRun && !yellowRun){
+      colorDetectedName = "none";
     }
 
   }
@@ -265,15 +257,19 @@ public class ControlPanel {
       {
         case 'B' :
         dataBlue();
+        colorCalledName = "Blue";
           break;
         case 'G' :
         dataGreen();
+        colorCalledName = "Green";
           break;
         case 'R' :
         dataRed();
+        colorCalledName = "Red";
           break;
         case 'Y' :
         dataYellow();
+        colorCalledName = "Yellow";
           break;
         default :
           //This is corrupt data

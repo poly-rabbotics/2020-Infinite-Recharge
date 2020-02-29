@@ -30,6 +30,7 @@ public class Drive implements Subsystem, AutoSubsystem {
   static boolean shooterFront;
   private double speed, rotation;
   private ShooterCamera camera;
+  public static String front;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
     right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
@@ -41,6 +42,7 @@ public class Drive implements Subsystem, AutoSubsystem {
     turnController = new PIDController(kGains, true);
     //turnController.setTolerance(0.01);
     camera = new ShooterCamera(RobotMap.shooterCameraName);
+    front = "Shooter";
     reset();
   }
   public void reset() {
@@ -102,10 +104,16 @@ public class Drive implements Subsystem, AutoSubsystem {
         shooterFront = !shooterFront;
       }
     }
+    if(shooterFront){
+      front = "Shooter";
+    }
+    else{
+      front = "Intake";
+    }
   }
   public void run() {
     System.out.println(camera.getYaw());
-    printState();
+   // printState();
     getControllerInput();
     move();
   }

@@ -29,6 +29,7 @@ public class Robot extends TimedRobot {
   Climb climb;
   CameraServo cameraServo;
   ControlPanel controlPanel;
+  SmartDashboardOutputs outputs;
 
   @Override
   public void robotInit() {
@@ -38,6 +39,7 @@ public class Robot extends TimedRobot {
     climb = new Climb();
     cameraServo = new CameraServo();
     controlPanel = new ControlPanel();
+    outputs = new SmartDashboardOutputs();
     subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
@@ -88,6 +90,7 @@ public class Robot extends TimedRobot {
       subsystem.run();
     }
     controlPanel.run();
+    outputs.run();
   }
 
   @Override

@@ -13,6 +13,8 @@ import frc.robot.RobotMap;
 public class MechanismsJoystick {
   
   private static Joystick joystick = RobotMap.mechanismsJoystick;
+  public static String controlState = "Normal";
+  public static boolean isManual = false;
 
   public static double getChangeTopShooter() {
     return joystick.getRawAxis(1);
@@ -47,5 +49,15 @@ public class MechanismsJoystick {
     }
     public static boolean getToggleManualMotor(){
       return joystick.getRawButton(12);
+    }
+
+    public static boolean isManual(){
+      if(isManual == true){
+        controlState = "Manual";
+      }
+      else{
+        controlState = "Normal";
+      }
+      return joystick.getRawButton(11);
     }
 }
