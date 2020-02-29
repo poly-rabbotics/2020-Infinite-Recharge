@@ -7,7 +7,9 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
@@ -32,6 +34,8 @@ public class Drive implements Subsystem, AutoSubsystem {
   private double speed, rotation;
   private ShooterCamera camera;
   private DriveMotor[] leftMotors, rightMotors;
+  private Relay relay;
+
   public Drive() {
     //Initialize left and right motors
     leftMotors  = new DriveMotor[]{new DriveMotor(RobotMap.leftFront), new DriveMotor(RobotMap.leftBack)};
@@ -40,6 +44,8 @@ public class Drive implements Subsystem, AutoSubsystem {
     SpeedControllerGroup left = new SpeedControllerGroup(leftMotors[0].getMotor(), leftMotors[1].getMotor());
     SpeedControllerGroup right = new SpeedControllerGroup(rightMotors[0].getMotor(), rightMotors[1].getMotor());
     this.drive = new DifferentialDrive(right, left);
+    relay = RobotMap.lightRelay;
+    relay.set(Value.kOff);
 
     //Initial default values
     this.shooterFront = true;
@@ -101,6 +107,7 @@ public class Drive implements Subsystem, AutoSubsystem {
     if(DriveJoystick.getCameraOrient()) {
       System.out.println("CAMERA ORIENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       setRotationalSetpoint(camera.getYaw());
+      relay.set(Value.kOn);
     }
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
@@ -109,6 +116,7 @@ public class Drive implements Subsystem, AutoSubsystem {
       turnController.setSetpoint(ahrs.getAngle());
       speed = shooterFront ? DriveJoystick.getMove() : -DriveJoystick.getMove();
       rotation = DriveJoystick.getTurn();
+      relay.set(Value.kOff);
       if(DriveJoystick.getFront()) {
         shooterFront = !shooterFront;
       }
