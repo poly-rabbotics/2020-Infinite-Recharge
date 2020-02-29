@@ -1,0 +1,21 @@
+DRIVE_______________________________
+left front   PDP15   CAN4
+left back    PDP14   CAN3
+right front  PDP13   CAN2
+right back   PDP12   CAN1
+
+SHOOTER_____________________________
+top          PDP2    CAN5
+bottom       PDP3    CAN6
+
+CONTROL PANEL_______________________
+PLG Motor    PDP5    PWM5
+
+INTAKE______________________________
+left 775     PDP9    PWM4
+raise left   PDP0    PWM0
+raise right  PDP1    PWM1
+
+CONVEYOR BELT_______________________
+bottom       PDP4    PWM2
+top          PDP5    PWM3
