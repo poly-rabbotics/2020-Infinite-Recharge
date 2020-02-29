@@ -14,7 +14,7 @@ import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
 public class IntakeTest {
-    private PWMVictorSPX motor;
+    private PWMVictorSPX motor, motorTwo;
     private DoubleSolenoid solenoid;
     private boolean out;
     private double speed;
@@ -22,7 +22,7 @@ public class IntakeTest {
     
 public IntakeTest(){
     motor = RobotMap.intakeMotor;
-    solenoid = RobotMap.intakeSolenoid;
+    motorTwo = RobotMap.armMotor;
     out = false;
     speed = 0.5;
 }
@@ -38,12 +38,15 @@ if(MechanismsJoystick.isManual()){
     }
 
     if (MechanismsJoystick.getToggleManIntakeSolenoid() && out == false){
-        solenoid.set (Value.kForward);
+        motorTwo.set(speed);
         out = true;
     }
     else if (MechanismsJoystick.getToggleManIntakeSolenoid() && out == true) {
-        solenoid.set (Value.kReverse);
+        motorTwo.set(-speed);
         out = false;
+    }
+    else{
+        motorTwo.set(0);
     }
 }
 }

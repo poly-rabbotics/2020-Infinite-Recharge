@@ -8,19 +8,27 @@ import frc.robot.controls.MechanismsJoystick;
 
 public class Climb implements Subsystem {
     DoubleSolenoid solenoid;
+    boolean on;
 
     public Climb() {
         solenoid = RobotMap.climbSolenoid;
         solenoid.set(Value.kReverse);
+        
     }
     public void run() {
-        if (MechanismsJoystick.getToggleClimbingSystem()) {
-            if(solenoid.get() == Value.kForward) {
-                solenoid.set(Value.kReverse);
-            }
-            else {
+        if (MechanismsJoystick.getAllowClimbingSystem()) {
+            if(MechanismsJoystick.getToggleClimbingSystem()){
                 solenoid.set(Value.kForward);
             }
+            else {
+             
+                solenoid.set(Value.kReverse);
+            }
+        }
+    
+        else{
+            solenoid.set(Value.kReverse);
+            
         }
     }
     public void reset() {}

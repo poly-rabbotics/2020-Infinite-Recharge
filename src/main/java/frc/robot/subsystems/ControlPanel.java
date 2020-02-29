@@ -263,6 +263,9 @@ public class ControlPanel {
     if(MechanismsJoystick.getToggleManColorWheel()){
       currentSpeed = SPEED;
     }
+    else{
+      currentSpeed = 0;
+    }
   }
 
   public void checkGameData(){
@@ -310,6 +313,7 @@ public class ControlPanel {
   }
   else{
     manualMotorM();
+    panelMotor.set(currentSpeed);
   }
   }
 }

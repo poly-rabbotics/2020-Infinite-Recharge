@@ -8,6 +8,7 @@
 package frc.robot.controls;
 
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 
 public class MechanismsJoystick {
@@ -21,11 +22,12 @@ public class MechanismsJoystick {
     return joystick.getRawAxis(5);
   }
   public static boolean getToggleClimbingSystem() {
-    if(joystick.getRawButton(4)&&joystick.getRawButtonPressed(10))
-    return true;
-    else{
-     return false;
-    }
+    return joystick.getRawButton(10);
+
+  }
+
+  public static boolean getAllowClimbingSystem(){
+    return joystick.getRawButton(4);
   }
  
   public static boolean getToggleColor(){
@@ -54,21 +56,21 @@ public class MechanismsJoystick {
       return joystick.getRawButton(11);
     }
     public static boolean getToggleManShootOne(){
-      return joystick.getRawButtonPressed(7);
+      return joystick.getRawButton(7);
     }
     public static boolean getToggleManShootTwo(){
-      return joystick.getRawButtonPressed(6);
+      return joystick.getRawButton(6);
     }
 
     public static boolean getToggleManShootThree(){
-      return joystick.getRawButtonPressed(5);
+      return joystick.getRawButton(5);
     }
     public static boolean getToggleManTopConveyor(){
-      return joystick.getRawButtonPressed(9);
+      return joystick.getRawButton(9);
       
     }
     public static boolean getToggleManBottomConveyor(){
-      return joystick.getRawButtonPressed(8);
+      return joystick.getRawButton(8);
     }
     public static boolean getToggleManIntakeMotor(){
       return joystick.getRawButton(3);
@@ -77,7 +79,7 @@ public class MechanismsJoystick {
       return joystick.getRawButton(2);
     }
     public static boolean getToggleManShooterSolenoid(){
-      return joystick.getRawButton(1);
+      return joystick.getRawButtonPressed(1);
     }
     public static boolean getToggleManColorWheel(){
      if (joystick.getRawAxis(1) >=0.5){

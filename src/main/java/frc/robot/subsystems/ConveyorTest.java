@@ -20,8 +20,8 @@ private double speed;
 
 
 public ConveyorTest(){
-  top = RobotMap.topConveyorMotor;
-  bottom = RobotMap.bottomConveyorMotor;
+  top = RobotMap.upperConveyorMotor;
+  bottom = RobotMap.lowerConveyorMotor;
   speed = 0.95;
 }
 
