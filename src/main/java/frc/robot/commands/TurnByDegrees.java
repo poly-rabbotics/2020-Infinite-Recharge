@@ -1,4 +1,6 @@
 package frc.robot.commands;
+
+import frc.robot.Robot;
 import frc.robot.subsystems.Drive;
 
 public class TurnByDegrees extends Command {
@@ -11,15 +13,15 @@ public class TurnByDegrees extends Command {
     private double abs(double num) {
         return num > 0 ? num : -num;
     }
-    public TurnByDegrees(Drive drive, double degrees, double acceptableError, String name, int periodInMillis, boolean verbose) {
+    public TurnByDegrees(double degrees, double acceptableError, String name, int periodInMillis, boolean verbose) {
         super(name, periodInMillis, verbose);
-        this.drive = drive;
+        this.drive = Robot.drive;
         this.degrees = degrees;
         this.acceptableError = acceptableError;
         lowErrorCount = 0;
     }
     public TurnByDegrees(Drive drive, double degrees, double acceptableError, String name, int periodInMillis) {
-        this(drive, degrees, acceptableError, name, periodInMillis, false);
+        this(degrees, acceptableError, name, periodInMillis, false);
     }
     protected void onStart() {
         super.onStart();

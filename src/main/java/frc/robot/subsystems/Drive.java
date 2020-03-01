@@ -8,14 +8,11 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
-import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
-import frc.robot.commands.CameraOrient;
+import frc.robot.commands.CameraSetDriveSetpoint;
 import frc.robot.controls.DriveJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -100,10 +97,8 @@ public class Drive extends AutoSubsystem {
       setRotationalSetpoint(-5);
     }
     if(DriveJoystick.getCameraOrient()) {
-      (new CameraOrient(this, "Orient with target")).start();
+      (new CameraSetDriveSetpoint("Orient with target")).start();
     }
-    
-    
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
     }
@@ -124,8 +119,6 @@ public class Drive extends AutoSubsystem {
       front = "Intake";
     }
   }
-
-
 
   public void run() {
     System.out.println(camera.getYaw());

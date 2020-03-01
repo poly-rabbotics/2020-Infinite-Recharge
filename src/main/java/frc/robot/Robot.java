@@ -22,16 +22,17 @@ import frc.robot.subsystems.*;
  */
 public class Robot extends TimedRobot {
 
-  Subsystem subsystems[];
-  AutoSubsystem autoSubsystems[];
-  Drive drive;
-  Shooter shooter;
-  Climb climb;
-  CameraServo cameraServo;
-  ControlPanel controlPanel;
-  SmartDashboardOutputs outputs;
-  ConveyorTest conveyor;
-  IntakeTest intake;
+  public static Subsystem subsystems[];
+  public static AutoSubsystem autoSubsystems[];
+  public static Drive drive;
+  public static Shooter shooter;
+  public static Climb climb;
+  public static CameraServo cameraServo;
+  public static ControlPanel controlPanel;
+  public static  SmartDashboardOutputs outputs;
+  public static ConveyorTest conveyor;
+  public static IntakeTest intake;
+  public static VisionLight light;
 
   @Override
   public void robotInit() {
@@ -44,7 +45,8 @@ public class Robot extends TimedRobot {
     outputs = new SmartDashboardOutputs();
     conveyor = new ConveyorTest();
     intake = new IntakeTest();
-    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
+    light = new VisionLight();
+    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo, light};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }

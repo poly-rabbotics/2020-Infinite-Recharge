@@ -4,17 +4,17 @@ import frc.robot.subsystems.Drive;
 public class DriveInRegularPolygonSequence extends Command {
     private TurnByDegrees[] turn;
     private DriveByTime[] driveByTime;
-    public DriveInRegularPolygonSequence(Drive drive, double timeInSeconds, double speed, 
+    public DriveInRegularPolygonSequence(double timeInSeconds, double speed, 
                                     double acceptableError, int numVertices, String name, 
                                     int periodInMillis, boolean verbose) {
         super(name, periodInMillis, verbose);
         driveByTime = new DriveByTime[4];
         for(int i = 0; i < numVertices; i++) {
-            driveByTime[i] = new DriveByTime(drive, timeInSeconds, speed, name + "-drive-" + i, periodInMillis, verbose);
+            driveByTime[i] = new DriveByTime(timeInSeconds, speed, name + "-drive-" + i, periodInMillis, verbose);
         }
         turn = new TurnByDegrees[4];
         for(int i = 0; i < numVertices; i++) {
-            turn[i] = new TurnByDegrees(drive, 360 / numVertices, acceptableError, name + "-turn-" + i, periodInMillis, verbose);
+            turn[i] = new TurnByDegrees(360 / numVertices, acceptableError, name + "-turn-" + i, periodInMillis, verbose);
         }
     }
     protected void onStart() {

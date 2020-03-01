@@ -1,4 +1,6 @@
 package frc.robot.commands;
+
+import frc.robot.Robot;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.VisionLight;
 
@@ -10,10 +12,10 @@ public class CameraSetDriveSetpoint extends Command {
     private Drive drive;
     private VisionLight light;
     private boolean finished;
-    public CameraSetDriveSetpoint(Drive drive, VisionLight light, String name) {
+    public CameraSetDriveSetpoint(String name) {
         super(name, PERIOD, false);
-        this.drive = drive;
-        this.light = light;
+        this.drive = Robot.drive;
+        this.light = Robot.light;
         finished = false;
     }
     @Override
