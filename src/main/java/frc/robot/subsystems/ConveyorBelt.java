@@ -20,33 +20,65 @@ import frc.robot.controls.MechanismsJoystick;
  */
 public class ConveyorBelt {
  PWMVictorSPX lowerConveyor, upperConveyor;
- DigitalInput upperSensor, lowerSensorOne;
- double speed, currentTime, delay;
+ DigitalInput upperSensor, lowerSensor;
+ double speed, currentTimeOne, currentTimeTwo, delay, count, countTwo;
  int ballCount;
- boolean lowerBallDetected, upperBallDetected, shooterIsSpeed, test;
+ boolean lowerBallDetected, upperBallDetected, shooterIsSpeed, test, detectedUp, detectedBottom;
 
  public ConveyorBelt(){
   lowerConveyor = RobotMap.lowerConveyorMotor;
   upperConveyor = RobotMap.upperConveyorMotor;
-  lowerSensorOne = RobotMap.intakeSensorOne;
-
+  lowerSensor = RobotMap.intakeSensorOne;
   upperSensor = RobotMap.shooterSensor;
   speed = 0.3;
   ballCount = 0;
   lowerBallDetected = false;
   upperBallDetected = false;
   shooterIsSpeed = false;
-  currentTime = 0;
+  currentTimeOne = 0;
+  currentTimeTwo = 0;
   delay = 2.0;
   test = false;
+  count = 0;
+  countTwo = 0;
+  detectedUp = false;
+  detectedBottom = false;
  }
+
+  public void upperThreshold(){
+
+    if(!upperSensor.get()){
+      count ++;
+    }
+    else{
+      count = 0;
+      detectedUp = false;
+    }
+    if( count > 3 ){
+      detectedUp = true;
+    }
+  }
+  public void lowerThreshold(){
+
+    if(!lowerSensor.get()){
+      countTwo ++;
+    }
+    else{
+      countTwo = 0;
+      detectedBottom = false;
+    }
+    if( countTwo > 3 ){
+      detectedBottom = true;
+    }
+  }
+
   public void countBalls() {
     //Check for balls entering the mechanism
-    if(lowerSensorOne.get() == false) {
+    if(detectedBottom) {
       lowerBallDetected = true;
-      currentTime = Timer.getFPGATimestamp();
+      currentTimeOne = Timer.getFPGATimestamp();
     }
-    if(lowerBallDetected == true && lowerSensorOne.get() == true){
+    if(lowerBallDetected == true && !detectedBottom){
       ballCount += 1;
       lowerBallDetected = false;
     }
@@ -61,13 +93,13 @@ public class ConveyorBelt {
   }
   public void storeBalls(){
     
-    if(lowerSensorOne.get() == false && ballCount < 5){
+    if(detectedBottom && ballCount < 5){
       lowerConveyor.set(speed);
       upperConveyor.set(speed);
       test = true;
     }
     else{
-      if(currentTime + delay >= Timer.getFPGATimestamp()){
+      if(currentTimeOne + delay >= Timer.getFPGATimestamp()){
         lowerConveyor.set(speed);
         upperConveyor.set(speed);
         test = true;
@@ -81,7 +113,7 @@ public class ConveyorBelt {
   }
 
   public void conveyorOverride(){
-    if(MechanismsJoystick.getToggleConveyorOverride() == true && upperSensor.get() == true){
+    if(MechanismsJoystick.getToggleConveyorOverride() == true && !detectedUp){
       lowerConveyor.set(speed);
       upperConveyor.set(speed);
       test = true;
@@ -105,10 +137,10 @@ public class ConveyorBelt {
     countBalls();
     conveyorOverride();
     SmartDashboard.putNumber("Number of Balls in Intake", ballCount);
-    SmartDashboard.putBoolean("First Sensor", lowerSensorOne.get());
-    SmartDashboard.putBoolean("Second Sensor", upperSensor.get());
+    SmartDashboard.putBoolean("First Sensor", detectedBottom);
+    SmartDashboard.putBoolean("Second Sensor", detectedUp);
     SmartDashboard.putNumber("Time", Timer.getFPGATimestamp());
-    SmartDashboard.putNumber("Current Time", currentTime);
+    SmartDashboard.putNumber("Current Time", currentTimeOne);
     SmartDashboard.putBoolean("Is Intaking", test);
   }
  
