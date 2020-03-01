@@ -7,8 +7,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
@@ -32,9 +35,12 @@ public class Drive extends AutoSubsystem {
   private double speed, rotation;
   private ShooterCamera camera;
   public static String front;
+  private DigitalOutput relay;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
     right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
+    relay = RobotMap.lightRelay;
+    relay.set(false);
     shooterFront = true;
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
@@ -96,9 +102,12 @@ public class Drive extends AutoSubsystem {
     if(DriveJoystick.getCameraOrient()) {
       (new CameraOrient(this, "Orient with target")).start();
     }
+    
+    
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
     }
+    
     else {
       turnController.setSetpoint(ahrs.getAngle());
       speed = shooterFront ? DriveJoystick.getMove() : -DriveJoystick.getMove();
@@ -107,6 +116,7 @@ public class Drive extends AutoSubsystem {
         shooterFront = !shooterFront;
       }
     }
+   
     if(shooterFront){
       front = "Shooter";
     }
@@ -114,6 +124,9 @@ public class Drive extends AutoSubsystem {
       front = "Intake";
     }
   }
+
+
+
   public void run() {
     System.out.println(camera.getYaw());
    // printState();
