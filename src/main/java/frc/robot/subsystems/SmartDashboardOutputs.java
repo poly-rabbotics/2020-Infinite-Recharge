@@ -14,54 +14,54 @@ import frc.robot.controls.MechanismsJoystick;
  * Add your docs here.
  */
 public class SmartDashboardOutputs {
-double number, numberTwo; 
-boolean intakeArm;
-public SmartDashboardOutputs(){
-    number=0;
-    intakeArm=true;
-    numberTwo=0;
-}
-public void run(){
+    double numberOfBalls, numberOfAutoMode; 
+    boolean intakeArm;
+    public SmartDashboardOutputs() {
+        numberOfBalls = 0;
+        intakeArm = true;
+        numberOfAutoMode = 0;
+    }
+    public void run() {
 
-    // DRIVE VALUES
-    SmartDashboard.putString("Front", Drive.front);
+        // DRIVE VALUES
+        SmartDashboard.putString("Front", Drive.front);
 
-    // SHOOTER VALUES
-    SmartDashboard.putNumber("Distance from Shooter:", Shooter.distance);
-    SmartDashboard.putNumber("Preset", Shooter.preset);
+        // SHOOTER VALUES
+        SmartDashboard.putNumber("Distance from Shooter:", Shooter.distance);
+        SmartDashboard.putNumber("Preset", Shooter.preset);
 
-    // CONVEYOR/INTAKE VALUES
-    SmartDashboard.putNumber("Number of Balls", number);
-    SmartDashboard.putBoolean("Arm is Up",intakeArm);
+        // CONVEYOR/INTAKE VALUES
+        SmartDashboard.putNumber("Number of Balls", numberOfBalls);
+        SmartDashboard.putBoolean("Arm is Up", intakeArm);
 
-    // COLORWHEEL VALUES TESTING
+        // COLORWHEEL VALUES TESTING
+        
+    /*  SmartDashboard.putBoolean("Called Blue", ControlPanel.blueCall);
+        SmartDashboard.putBoolean("Called Green",ControlPanel.greenCall);
+        SmartDashboard.putBoolean("Called Red",ControlPanel.redCall);
+        SmartDashboard.putBoolean("Called Yellow",ControlPanel.yellowCall);
+
+        SmartDashboard.putBoolean("Running Blue",ControlPanel.blueRun);
+        SmartDashboard.putBoolean("Running Green",ControlPanel. greenRun);
+        SmartDashboard.putBoolean("Running Red",ControlPanel.redRun);
+        SmartDashboard.putBoolean("Running Yellow",ControlPanel.yellowRun);
+
+        SmartDashboard.putNumber("Red", ControlPanel.detectedColor.red);
+        SmartDashboard.putNumber("Green", ControlPanel.detectedColor.green);
+        SmartDashboard.putNumber("Blue", ControlPanel.detectedColor.blue);
+        */
+
+        // COLORWHEEL VALUES IN GAME
+        SmartDashboard.putString("Color Called", ControlPanel.colorCalledName);
+        SmartDashboard.putString("Color Detected", ControlPanel.colorDetectedName);
+        SmartDashboard.putBoolean("The Color Choice Method is On", ControlPanel.colorOn);
+        SmartDashboard.putBoolean("Rotations are going", ControlPanel.rotationOn);
+
+        // AUTONOMOUS MODE
+        SmartDashboard.putNumber("Automode ", numberOfAutoMode);
+
+        // CONTROLS
+        SmartDashboard.putString("Controls", MechanismsJoystick.controlState);
     
-   /*  SmartDashboard.putBoolean("Called Blue", ControlPanel.blueCall);
-    SmartDashboard.putBoolean("Called Green",ControlPanel.greenCall);
-    SmartDashboard.putBoolean("Called Red",ControlPanel.redCall);
-    SmartDashboard.putBoolean("Called Yellow",ControlPanel.yellowCall);
-
-    SmartDashboard.putBoolean("Running Blue",ControlPanel.blueRun);
-    SmartDashboard.putBoolean("Running Green",ControlPanel. greenRun);
-    SmartDashboard.putBoolean("Running Red",ControlPanel.redRun);
-    SmartDashboard.putBoolean("Running Yellow",ControlPanel.yellowRun);
-
-    SmartDashboard.putNumber("Red", ControlPanel.detectedColor.red);
-    SmartDashboard.putNumber("Green", ControlPanel.detectedColor.green);
-    SmartDashboard.putNumber("Blue", ControlPanel.detectedColor.blue);
-    */
-
-    // COLORWHEEL VALUES IN GAME
-    SmartDashboard.putString("Color Called", ControlPanel.colorCalledName);
-    SmartDashboard.putString("Color Detected", ControlPanel.colorDetectedName);
-    SmartDashboard.putBoolean("The Color Choice Method is On",ControlPanel.colorOn);
-    SmartDashboard.putBoolean("Rotations are going", ControlPanel.rotationOn);
-
-    // AUTONOMOUS MODE
-    SmartDashboard.putNumber("Automode ",numberTwo);
-
-    // CONTROLS
-    SmartDashboard.putString("Controls", MechanismsJoystick.controlState);
-   
-}
+    }
 }

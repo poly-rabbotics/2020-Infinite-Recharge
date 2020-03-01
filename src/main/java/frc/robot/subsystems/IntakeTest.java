@@ -12,40 +12,39 @@ import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
 public class IntakeTest {
-    private PWMVictorSPX motor, motorTwo;
+    private PWMVictorSPX motor, armMotor;
     private boolean out;
     private double speed;
 
-    
-public IntakeTest(){
-    motor = RobotMap.intakeMotor;
-    motorTwo = RobotMap.armMotor;
-    out = false;
-    speed = 0.5;
-}
-
-
-public void run(){
-if(MechanismsJoystick.isManual()){
-    if (MechanismsJoystick.getToggleManIntakeMotor()){
-        motor.set(speed);
-    }
-    else {
-        motor.set(0);
-    }
-
-    if (MechanismsJoystick.getToggleManArmMotor() && out == false){
-        motorTwo.set(speed);
-        out = true;
-    }
-    else if (MechanismsJoystick.getToggleManArmMotor() && out == true) {
-        motorTwo.set(-speed);
+    public IntakeTest(){
+        motor = RobotMap.intakeMotor;
+        armMotor = RobotMap.armMotor;
         out = false;
+        speed = 0.5;
     }
-    else{
-        motorTwo.set(0);
+
+
+    public void run(){
+        if(MechanismsJoystick.isManual()){
+            if (MechanismsJoystick.getToggleManIntakeMotor()){
+                motor.set(speed);
+            }
+            else {
+                motor.set(0);
+            }
+
+            if (MechanismsJoystick.getToggleManArmMotor() && out == false){
+                armMotor.set(speed);
+                out = true;
+            }
+            else if (MechanismsJoystick.getToggleManArmMotor() && out == true) {
+                armMotor.set(-speed);
+                out = false;
+            }
+            else{
+                armMotor.set(0);
+            }
+        }
     }
-}
-}
 
 }

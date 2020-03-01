@@ -16,7 +16,6 @@ import frc.robot.commands.CameraSetDriveSetpoint;
 import frc.robot.controls.DriveJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
-//import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.utils.*;
 import frc.robot.sensors.ShooterCamera;
 /**
@@ -42,9 +41,7 @@ public class Drive extends AutoSubsystem {
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
     kGains = new KGains(0.01, 0.002, 1, 0);
-    //kGains = new KGains(0.03, 0, 0, 0);
     turnController = new PIDController(kGains, true);
-    //turnController.setTolerance(0.01);
     camera = new ShooterCamera(RobotMap.shooterCameraName);
     front = "Shooter";
     reset();
@@ -61,10 +58,10 @@ public class Drive extends AutoSubsystem {
     //System.out.println(speed);
     this.speed = speed;
   }
-  protected boolean aligned(double tolerance) {
+  public boolean aligned(double tolerance) {
     return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
   }
-  protected void autoOrient() {
+  private void autoOrient() {
     rotation = turnController.calculate(ahrs.getAngle());
   }
   public double getAngle() {

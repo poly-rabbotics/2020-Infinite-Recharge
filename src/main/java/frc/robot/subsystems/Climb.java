@@ -18,7 +18,7 @@ public class Climb extends Subsystem {
     public void run() {
         boolean toggleClimbingSystem = MechanismsJoystick.getToggleClimbingSystem();
         boolean allowClimbingSystem  = MechanismsJoystick.getAllowClimbingSystem();
-        if (allowClimbingSystem) {
+        if(allowClimbingSystem) {
             // Mode for endgame
             if(toggleClimbingSystem) {
                 // Set the solenoid to the state that it is not currently in
