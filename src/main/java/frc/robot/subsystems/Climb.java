@@ -6,7 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
-public class Climb implements Subsystem {
+public class Climb extends Subsystem {
     DoubleSolenoid solenoid;
     boolean on;
 

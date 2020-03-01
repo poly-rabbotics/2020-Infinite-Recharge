@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.commands.CameraOrient;
 import frc.robot.controls.DriveJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
@@ -21,7 +22,7 @@ import frc.robot.sensors.ShooterCamera;
 /**
  * Add your docs here.
  */
-public class Drive implements Subsystem, AutoSubsystem {
+public class Drive extends AutoSubsystem {
   private SpeedControllerGroup left, right;
   private DifferentialDrive drive;
   private AHRS ahrs;
@@ -82,6 +83,9 @@ public class Drive implements Subsystem, AutoSubsystem {
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
     SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
   }
+  public void cameraOrient() {
+    setRotationalSetpoint(camera.getYaw());
+  }
   private void getControllerInput() {
     if(DriveJoystick.getStartAutoOrientLeft()) {
       setRotationalSetpoint(5);
@@ -90,8 +94,7 @@ public class Drive implements Subsystem, AutoSubsystem {
       setRotationalSetpoint(-5);
     }
     if(DriveJoystick.getCameraOrient()) {
-      System.out.println("CAMERA ORIENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      setRotationalSetpoint(camera.getYaw());
+      (new CameraOrient(this, "Orient with target")).start();
     }
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();

@@ -1,5 +1,7 @@
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
+
 /***********************************
 Commands are Threads. This is because when
 multiple actions must happen in sequence, it is sometimes helpful for each action to block
@@ -15,6 +17,7 @@ complex task into smaller ones.
 public abstract class Command extends Thread {
     private int period;
     private boolean verbose;
+    private double startTime;
     
     public Command(String name, int periodInMillis, boolean verbose) {
         //All Threads have names by which they can be identified.
@@ -51,6 +54,7 @@ public abstract class Command extends Thread {
         if(verbose) {
             System.out.println(getName() + "_STARTING*********");
         }
+        startTime = Timer.getFPGATimestamp();
     }
     /*
     * Tie up any loose ends here. For instance, if a Command makes a mechanism move, then 
@@ -93,5 +97,8 @@ public abstract class Command extends Thread {
             }
         }
         onFinish();
+    }
+    public double getTime() {
+        return Timer.getFPGATimestamp() - startTime;
     }
 }

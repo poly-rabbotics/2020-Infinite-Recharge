@@ -60,4 +60,5 @@ public class RobotMap {
   public static final Servo camera = new Servo(9);
 
   public static final String shooterCameraName = "Microsoft LifeCam HD-3000";
+  public static final DigitalOutput visionLightRelay = new DigitalOutput(9);
 }

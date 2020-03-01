@@ -9,7 +9,7 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import frc.robot.RobotMap;
 
-public class Shooter implements Subsystem {
+public class Shooter extends Subsystem {
     private TalonSRX topMotor, bottomMotor;
     static double distance, preset;
     private double topMotorSpeed, bottomMotorSpeed, lowSpeed, highSpeed, bothSpeed;
@@ -47,35 +47,35 @@ public class Shooter implements Subsystem {
     
 
     public void run() {
-      if(MechanismsJoystick.isManual() == false){
+      if(MechanismsJoystick.isManual() == false) {
         adjustSpeeds();
         //SmartDashboard.putNumber("Top Shooter:", topMotorSpeed);
         //SmartDashboard.putNumber("Bottom Shooter:", bottomMotorSpeed);
         topMotor.set(ControlMode.PercentOutput, topMotorSpeed);
         bottomMotor.set(ControlMode.PercentOutput, bottomMotorSpeed);
       }
-      else{
-        if(MechanismsJoystick.getToggleManShootOne()){
+      else {
+        if(MechanismsJoystick.getToggleManShootOne()) {
           topMotor.set(ControlMode.PercentOutput, bothSpeed);
           bottomMotor.set(ControlMode.PercentOutput, bothSpeed);
         }
-        else if(MechanismsJoystick.getToggleManShootTwo()){
+        else if(MechanismsJoystick.getToggleManShootTwo()) {
           topMotor.set(ControlMode.PercentOutput, highSpeed);
           bottomMotor.set(ControlMode.PercentOutput, lowSpeed);
         }
-        else if(MechanismsJoystick.getToggleManShootThree()){
+        else if(MechanismsJoystick.getToggleManShootThree()) {
           topMotor.set(ControlMode.PercentOutput, lowSpeed);
           bottomMotor.set(ControlMode.PercentOutput, highSpeed);
         }
-        else{
+        else {
           topMotor.set(ControlMode.PercentOutput, 0);
           bottomMotor.set(ControlMode.PercentOutput, 0);
         }
-        if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == false){
+        if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == false) {
           solenoid.set(Value.kForward);
           solenoidOut = true;
         }
-        else if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == true){
+        else if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == true) {
           solenoid.set(Value.kReverse);
           solenoidOut = false;
         }
