@@ -7,8 +7,11 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Relay;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
@@ -31,9 +34,12 @@ public class Drive implements Subsystem, AutoSubsystem {
   private double speed, rotation;
   private ShooterCamera camera;
   public static String front;
+  private DigitalOutput relay;
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
     right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
+    relay = RobotMap.lightRelay;
+    relay.set(false);
     shooterFront = true;
     drive = new DifferentialDrive(right, left);
     ahrs = RobotMap.ahrs;
@@ -82,6 +88,7 @@ public class Drive implements Subsystem, AutoSubsystem {
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
     SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
   }
+ 
   private void getControllerInput() {
     if(DriveJoystick.getStartAutoOrientLeft()) {
       setRotationalSetpoint(5);
@@ -93,9 +100,12 @@ public class Drive implements Subsystem, AutoSubsystem {
       System.out.println("CAMERA ORIENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
       setRotationalSetpoint(camera.getYaw());
     }
+    
+    
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
     }
+    
     else {
       turnController.setSetpoint(ahrs.getAngle());
       speed = shooterFront ? DriveJoystick.getMove() : -DriveJoystick.getMove();
@@ -104,6 +114,7 @@ public class Drive implements Subsystem, AutoSubsystem {
         shooterFront = !shooterFront;
       }
     }
+   
     if(shooterFront){
       front = "Shooter";
     }
@@ -111,6 +122,9 @@ public class Drive implements Subsystem, AutoSubsystem {
       front = "Intake";
     }
   }
+
+
+
   public void run() {
     System.out.println(camera.getYaw());
    // printState();
