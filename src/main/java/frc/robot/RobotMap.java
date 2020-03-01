@@ -9,6 +9,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.Relay;
+
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -43,6 +45,7 @@ public class RobotMap {
   public static final DigitalInput intakeSensorOne = new DigitalInput(5);
   public static final DigitalInput intakeSensorTwo = new DigitalInput(7);
   public static final DigitalInput shooterSensor = new DigitalInput(6);
+  public static final Relay lightRelay = new Relay(4);
 
   public static final CANSparkMax leftFront = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
   public static final CANSparkMax leftBack = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);
