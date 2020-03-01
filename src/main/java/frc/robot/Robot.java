@@ -24,21 +24,18 @@ import frc.robot.subsystems.shooter.Shooter;
  */
 public class Robot extends TimedRobot {
 
-  Subsystem subsystems[];
-  AutoSubsystem autoSubsystems[];
-  Drive drive;
-  Shooter shooter;
-  Climb climb;
-  CameraServo cameraServo;
+  public static Subsystem subsystems[];
+  public static AutoSubsystem autoSubsystems[];
+  public static Drive drive = new Drive();
+  public static Shooter shooter = new Shooter();
+  public static Climb climb = new Climb();
+  public static CameraServo cameraServo = new CameraServo();
+  public static ConveyorBelt conveyorBelt = new ConveyorBelt();
 
   @Override
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
-    drive = new Drive(); 
-    shooter = new Shooter();
-    climb = new Climb();
-    cameraServo = new CameraServo();
-    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
+    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo, conveyorBelt};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
