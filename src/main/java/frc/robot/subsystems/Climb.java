@@ -16,18 +16,11 @@ public class Climb implements Subsystem {
         
     }
     public void run() {
-        if (MechanismsJoystick.getAllowClimbingSystem()) {
-            if(MechanismsJoystick.getToggleClimbingSystem()){
-                solenoid.set(Value.kForward);
-            }
-            else {
-                solenoid.set(Value.kReverse);
-            }
+        if (MechanismsJoystick.getToggleClimbingSystem() && MechanismsJoystick.getAllowClimbingSystem()) {
+            solenoid.set(Value.kForward);
         }
-    
-        else{
+       else{
             solenoid.set(Value.kReverse);
-            
         }
     }
     public void reset() {}
