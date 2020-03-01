@@ -11,30 +11,23 @@ import frc.robot.RobotMap;
 
 public class Shooter implements Subsystem {
     private TalonSRX topMotor, bottomMotor;
-<<<<<<< HEAD
-    private double topMotorSpeed, bottomMotorSpeed;
     static double distance, preset;
-=======
     private double topMotorSpeed, bottomMotorSpeed, lowSpeed, highSpeed, bothSpeed;
     private DoubleSolenoid solenoid;
     private boolean solenoidOut;
   
->>>>>>> Manual-Controls
     public Shooter() {
       topMotorSpeed = 0.3;
       bottomMotorSpeed = 0.3;
       topMotor = RobotMap.shooterTopMotor;
       bottomMotor = RobotMap.shooterBottomMotor;
-<<<<<<< HEAD
       distance = 0.0;
       preset = 1;
-=======
       lowSpeed = 0.3;
       highSpeed = 0.5;
       bothSpeed = 0.35;
       solenoid = RobotMap.shooterSolenoid;
       solenoidOut = false;
->>>>>>> Manual-Controls
     }
     private void adjustSpeeds() {
         if(MechanismsJoystick.getChangeTopShooter() > 0.1 && topMotorSpeed <= 1) {
@@ -51,9 +44,7 @@ public class Shooter implements Subsystem {
         }
     }
 
-    public void manual(){
-      
-    }
+    
 
     public void run() {
       if(MechanismsJoystick.isManual() == false){

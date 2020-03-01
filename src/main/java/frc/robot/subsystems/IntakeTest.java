@@ -37,11 +37,11 @@ if(MechanismsJoystick.isManual()){
         motor.set(0);
     }
 
-    if (MechanismsJoystick.getToggleManIntakeSolenoid() && out == false){
+    if (MechanismsJoystick.getToggleManArmMotor() && out == false){
         motorTwo.set(speed);
         out = true;
     }
-    else if (MechanismsJoystick.getToggleManIntakeSolenoid() && out == true) {
+    else if (MechanismsJoystick.getToggleManArmMotor() && out == true) {
         motorTwo.set(-speed);
         out = false;
     }

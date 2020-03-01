@@ -21,7 +21,6 @@ public class Climb implements Subsystem {
                 solenoid.set(Value.kForward);
             }
             else {
-             
                 solenoid.set(Value.kReverse);
             }
         }

@@ -52,7 +52,6 @@ public class MechanismsJoystick {
     public static boolean getToggleManualMotor(){
       return joystick.getRawButton(12);
     }
-<<<<<<< HEAD
 
     public static boolean isManual(){
       if(isManual == true){
@@ -63,12 +62,9 @@ public class MechanismsJoystick {
       }
       return joystick.getRawButton(11);
     }
-=======
     //      MANUAL CONTROLS
 
-    public static boolean isManual (){
-      return joystick.getRawButton(11);
-    }
+ 
     public static boolean getToggleManShootOne(){
       return joystick.getRawButton(7);
     }
@@ -89,7 +85,7 @@ public class MechanismsJoystick {
     public static boolean getToggleManIntakeMotor(){
       return joystick.getRawButton(3);
     }
-    public static boolean getToggleManIntakeSolenoid(){
+    public static boolean getToggleManArmMotor(){
       return joystick.getRawButton(2);
     }
     public static boolean getToggleManShooterSolenoid(){
@@ -105,5 +101,4 @@ public class MechanismsJoystick {
     }
 
 
->>>>>>> Manual-Controls
 }
