@@ -23,10 +23,13 @@ public class DriveByDistance extends Command {
     @Override
     public void start() {
         super.start();
-        startPosition = drive.getPosition();
-        startTime = Timer.getFPGATimestamp();
-        drive.lock();
-        drive.setTranslationalSetpoint(distance);
+        
+        if(!drive.getLocked()) {
+            drive.lock("Drive by distance");
+            startPosition = drive.getPosition();
+            startTime = Timer.getFPGATimestamp();
+            drive.setTranslationalSetpoint(distance);
+        }  
     }
     @Override
     public void whileRunning() {
@@ -35,7 +38,8 @@ public class DriveByDistance extends Command {
     @Override
     public boolean isFinished() {
         return Math.abs(drive.getPosition() - startPosition) < 0.5 //Within 6 inches of correct position,
-            || Timer.getFPGATimestamp() - startTime > maxTimeInSeconds; //or it has been enough time
+            || Timer.getFPGATimestamp() - startTime > maxTimeInSeconds //or it has been enough time
+            || drive.getLock() != "drive"; //or the subsystem is claimed by another command
     }
     @Override
     public void onFinish() {

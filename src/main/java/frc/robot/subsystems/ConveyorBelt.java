@@ -11,6 +11,8 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import frc.robot.RobotMap;
+import frc.robot.commands.IntakeBall;
+import frc.robot.commands.PreloadShooter;
 import frc.robot.controls.MechanismsJoystick;
 
 /**
@@ -20,14 +22,13 @@ public class ConveyorBelt extends AutoSubsystem {
  public static double INTAKE_SPEED = 0.5;
  public static double SHOOT_SPEED = 0.3;
  SpeedControllerGroup motors;
- DigitalInput upperSensor, lowerSensorOne, lowerSensorTwo;
+ DigitalInput upperSensor, lowerSensor, lowerSensorTwo;
  int ballCount;
  boolean lowerBallDetected, upperBallDetected;
 
  public ConveyorBelt(){
   motors = new SpeedControllerGroup(RobotMap.lowerConveyorMotor, RobotMap.upperConveyorMotor);
-  lowerSensorOne = RobotMap.intakeSensorOne;
-  lowerSensorTwo = RobotMap.intakeSensorTwo;
+  lowerSensor = RobotMap.intakeSensor;
 
   upperSensor = RobotMap.shooterSensor;
   ballCount = 0;
@@ -36,52 +37,65 @@ public class ConveyorBelt extends AutoSubsystem {
  }
   public void countBalls() {
     //Check for balls entering the mechanism
-    if(lowerSensorOne.get() == true || lowerSensorTwo.get() == true) {
+    if(lowerSensor.get()) {
       lowerBallDetected = true;
     }
-    if(lowerBallDetected == true && lowerSensorOne.get() == false && lowerSensorTwo.get() == false){
+    if(lowerBallDetected && !lowerSensor.get()){
       ballCount += 1;
       lowerBallDetected = false;
     }
     //Check for balls leaving the mechanism
-    if(upperSensor.get() == true) {
+    if(upperSensor.get()) {
       upperBallDetected = true;
     }
-    if(upperBallDetected == true && upperSensor.get() == false){
+    if(upperBallDetected && !upperSensor.get()){
       ballCount -= 1;
       upperBallDetected = false;
     }
   }
-  public void storeBalls(){
-    if(lowerSensorOne.get() == true || lowerSensorTwo.get() == true && getNumberOfBalls() < 5){
-      motors.set(INTAKE_SPEED);
-    }
-    else{
-      motors.set(0);
-    }
-  }
+  // public void storeBalls(){
+  //   if(lowerSensor.get() && getNumberOfBalls() < 5){ //5 is maximum allowable number of balls
+  //     motors.set(INTAKE_SPEED);
+  //   }
+  //   else{
+  //     motors.set(0);
+  //   }
+  // }
 
-  public void conveyorOverride(){
-    if(MechanismsJoystick.getToggleConveyorOverride() == true && upperSensor.get() == false){
-      motors.set(INTAKE_SPEED);
-        }
-    else{
-      storeBalls();
-    }
-  }
+  // public void conveyorOverride(){
+  //   if(MechanismsJoystick.getToggleConveyorOverride() && !upperSensor.get()){
+  //     motors.set(INTAKE_SPEED);
+  //   }
+  //   else {
+  //     storeBalls();
+  //   }
+  // }
 
-  public void stop() {
-    motors.set(0);
-  }
+
   public void run(){
-    conveyorOverride();
+    if(getLock() == "") { //If no command has a lock on this subsystem
+      (new IntakeBall("Intake ball " + getNumberOfBalls(), 20, false)).start();
+    }
+    if(MechanismsJoystick.getToggleConveyorOverride()) {
+      (new PreloadShooter("Preload shooter", 20, false)).start();
+    }
+    countBalls();
     SmartDashboard.putNumber("Number of Balls in Intake", ballCount);
+  }
+  public boolean needsToStop() {
+    return upperSensor.get();
   }
   public int getNumberOfBalls() {
     return ballCount;
   }
+  public void stop() {
+    motors.set(0);
+  }
   public void moveForShoot() {
       motors.set(SHOOT_SPEED);
+  }
+  public void moveForIntake() {
+    motors.set(INTAKE_SPEED);
   }
   public void reset() {}
   public void autoRun() {

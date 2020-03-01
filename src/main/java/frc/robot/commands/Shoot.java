@@ -16,15 +16,19 @@ public class Shoot extends Command {
     @Override
     protected void onStart() {
         super.onStart();
+        if(conveyorBelt.getLock() == "intake ball" || !conveyorBelt.getLocked()) {
+            conveyorBelt.lock("shoot");
+        }
         shooter.setPreset(preset);
     }
     @Override
     protected void whileRunning() {
         if(shooter.getOkayToShoot(getVerbose())) {
+            conveyorBelt.lock("shoot");
             conveyorBelt.moveForShoot();
         }
         else {
-            conveyorBelt.storeBalls();
+            conveyorBelt.unlock();
         }
     }
     @Override

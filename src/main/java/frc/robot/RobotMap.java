@@ -42,8 +42,7 @@ public class RobotMap {
   public static final PWMVictorSPX lowerConveyorMotor = new PWMVictorSPX(3);
   public static final PWMVictorSPX upperConveyorMotor = new PWMVictorSPX(4);
 
-  public static final DigitalInput intakeSensorOne = new DigitalInput(5);
-  public static final DigitalInput intakeSensorTwo = new DigitalInput(7);
+  public static final DigitalInput intakeSensor = new DigitalInput(5);
   public static final DigitalInput shooterSensor = new DigitalInput(6);
   public static final Relay lightRelay = new Relay(4);
 

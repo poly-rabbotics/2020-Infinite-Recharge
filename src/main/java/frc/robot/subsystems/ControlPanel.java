@@ -12,7 +12,7 @@ import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
 /**
- * Add your docs here.
+ * THIS IS AN EARLY VERSION, DO NOT MERGE WITH MASTER.
  */
 public class ControlPanel extends Subsystem {
   private Spark panelMotor;
