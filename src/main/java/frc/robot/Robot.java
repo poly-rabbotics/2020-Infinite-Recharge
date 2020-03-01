@@ -29,7 +29,12 @@ public class Robot extends TimedRobot {
   Climb climb;
   CameraServo cameraServo;
   ControlPanel controlPanel;
+<<<<<<< HEAD
   SmartDashboardOutputs outputs;
+=======
+  ConveyorTest conveyor;
+  IntakeTest intake;
+>>>>>>> Manual-Controls
 
   @Override
   public void robotInit() {
@@ -39,7 +44,12 @@ public class Robot extends TimedRobot {
     climb = new Climb();
     cameraServo = new CameraServo();
     controlPanel = new ControlPanel();
+<<<<<<< HEAD
     outputs = new SmartDashboardOutputs();
+=======
+    conveyor = new ConveyorTest();
+    intake = new IntakeTest();
+>>>>>>> Manual-Controls
     subsystems = new Subsystem[]{drive, shooter, climb, cameraServo};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
@@ -90,7 +100,12 @@ public class Robot extends TimedRobot {
       subsystem.run();
     }
     controlPanel.run();
+<<<<<<< HEAD
     outputs.run();
+=======
+    conveyor.run();
+    intake.run();
+>>>>>>> Manual-Controls
   }
 
   @Override
