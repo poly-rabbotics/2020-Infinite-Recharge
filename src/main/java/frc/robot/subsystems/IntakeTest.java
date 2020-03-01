@@ -7,15 +7,12 @@
 
 package frc.robot.subsystems;
 
-import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PWMVictorSPX;
-import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
 public class IntakeTest {
     private PWMVictorSPX motor, motorTwo;
-    private DoubleSolenoid solenoid;
     private boolean out;
     private double speed;
 
