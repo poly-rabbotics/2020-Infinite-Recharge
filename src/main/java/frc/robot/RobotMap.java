@@ -31,9 +31,9 @@ public class RobotMap {
 
   public static final TalonSRX shooterTopMotor = new TalonSRX(1);
   public static final TalonSRX shooterBottomMotor = new TalonSRX(2);
-  public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(0, 1); //TODO: CHANGE TO ACTUAL PORT #
+  public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(1, 0); //TODO: CHANGE TO ACTUAL PORT #
   
-  public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
+  public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(3, 2);
   public static final Servo camera = new Servo(10);
   public static final Spark controlPanelMotor = new Spark(9);
 
@@ -44,7 +44,7 @@ public class RobotMap {
 
   public static final DigitalInput intakeSensor = new DigitalInput(5);
   public static final DigitalInput shooterSensor = new DigitalInput(6);
-  public static final Relay lightRelay = new Relay(4);
+  public static final Relay lightRelay = new Relay(3);
 
   public static final CANSparkMax leftFront = new CANSparkMax(3, CANSparkMaxLowLevel.MotorType.kBrushless);
   public static final CANSparkMax leftBack = new CANSparkMax(4, CANSparkMaxLowLevel.MotorType.kBrushless);

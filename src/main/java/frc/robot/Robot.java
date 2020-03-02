@@ -14,6 +14,7 @@ import frc.robot.commands.DriveInRegularPolygonSequence;
 import frc.robot.commands.TurnByDegrees;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.commands.*;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -35,7 +36,7 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
-    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo, conveyorBelt};
+    subsystems = new Subsystem[]{conveyorBelt};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
@@ -63,7 +64,8 @@ public class Robot extends TimedRobot {
       auto.reset();
     }
     //Put auto commands here
-    (new DriveByDistance(drive, 8, 10, "Drive forward 8 feet, quit after max 10 seconds", 20)).start();
+    (new IntakeBall("test intake ball", 20, false)).start();
+    //(new DriveByDistance(drive, 8, 10, "Drive forward 8 feet, quit after max 10 seconds", 20)).start();
   }
   @Override
   public void teleopInit() {
