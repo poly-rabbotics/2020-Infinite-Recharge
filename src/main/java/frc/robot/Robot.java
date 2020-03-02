@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
   public static Climb climb;
   public static CameraServo cameraServo;
   public static ControlPanel controlPanel;
-  public static  SmartDashboardOutputs outputs;
+  public static SmartDashboardOutputs outputs;
   public static ConveyorTest conveyor;
   public static IntakeTest intake;
   public static VisionLight light;
