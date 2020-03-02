@@ -47,4 +47,10 @@ public class DriveJoystick {
   public static boolean getFront(){
     return joystick.getRawButtonPressed(2);
   }
+
+  public static boolean getToggleLight(){
+    return joystick.getRawButton(3);
+  }
+
+
 }

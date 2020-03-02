@@ -13,11 +13,10 @@ import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
+import frc.robot.commands.CameraSetDriveSetpoint;
 import frc.robot.controls.DriveJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
-
-//import edu.wpi.first.wpilibj.controller.PIDController;
 import frc.robot.utils.*;
 import frc.robot.sensors.ShooterCamera;
 
@@ -53,6 +52,7 @@ public class Drive extends AutoSubsystem {
     //Set up inputs
     this.ahrs = RobotMap.ahrs;
     camera = new ShooterCamera(RobotMap.shooterCameraName);
+    front = "Shooter";
     reset();
   }
   public void reset() {
@@ -79,10 +79,10 @@ public class Drive extends AutoSubsystem {
     return (leftMotors[0].getPosition() + leftMotors[1].getPosition() 
             + rightMotors[0].getPosition() + rightMotors[1].getPosition()) / 4;
   }
-  protected boolean aligned(double tolerance) {
+  public boolean aligned(double tolerance) {
     return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
   }
-  protected void autoOrient() {
+  private void autoOrient() {
     rotation = turnController.calculate(ahrs.getAngle());
   }
   public double getAngle() {
@@ -104,6 +104,9 @@ public class Drive extends AutoSubsystem {
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
     SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
   }
+  public void cameraOrient() {
+    setRotationalSetpoint(camera.getYaw());
+  }
   private void getControllerInput() {
     if(DriveJoystick.getStartAutoOrientLeft()) {
       setRotationalSetpoint(5);
@@ -112,13 +115,12 @@ public class Drive extends AutoSubsystem {
       setRotationalSetpoint(-5);
     }
     if(DriveJoystick.getCameraOrient()) {
-      System.out.println("CAMERA ORIENT!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-      setRotationalSetpoint(camera.getYaw());
-      relay.set(Value.kOn);
+      (new CameraSetDriveSetpoint("Orient with target")).start();
     }
     if(DriveJoystick.getContinueAutoOrient()) {
       autoOrient();
     }
+    
     else {
       turnController.setSetpoint(ahrs.getAngle());
       speed = shooterFront ? DriveJoystick.getMove() : -DriveJoystick.getMove();
@@ -127,6 +129,13 @@ public class Drive extends AutoSubsystem {
       if(DriveJoystick.getFront()) {
         shooterFront = !shooterFront;
       }
+    }
+   
+    if(shooterFront){
+      front = "Shooter";
+    }
+    else{
+      front = "Intake";
     }
   }
   

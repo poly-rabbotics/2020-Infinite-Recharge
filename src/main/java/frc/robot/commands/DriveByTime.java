@@ -1,4 +1,6 @@
 package frc.robot.commands;
+
+import frc.robot.Robot;
 import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.Robot;
@@ -13,7 +15,7 @@ public class DriveByTime extends Command {
         this.time = timeInSeconds;
         this.speed = speed;
     }
-    public DriveByTime(Drive drive, double timeInSeconds, double speed, String name, int periodInMillis) {
+    public DriveByTime(double timeInSeconds, double speed, String name, int periodInMillis) {
         this(timeInSeconds, speed, name, periodInMillis, false);
     }
     protected void onStart() {
