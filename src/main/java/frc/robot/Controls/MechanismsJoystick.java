@@ -24,7 +24,7 @@ public class MechanismsJoystick {
     return joystick.getRawAxis(5);
   }
   public static boolean getToggleClimbingSystem() {
-    return joystick.getRawButton(10);
+    return joystick.getRawButtonPressed(10);
 
   }
 
@@ -82,14 +82,17 @@ public class MechanismsJoystick {
     public static boolean getToggleManBottomConveyor(){
       return joystick.getRawButton(8);
     }
-    public static boolean getToggleManIntakeMotor(){
+    public static boolean getManIntakeMotor(){
       return joystick.getRawButton(3);
     }
-    public static boolean getToggleManArmMotor(){
+    public static boolean getManArmMotor(){
       return joystick.getRawButton(2);
     }
+    public static boolean getToggleManArmMotor(){
+      return joystick.getRawButtonPressed(2);
+    }
     public static boolean getToggleManShooterSolenoid(){
-      return joystick.getRawButtonPressed(1);
+      return joystick.getRawButton(1);
     }
     public static boolean getToggleManColorWheel(){
      if (joystick.getRawAxis(1) >=0.5){
@@ -99,6 +102,4 @@ public class MechanismsJoystick {
       return false;
     }
     }
-
-
 }

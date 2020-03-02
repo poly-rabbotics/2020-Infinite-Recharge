@@ -17,15 +17,15 @@ public class Shooter extends Subsystem {
     private boolean solenoidOut;
   
     public Shooter() {
-      topMotorSpeed = 0.3;
-      bottomMotorSpeed = 0.3;
+      topMotorSpeed = 0;
+      bottomMotorSpeed = 0;
       topMotor = RobotMap.shooterTopMotor;
       bottomMotor = RobotMap.shooterBottomMotor;
       distance = 0.0;
       preset = 1;
       lowSpeed = 0.3;
-      highSpeed = 0.5;
-      bothSpeed = 0.35;
+      highSpeed = 0.6;
+      bothSpeed = 0.8;
       solenoid = RobotMap.shooterSolenoid;
       solenoidOut = false;
     }
@@ -56,28 +56,26 @@ public class Shooter extends Subsystem {
       }
       else {
         if(MechanismsJoystick.getToggleManShootOne()) {
-          topMotor.set(ControlMode.PercentOutput, bothSpeed);
+          topMotor.set(ControlMode.PercentOutput, -bothSpeed);
           bottomMotor.set(ControlMode.PercentOutput, bothSpeed);
         }
         else if(MechanismsJoystick.getToggleManShootTwo()) {
-          topMotor.set(ControlMode.PercentOutput, highSpeed);
+          topMotor.set(ControlMode.PercentOutput, -highSpeed);
           bottomMotor.set(ControlMode.PercentOutput, lowSpeed);
         }
         else if(MechanismsJoystick.getToggleManShootThree()) {
-          topMotor.set(ControlMode.PercentOutput, lowSpeed);
+          topMotor.set(ControlMode.PercentOutput, -lowSpeed);
           bottomMotor.set(ControlMode.PercentOutput, highSpeed);
         }
         else {
           topMotor.set(ControlMode.PercentOutput, 0);
           bottomMotor.set(ControlMode.PercentOutput, 0);
         }
-        if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == false) {
+        if(MechanismsJoystick.getToggleManShooterSolenoid()) {
           solenoid.set(Value.kForward);
-          solenoidOut = true;
         }
-        else if(MechanismsJoystick.getToggleManShooterSolenoid() && solenoidOut == true) {
+        else if(!MechanismsJoystick.getToggleManShooterSolenoid()) {
           solenoid.set(Value.kReverse);
-          solenoidOut = false;
         }
       }
     }

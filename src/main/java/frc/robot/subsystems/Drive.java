@@ -33,8 +33,8 @@ public class Drive extends AutoSubsystem {
   public static String front;
   private DigitalOutput relay;
   public Drive() {
-    left = new SpeedControllerGroup(RobotMap.frontL, RobotMap.backL);
-    right = new SpeedControllerGroup(RobotMap.frontR, RobotMap.backR);
+    left = new SpeedControllerGroup(RobotMap.leftFront, RobotMap.leftBack);
+    right = new SpeedControllerGroup(RobotMap.rightFront, RobotMap.rightBack);
     relay = RobotMap.lightRelay;
     relay.set(false);
     shooterFront = true;

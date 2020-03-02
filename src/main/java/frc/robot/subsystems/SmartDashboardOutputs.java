@@ -9,7 +9,7 @@ package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.smartdashboard.*;
 import frc.robot.controls.MechanismsJoystick;
-
+import frc.robot.Robot;
 /**
  * Add your docs here.
  */
@@ -56,12 +56,16 @@ public class SmartDashboardOutputs {
         SmartDashboard.putString("Color Detected", ControlPanel.colorDetectedName);
         SmartDashboard.putBoolean("The Color Choice Method is On", ControlPanel.colorOn);
         SmartDashboard.putBoolean("Rotations are going", ControlPanel.rotationOn);
+        Robot.controlPanel.showRotations();
 
         // AUTONOMOUS MODE
         SmartDashboard.putNumber("Automode ", numberOfAutoMode);
 
         // CONTROLS
         SmartDashboard.putString("Controls", MechanismsJoystick.controlState);
-    
+
+        // PRESSURE
+        SmartDashboard.putNumber("Pressure", Robot.pressureTransducer.getPSI());
+        SmartDashboard.putBoolean("Pressure above 60 PSI", Robot.pressureTransducer.getPSI() > 60);
     }
 }

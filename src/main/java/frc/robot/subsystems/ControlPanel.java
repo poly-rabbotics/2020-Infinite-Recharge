@@ -83,13 +83,15 @@ public class ControlPanel {
       }
     }
   }
-  public void startThreeRotation() {
+  public void showRotations() {
     SmartDashboard.putNumber(" Number of Rotations ", encoder.getDistance());
+  }
+  public void startThreeRotation() {
     if (MechanismsJoystick.getToggleRotation()) {
       rotationOn = true;
       startDistance = encoder.getDistance();
     }
-    if (encoder.getDistance() - startDistance < REQUIRED_ROTATIONS && rotationOn) {
+    if (encoder.getDistance() - startDistance < REQUIRED_ROTATIONS && rotationOn && !MechanismsJoystick.getToggleManColorWheel()) {
       currentSpeed = SPEED;
     }
     else {

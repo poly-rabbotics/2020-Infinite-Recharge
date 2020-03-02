@@ -21,6 +21,7 @@ private double speed;
 
 public ConveyorTest(){
   top = RobotMap.upperConveyorMotor;
+  top.setInverted(true);
   bottom = RobotMap.lowerConveyorMotor;
   speed = 0.95;
 }

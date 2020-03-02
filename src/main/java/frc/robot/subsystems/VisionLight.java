@@ -1,18 +1,19 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalOutput;
+import edu.wpi.first.wpilibj.Relay;
 import frc.robot.RobotMap;
 
 public class VisionLight extends Subsystem {
-    DigitalOutput relay;
+    Relay relay;
     public VisionLight() {
         relay = RobotMap.visionLightRelay;
     }
     public void turnOn() {
-        relay.set(true); //TODO: choose this value such that the lights turn off when reset
+        relay.set(Relay.Value.kForward); //TODO: choose this value such that the lights turn off when reset
     }
     public void turnOff() {
-        relay.set(false);
+        relay.set(Relay.Value.kOff);
     }
     public void run() {
         if(!getLocked()) {

@@ -8,9 +8,11 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveByTime;
 import frc.robot.commands.DriveInRegularPolygonSequence;
 import frc.robot.commands.TurnByDegrees;
+import frc.robot.sensors.PressureTransducer;
 import frc.robot.subsystems.*;
 
 /**
@@ -33,6 +35,7 @@ public class Robot extends TimedRobot {
   public static ConveyorTest conveyor;
   public static IntakeTest intake;
   public static VisionLight light;
+  public static PressureTransducer pressureTransducer;
 
   @Override
   public void robotInit() {
@@ -46,11 +49,12 @@ public class Robot extends TimedRobot {
     conveyor = new ConveyorTest();
     intake = new IntakeTest();
     light = new VisionLight();
+    pressureTransducer = new PressureTransducer();
     subsystems = new Subsystem[]{drive, shooter, climb, cameraServo, light};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
-    autoSubsystems = new AutoSubsystem[]{drive};
+    autoSubsystems = new AutoSubsystem[]{};
     for(Subsystem auto: autoSubsystems) {
       auto.reset();
     }

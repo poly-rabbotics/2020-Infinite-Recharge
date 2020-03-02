@@ -18,6 +18,7 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
@@ -36,10 +37,10 @@ public class RobotMap {
 
   public static final AHRS ahrs = new AHRS();
 
-  public static final CANSparkMax frontL = new CANSparkMax(1, MotorType.kBrushless);
-  public static final CANSparkMax frontR = new CANSparkMax(2, MotorType.kBrushless);
-  public static final CANSparkMax backL = new CANSparkMax(3, MotorType.kBrushless);
-  public static final CANSparkMax backR = new CANSparkMax(4, MotorType.kBrushless);
+  public static final CANSparkMax leftFront = new CANSparkMax(1, MotorType.kBrushless);
+  public static final CANSparkMax leftBack = new CANSparkMax(2, MotorType.kBrushless);
+  public static final CANSparkMax rightFront = new CANSparkMax(3, MotorType.kBrushless);
+  public static final CANSparkMax rightBack = new CANSparkMax(4, MotorType.kBrushless);
   public static final PWMVictorSPX controlPanelMotor = new PWMVictorSPX(0);
   public static final PWMVictorSPX upperConveyorMotor = new PWMVictorSPX(1);
   public static final PWMVictorSPX lowerConveyorMotor = new PWMVictorSPX(2);
@@ -51,17 +52,19 @@ public class RobotMap {
   public static final ColorSensorV3 controlPanelColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
   public static final DigitalInput intakeSensorOne = new DigitalInput(2);
   public static final DigitalInput shooterSensor = new DigitalInput(3);
+  public static final AnalogInput pressureTransducer = new AnalogInput(3);
 
   public static final DigitalOutput lightRelay = new DigitalOutput(9);
 
   public static final TalonSRX shooterTopMotor = new TalonSRX(5);
+  
   public static final TalonSRX shooterBottomMotor = new TalonSRX(6);
   
-  public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(0, 1);
-  public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(2, 3);
+  public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(3, 2);
+  public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(0, 1);
   //public static final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(4,5);
   public static final Servo camera = new Servo(9);
 
   public static final String shooterCameraName = "Microsoft LifeCam HD-3000";
-  public static final DigitalOutput visionLightRelay = new DigitalOutput(9);
+  public static final Relay visionLightRelay = new Relay(0);
 }

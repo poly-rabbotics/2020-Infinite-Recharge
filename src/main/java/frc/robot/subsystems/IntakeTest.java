@@ -8,41 +8,55 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.PWMVictorSPX;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
 public class IntakeTest {
+    public static double HOLD_SPEED = 0.05;
+    public static double MOVE_SPEED = 1;
+    public static double INTAKE_SPEED = 0.25;
+    public static double AVOID_INTAKING_SPEED = -0.05;
+
     private PWMVictorSPX motor, armMotor;
     private boolean out;
-    private double speed;
 
     public IntakeTest(){
         motor = RobotMap.intakeMotor;
+        motor.setInverted(true);
         armMotor = RobotMap.armMotor;
         out = false;
-        speed = 0.5;
     }
 
 
     public void run(){
+        if(MechanismsJoystick.getManIntakeMotor()) {
+            motor.set(INTAKE_SPEED);
+        }
+        else {
+            motor.set(AVOID_INTAKING_SPEED);
+        }
         if(MechanismsJoystick.isManual()){
-            if (MechanismsJoystick.getToggleManIntakeMotor()){
-                motor.set(speed);
+            SmartDashboard.putBoolean("out", out);
+            SmartDashboard.putNumber("arm motor output", armMotor.get());
+            if(MechanismsJoystick.getToggleManArmMotor()) {
+                out = !out;
+            }
+            if(!out){
+                if(MechanismsJoystick.getManArmMotor()) {
+                    armMotor.set(MOVE_SPEED);
+                }
+                else {
+                    armMotor.set(HOLD_SPEED);
+                }
             }
             else {
-                motor.set(0);
-            }
-
-            if (MechanismsJoystick.getToggleManArmMotor() && out == false){
-                armMotor.set(speed);
-                out = true;
-            }
-            else if (MechanismsJoystick.getToggleManArmMotor() && out == true) {
-                armMotor.set(-speed);
-                out = false;
-            }
-            else{
-                armMotor.set(0);
+                if(MechanismsJoystick.getManArmMotor()) {
+                    armMotor.set(-MOVE_SPEED);
+                }
+                else {
+                    armMotor.set(-HOLD_SPEED);
+                }
             }
         }
     }
