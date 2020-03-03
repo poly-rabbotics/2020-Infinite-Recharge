@@ -18,9 +18,15 @@ public class CameraSetDriveSetpoint extends Command {
         this.light = Robot.light;
         finished = false;
     }
+    public CameraSetDriveSetpoint(boolean verbose) {
+        super("camera set drive setpoint", PERIOD, verbose);
+        this.drive = Robot.drive;
+        this.light = Robot.light;
+        finished = false;
+    }
     @Override
     protected void onStart() {
-        light.lock();
+        light.lock("Set drive setpoint");
         light.turnOn();
     }
     @Override

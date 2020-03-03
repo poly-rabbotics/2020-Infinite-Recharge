@@ -8,16 +8,21 @@ import frc.robot.subsystems.ConveyorBelt;
  */
 
 public class IntakeBall extends Command {
+    private static final int MAX_NUMBER_OF_BALLS = 5;
+    private String name;
+    public static final int PERIOD = 20;
+
     private ConveyorBelt conveyorBelt;
-    private int numberOfBalls;
-    public IntakeBall(String name, int periodInMillis, boolean verbose) {
-        super(name, periodInMillis, verbose);
+    private int startingNumberOfBalls;
+    public IntakeBall(boolean verbose) {
+        super("intake ball" + Robot.conveyorBelt.getNumberOfBalls(), PERIOD, verbose);
+        name = getName();
         conveyorBelt = Robot.conveyorBelt;
-        numberOfBalls = conveyorBelt.getNumberOfBalls();
+        startingNumberOfBalls = conveyorBelt.getNumberOfBalls();
     }
     @Override
     protected void onStart() {
-        conveyorBelt.lock("intake ball");
+        conveyorBelt.lock(name);
     }
     @Override
     protected void whileRunning() {
@@ -25,8 +30,9 @@ public class IntakeBall extends Command {
     }
     @Override
     protected boolean isFinished() {
-        return (conveyorBelt.getNumberOfBalls() > numberOfBalls || numberOfBalls > 4) 
-                || conveyorBelt.getLock() != "intake ball";
+        return conveyorBelt.getNumberOfBalls() > startingNumberOfBalls 
+                || conveyorBelt.getNumberOfBalls() >= MAX_NUMBER_OF_BALLS 
+                || conveyorBelt.getLock() != name;
     }
     @Override
     protected void onFinish() {

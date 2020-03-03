@@ -16,9 +16,10 @@ import frc.robot.subsystems.AutoSubsystem;
 
 public class Shooter extends AutoSubsystem {
     //TODO: Calibrate presets
-    private static final ShooterPreset TARGET_ZONE_PRESET = new ShooterPreset(300, 0.3, false);
-    private static ShooterPreset INITIATION_LINE_PRESET = new ShooterPreset(500, 0.5, true);
-    private static final ShooterPreset TRENCH_RUN_CLOSE_PRESET = new ShooterPreset(2000, 1.75, true);
+    //public static final ShooterPreset TARGET_ZONE_PRESET = new ShooterPreset(300, 0.3, false);
+    public static ShooterPreset INITIATION_LINE_PRESET = new ShooterPreset(500, 0.5, false);
+    public static final ShooterPreset COLOR_WHEEL_PRESET = new ShooterPreset(3500, 1.25, false);
+    public static final ShooterPreset TRENCH_RUN_PRESET = new ShooterPreset(5000, 1.25, true);
 
     private static final double ACCEPTABLE_PERCENT_ERROR = 1;
 

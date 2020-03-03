@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.commands.CameraSetDriveSetpoint;
 import frc.robot.controls.DriveJoystick;
+import frc.robot.controls.MechanismsJoystick;
 
 import com.kauailabs.navx.frc.AHRS;
 import frc.robot.utils.*;
@@ -25,7 +26,10 @@ import frc.robot.sensors.ShooterCamera;
  * Add your docs here.
  */
 public class Drive extends AutoSubsystem {
-  static boolean shooterFront = true;
+  private static final double FINE_ADJUSTMENT_MAGNITUDE = 2.5;
+  private static final double MANUAL_TURN_CONSTANT = 20;
+
+  private boolean shooterFront = true;
 
   private DifferentialDrive drive;
   private AHRS ahrs;
@@ -33,7 +37,6 @@ public class Drive extends AutoSubsystem {
   private double speed, rotation;
   private ShooterCamera camera;
   private DriveMotor[] leftMotors, rightMotors;
-  private Relay relay;
 
   public Drive() {
     //Initialize left and right motors
@@ -52,7 +55,6 @@ public class Drive extends AutoSubsystem {
     //Set up inputs
     this.ahrs = RobotMap.ahrs;
     camera = new ShooterCamera(RobotMap.shooterCameraName);
-    front = "Shooter";
     reset();
   }
   public void reset() {
@@ -61,6 +63,12 @@ public class Drive extends AutoSubsystem {
   }
   public void setRotationalSetpoint(double change) {
     turnController.setSetpoint(turnController.getSetpoint() + change);
+  }
+  public void applyRotationalPID() {
+    rotation = turnController.calculate(ahrs.getAngle());
+  }
+  public void setRotationalSetpointRelativeToCurrentPos(double change) {
+    turnController.setSetpoint(ahrs.getAngle() + change);
   }
   public void setDriveForward(double speed) {
     //System.out.print("Setting drive forward to ");
@@ -82,9 +90,6 @@ public class Drive extends AutoSubsystem {
   public boolean aligned(double tolerance) {
     return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
   }
-  private void autoOrient() {
-    rotation = turnController.calculate(ahrs.getAngle());
-  }
   public double getAngle() {
     return ahrs.getAngle();
   }
@@ -97,6 +102,9 @@ public class Drive extends AutoSubsystem {
   private void move() {
     drive.arcadeDrive(speed, rotation);
   }
+  public boolean getShooterFront() {
+    return shooterFront;
+  }
   public void printState() {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
@@ -105,52 +113,50 @@ public class Drive extends AutoSubsystem {
     SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
   }
   public void cameraOrient() {
-    setRotationalSetpoint(camera.getYaw());
+    setRotationalSetpointRelativeToCurrentPos(camera.getYaw());
   }
   private void getControllerInput() {
-    if(DriveJoystick.getStartAutoOrientLeft()) {
-      setRotationalSetpoint(5);
+    if(!MechanismsJoystick.isManual()) {
+      // SET COOKED ROTATIONAL SETPOINT
+      if(DriveJoystick.getAdjustRotationLeft()) {
+        setRotationalSetpoint(FINE_ADJUSTMENT_MAGNITUDE);
+      }
+      else if(DriveJoystick.getAdjustRotationRight()) { //Special fine adjustment
+        setRotationalSetpoint(-FINE_ADJUSTMENT_MAGNITUDE);
+      }
+      else if(DriveJoystick.getCameraOrient()) { //Special auto orient
+        (new CameraSetDriveSetpoint("Orient with target")).start();
+      }
+      else if(DriveJoystick.getTurn() != 0) { //This is the manual control
+        setRotationalSetpointRelativeToCurrentPos(TransformationUtils.cubicTransform(DriveJoystick.getTurn()) * MANUAL_TURN_CONSTANT);
+      }
+      applyRotationalPID();
     }
-    if(DriveJoystick.getStartAutoOrientRight()) {
-      setRotationalSetpoint(-5);
-    }
-    if(DriveJoystick.getCameraOrient()) {
-      (new CameraSetDriveSetpoint("Orient with target")).start();
-    }
-    if(DriveJoystick.getContinueAutoOrient()) {
-      autoOrient();
+    else {
+      // SET RAW (medium rare) ROTATIONAL SETPOINT
+      reset();
+      rotation = TransformationUtils.cubicTransform(DriveJoystick.getTurn());
     }
     
-    else {
-      turnController.setSetpoint(ahrs.getAngle());
-      speed = shooterFront ? DriveJoystick.getMove() : -DriveJoystick.getMove();
-      rotation = DriveJoystick.getTurn();
-      relay.set(Value.kOff);
-      if(DriveJoystick.getFront()) {
-        shooterFront = !shooterFront;
-      }
-    }
-   
-    if(shooterFront){
-      front = "Shooter";
-    }
-    else{
-      front = "Intake";
+
+    // SET RAW TRANSLATIONAL SPEED (same no matter which mode, just always raw/medium rare rotation)
+    speed = TransformationUtils.squareTransform(DriveJoystick.getMove());
+    speed = shooterFront ? speed : -speed;
+
+    // CHANGE FRONT/BACK AS REQUESTED
+    if(DriveJoystick.getFront()) {
+    shooterFront = !shooterFront;
     }
   }
   
   public void run() {
-    System.out.println(camera.getYaw());
-    printState();
     if(!getLocked()) {
       getControllerInput();
       move();
     }
   }
   public void autoRun() {
-    //System.out.println(speed);
     if(!getLocked()) {
-      autoOrient();
       move();
     }
   }

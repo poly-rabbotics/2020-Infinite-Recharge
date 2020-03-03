@@ -17,7 +17,7 @@ public class DriveByDistance extends Command {
         this.startPosition = -1; //Garbage value
         this.startTime = -1; //Garbage value
     }
-    public DriveByDistance(Drive drive, double distance, double maxTimeInSeconds, String name, int periodInMillis) {
+    public DriveByDistance(double distance, double maxTimeInSeconds, String name, int periodInMillis) {
         this(distance, maxTimeInSeconds, name, periodInMillis, false);
     }
     @Override

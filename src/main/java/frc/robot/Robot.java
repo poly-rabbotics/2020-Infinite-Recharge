@@ -8,11 +8,7 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.commands.DriveByTime;
-import frc.robot.commands.DriveInRegularPolygonSequence;
-import frc.robot.commands.TurnByDegrees;
-import frc.robot.sensors.PressureTransducer;
+import frc.robot.sensors.*;
 import frc.robot.subsystems.*;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.commands.*;
@@ -35,31 +31,33 @@ public class Robot extends TimedRobot {
   public static ConveyorBelt conveyorBelt = new ConveyorBelt();
   public static ControlPanel controlPanel = new ControlPanel();
   public static SmartDashboardOutputs outputs = new SmartDashboardOutputs();
-  public static ConveyorTest conveyor = new Conveyor();
+  public static ConveyorTest conveyor = new ConveyorTest();
   public static IntakeTest intake = new IntakeTest();
   public static VisionLight light = new VisionLight();
+  public static ColorSensor colorSensor = new ColorSensor();
   public static PressureTransducer pressureTransducer = new PressureTransducer();
 
   @Override
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
-    subsystems = new Subsystem[]{};
-    for(Subsystem subsystem: subsystems) {
+    subsystems = new Subsystem[] {};
+    for (Subsystem subsystem : subsystems) {
       subsystem.reset();
     }
-    autoSubsystems = new AutoSubsystem[]{};
-    for(Subsystem auto: autoSubsystems) {
+    autoSubsystems = new AutoSubsystem[] {};
+    for (Subsystem auto : autoSubsystems) {
       auto.reset();
     }
   }
 
   /**
-   * This function is called every robot packet, no matter the mode. Use
-   * this for items like diagnostics that you want ran during disabled,
-   * autonomous, teleoperated and test.
+   * This function is called every robot packet, no matter the mode. Use this for
+   * items like diagnostics that you want ran during disabled, autonomous,
+   * teleoperated and test.
    *
-   * <p>This runs after the mode specific periodic functions, but before
-   * LiveWindow and SmartDashboard integrated updating.
+   * <p>
+   * This runs after the mode specific periodic functions, but before LiveWindow
+   * and SmartDashboard integrated updating.
    */
   @Override
   public void robotPeriodic() {
@@ -67,40 +65,67 @@ public class Robot extends TimedRobot {
 
   @Override
   public void autonomousInit() {
-    for(AutoSubsystem auto: autoSubsystems) {
+    for (AutoSubsystem auto : autoSubsystems) {
       auto.reset();
     }
-    //Put auto commands here
-    (new IntakeBall("test intake ball", 20, false)).start();
-    //(new DriveByDistance(drive, 8, 10, "Drive forward 8 feet, quit after max 10 seconds", 20)).start();
+    // Put auto commands here
+    // (new DriveByDistance(drive, 8, 10, "Drive forward 8 feet, quit after max 10
+    // seconds", 20)).start();
   }
+
   @Override
   public void teleopInit() {
     super.teleopInit();
-    for(Subsystem subsystem: subsystems) {
+    for (Subsystem subsystem : subsystems) {
       subsystem.reset();
     }
   }
 
   @Override
   public void autonomousPeriodic() {
-    for(AutoSubsystem auto: autoSubsystems) {
+    for (AutoSubsystem auto : autoSubsystems) {
       auto.autoRun();
     }
   }
 
   @Override
   public void teleopPeriodic() {
-    for(Subsystem subsystem: subsystems) {
+    for (Subsystem subsystem : subsystems) {
       subsystem.run();
     }
-    controlPanel.run();
-    outputs.run();
-    conveyor.run();
-    intake.run();
   }
 
   @Override
   public void testPeriodic() {
+  }
+
+  @Override
+  public void testInit() {
+    Command[] tests = { 
+        new IntakeBall(true), 
+        new PreloadShooter(true),
+        new Shoot(Shooter.INITIATION_LINE_PRESET, "Shoot from initiation line", 20, true),
+
+        new DriveByTime(1, 0.25, "drive for 1 second", 20, true),
+        new DriveByDistance(5, 10, "Drive 5 feet for max 10 seconds", 20),
+        new TurnByDegrees(5, 1, "turn by degrees", 20, true), new TurnPanel4Rotations(true),
+
+        new TurnPanelToRequestedColor(true),
+        new TurnPanel4Rotations(true),
+
+        new CameraSetDriveSetpoint(true),
+        };
+    new Thread(() -> {
+      for (Command command : tests) {
+        System.out.print("STARTING_COMMAND_" + command.getName() + "********************");
+        command.start();
+        try {
+          command.join();
+        } catch (InterruptedException e) {
+          // TODO Auto-generated catch block
+          e.printStackTrace();
+        }
+     }
+    }).start();
   }
 }

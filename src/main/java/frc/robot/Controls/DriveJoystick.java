@@ -28,10 +28,10 @@ public class DriveJoystick {
   public static boolean getCameraOrient() {
     return joystick.getRawButtonPressed(1); //A button
   }
-  public static boolean getStartAutoOrientLeft() {
+  public static boolean getAdjustRotationLeft() {
     return joystick.getRawButtonPressed(5);
   }
-  public static boolean getStartAutoOrientRight() {
+  public static boolean getAdjustRotationRight() {
     return joystick.getRawButtonPressed(6);
   }
   public static boolean getContinueAutoOrient() {

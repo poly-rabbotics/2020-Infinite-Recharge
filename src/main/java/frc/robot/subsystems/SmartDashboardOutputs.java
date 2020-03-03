@@ -24,7 +24,7 @@ public class SmartDashboardOutputs {
     public void run() {
 
         // DRIVE VALUES
-        SmartDashboard.putString("Front", Drive.front);
+        SmartDashboard.putString("Front", Robot.drive.getShooterFront() ? "Shooter" : "Intake");
 
         // SHOOTER VALUES
         SmartDashboard.putNumber("Distance from Shooter:", Shooter.distance);
@@ -52,11 +52,10 @@ public class SmartDashboardOutputs {
         */
 
         // COLORWHEEL VALUES IN GAME
-        SmartDashboard.putString("Color Called", ControlPanel.colorCalledName);
-        SmartDashboard.putString("Color Detected", ControlPanel.colorDetectedName);
-        SmartDashboard.putBoolean("The Color Choice Method is On", ControlPanel.colorOn);
-        SmartDashboard.putBoolean("Rotations are going", ControlPanel.rotationOn);
-        Robot.controlPanel.showRotations();
+        SmartDashboard.putString("Color Called", Robot.controlPanel.getGameData());
+        SmartDashboard.putString("Color Detected", "" + Robot.colorSensor.getColor());
+        SmartDashboard.putString("Command using Control Panel", Robot.controlPanel.getLock());
+        SmartDashboard.putNumber("Total rotations", Robot.controlPanel.getPanelRotations());
 
         // AUTONOMOUS MODE
         SmartDashboard.putNumber("Automode ", numberOfAutoMode);

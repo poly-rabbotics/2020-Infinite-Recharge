@@ -50,7 +50,7 @@ public class MechanismsJoystick {
     return joystick.getRawButton(4);
   }
  
-  public static boolean getToggleColor(){
+  public static boolean getTurnToRequestedColor(){
     if(joystick.getRawAxis(0) < -0.5){
     return true;
     }
@@ -59,10 +59,10 @@ public class MechanismsJoystick {
     }
 
   }
-  public static boolean getToggleConveyorOverride(){
+  public static boolean getConveyorOverride(){
     return joystick.getRawButton(-2); //TODO: SET TO ACTUAL CHANNEL NUMBER.
   }
-  public static boolean getToggleRotation(){
+  public static boolean getColorWheelRotation(){
     if(joystick.getRawAxis(0) > 0.5){
           return true;
     }
@@ -70,7 +70,7 @@ public class MechanismsJoystick {
         return false;
       }
     }
-    public static boolean getToggleManualMotor(){
+    public static boolean getManualControlPanel(){
       return joystick.getRawButton(12);
     }
 
@@ -115,8 +115,8 @@ public class MechanismsJoystick {
     public static boolean getToggleManShooterSolenoid(){
       return joystick.getRawButton(1);
     }
-    public static boolean getToggleManColorWheel(){
-     if (joystick.getRawAxis(1) >=0.5){
+    public static boolean getManColorWheel(){
+     if (joystick.getRawAxis(1) >= 0.5){
        return true;
      }
     else {

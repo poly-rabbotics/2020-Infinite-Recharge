@@ -42,7 +42,7 @@ public class RobotMap {
 
 
   public static final DigitalInput intakeSensor = new DigitalInput(2);
-  public static final Relay lightRelay = new Relay(3);
+  public static final Relay visionLightRelay = new Relay(3);
 
   public static final CANSparkMax leftFront = new CANSparkMax(1, MotorType.kBrushless);
   public static final CANSparkMax leftBack = new CANSparkMax(2, MotorType.kBrushless);
@@ -67,7 +67,7 @@ public class RobotMap {
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(3, 2);
   public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(0, 1);
   //public static final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(4,5);
-  public static final Servo camera = new Servo(9);
+  public static final Servo cameraServo = new Servo(9);
 
   public static final String shooterCameraName = "Microsoft LifeCam HD-3000";
 }

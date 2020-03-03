@@ -74,9 +74,9 @@ public class ConveyorBelt extends AutoSubsystem {
 
   public void run(){
     if(getLock() == "") { //If no command has a lock on this subsystem
-      (new IntakeBall("Intake ball " + getNumberOfBalls(), 20, false)).start();
+      (new IntakeBall(false)).start();
     }
-    if(MechanismsJoystick.getToggleConveyorOverride()) {
+    if(MechanismsJoystick.getConveyorOverride()) {
       (new PreloadShooter("Preload shooter", 20, false)).start();
     }
     countBalls();

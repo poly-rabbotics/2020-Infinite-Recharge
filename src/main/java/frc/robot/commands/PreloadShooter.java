@@ -13,6 +13,10 @@ public class PreloadShooter extends Command {
         super(name, periodInMillis, verbose);
         conveyorBelt = Robot.conveyorBelt;
     }
+    public PreloadShooter(boolean verbose) {
+        super("preload shooter", 20, verbose);
+        conveyorBelt = Robot.conveyorBelt;
+    }
     @Override
     protected void onStart() {
         conveyorBelt.lock("preload shooter");

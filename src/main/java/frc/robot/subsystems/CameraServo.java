@@ -1,20 +1,21 @@
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.Servo;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 
 public class CameraServo extends Subsystem {
-    Servo camera;
+    Servo cameraServo;
     public CameraServo() {
-        camera = RobotMap.camera;
+        cameraServo = RobotMap.cameraServo;
     }
     public void run() {
 
-        if(Drive.shooterFront) {
-            camera.set(0.27);
+        if(Robot.drive.getShooterFront()) {
+            cameraServo.set(0.27);
         }
         else {
-            camera.set(1.0);
+            cameraServo.set(1.0);
         }
 
     }
