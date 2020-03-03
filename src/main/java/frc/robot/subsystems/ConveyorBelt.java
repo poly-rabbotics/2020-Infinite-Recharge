@@ -36,9 +36,15 @@ public class ConveyorBelt extends AutoSubsystem {
   lowerBallDetected = false;
   upperBallDetected = false;
  }
+ public boolean ballDetectedAtIntake() {
+   return lowerSensor.get();
+ }
+ public boolean ballDetectedAtShooter() {
+   return upperSensor.get();
+ }
   public void countBalls() {
     //Check for balls entering the mechanism
-    if(lowerSensor.get()) {
+    if(ballDetectedAtIntake()) {
       lowerBallDetected = true;
     }
     if(lowerBallDetected && !lowerSensor.get()){
@@ -46,7 +52,7 @@ public class ConveyorBelt extends AutoSubsystem {
       lowerBallDetected = false;
     }
     //Check for balls leaving the mechanism
-    if(upperSensor.get()) {
+    if(ballDetectedAtShooter()) {
       upperBallDetected = true;
     }
     if(upperBallDetected && !upperSensor.get()){
@@ -99,7 +105,7 @@ public class ConveyorBelt extends AutoSubsystem {
     }
   }
   public boolean needsToStop() {
-    return upperSensor.get();
+    return ballDetectedAtShooter();
   }
   public int getNumberOfBalls() {
     return ballCount;

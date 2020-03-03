@@ -41,7 +41,8 @@ public class RobotMap {
   public static final AHRS ahrs = new AHRS();
 
 
-  public static final DigitalInput intakeSensor = new DigitalInput(2);
+  public static final DigitalInput intakeSensor = new DigitalInput(5);
+  public static final DigitalInput shooterSensor = new DigitalInput(3);
   public static final Relay visionLightRelay = new Relay(3);
 
   public static final CANSparkMax leftFront = new CANSparkMax(1, MotorType.kBrushless);
@@ -57,7 +58,6 @@ public class RobotMap {
   public static final Encoder controlPanelEncoder = new Encoder(0,1); 
 
   public static final ColorSensorV3 controlPanelColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
-  public static final DigitalInput shooterSensor = new DigitalInput(3);
   public static final AnalogInput pressureTransducer = new AnalogInput(3);
 
   public static final TalonSRX shooterTopMotor = new TalonSRX(5);

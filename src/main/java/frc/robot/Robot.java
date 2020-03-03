@@ -112,14 +112,14 @@ public class Robot extends TimedRobot {
         new PreloadShooter(true),
         new Shoot(Shooter.INITIATION_LINE_PRESET, "Shoot from initiation line", 20, true),
 
-        new DriveByTime(1, 0.25, "drive for 1 second", 20, true),
+        /*new DriveByTime(1, 0.25, "drive for 1 second", 20, true),
         new DriveByDistance(5, 10, "Drive 5 feet for max 10 seconds", 20),
         new TurnByDegrees(5, 1, "turn by degrees", 20, true), new TurnPanel4Rotations(true),
 
         new TurnPanelToRequestedColor(true),
         new TurnPanel4Rotations(true),
 
-        new CameraSetDriveSetpoint(true),
+        new CameraSetDriveSetpoint(true)*/
         };
     new Thread(() -> {
       for (Command command : tests) {

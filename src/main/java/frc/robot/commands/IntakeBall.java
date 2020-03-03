@@ -26,7 +26,9 @@ public class IntakeBall extends Command {
     }
     @Override
     protected void whileRunning() {
-        conveyorBelt.moveForIntake();
+        if(conveyorBelt.ballDetectedAtIntake()) {
+            conveyorBelt.moveForIntake();
+        }
     }
     @Override
     protected boolean isFinished() {
