@@ -24,9 +24,18 @@ public class MechanismsJoystick {
     return joystick.getRawButtonPressed(1);
   }
   public static boolean getToggleClimbingSystem() {
-    return joystick.getRawButtonPressed(5) && joystick.getRawButtonPressed(6) && joystick.getRawButtonPressed(7) && joystick.getRawButtonPressed(8);
+    return joystick.getRawButtonPressed(5);
   }
   public static boolean getToggleConveyorOverride(){
+    return joystick.getRawButton(9);
+  }
+
+  public static boolean getAllowConveyor(){
+    return joystick.getRawButtonPressed(8);
+  }
+
+  public static boolean getTestsIntake(){
     return joystick.getRawButton(2);
   }
+
 }

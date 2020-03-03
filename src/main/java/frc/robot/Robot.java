@@ -29,7 +29,7 @@ public class Robot extends TimedRobot {
   Drive drive;
   //Shooter shooter;
   Climb climber;
-  CameraServo cameraServo;
+  //CameraServo cameraServo;
   ConveyorBelt conveyorBelt;
   public static Timer timer;
 
@@ -51,7 +51,7 @@ public class Robot extends TimedRobot {
 
     //shooter = new Shooter();
     climber = new Climb();
-    cameraServo = new CameraServo();
+    //cameraServo = new CameraServo();
     conveyorBelt = new ConveyorBelt();
     timer = new Timer();
   }
@@ -90,7 +90,7 @@ public class Robot extends TimedRobot {
   public void teleopInit() {
     // TODO Auto-generated method stub
     super.teleopInit();
-    drive.reset();
+   // drive.reset();
     timer.start();
  
   }
@@ -115,10 +115,10 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void teleopPeriodic() {
-    drive.run();
+    //drive.run();
    // shooter.run();
     climber.run();
-    cameraServo.run();
+    //cameraServo.run();
     conveyorBelt.run();
   }
 
