@@ -4,11 +4,12 @@ import frc.robot.subsystems.ConveyorBelt;
 import frc.robot.Robot;
 
 public class Shoot extends Command {
+    public static String NAME = "shoot";
     Shooter shooter;
     ShooterPreset preset;
     ConveyorBelt conveyorBelt;
-    public Shoot(ShooterPreset preset, String name, int periodInMillis, boolean verbose) {
-        super(name, periodInMillis, verbose);
+    public Shoot(ShooterPreset preset, int periodInMillis, boolean verbose) {
+        super(NAME, periodInMillis, verbose);
         this.shooter = Robot.shooter;
         this.preset = preset;
         this.conveyorBelt = Robot.conveyorBelt;
@@ -16,15 +17,15 @@ public class Shoot extends Command {
     @Override
     protected void onStart() {
         super.onStart();
-        if(conveyorBelt.getLock() == "intake ball" || !conveyorBelt.getLocked()) {
-            conveyorBelt.lock("shoot");
+        if(conveyorBelt.getLock() == IntakeBall.NAME || !conveyorBelt.getLocked()) {
+            lockSubsystem(conveyorBelt);
         }
         shooter.setPreset(preset);
     }
     @Override
     protected void whileRunning() {
         if(shooter.getOkayToShoot(getVerbose())) {
-            conveyorBelt.lock("shoot");
+            conveyorBelt.lock(NAME);
             conveyorBelt.moveForShoot();
         }
         else {
@@ -33,6 +34,6 @@ public class Shoot extends Command {
     }
     @Override
     protected boolean isFinished() {
-        return conveyorBelt.getNumberOfBalls() == 0;
+        return conveyorBelt.getNumberOfBalls() == 0 || subsystemTaken(conveyorBelt);
     }
 }

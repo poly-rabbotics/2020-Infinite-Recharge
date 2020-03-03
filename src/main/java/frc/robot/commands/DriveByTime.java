@@ -2,31 +2,32 @@ package frc.robot.commands;
 
 import frc.robot.Robot;
 import frc.robot.subsystems.Drive;
-import edu.wpi.first.wpilibj.Timer;
-import frc.robot.Robot;
 
 public class DriveByTime extends Command {
+    public static final String NAME = "drive by time";
     private Drive drive;
     private double time, speed;
-    private double startTime;
-    public DriveByTime(double timeInSeconds, double speed, String name, int periodInMillis, boolean verbose) {
-        super(name, periodInMillis, verbose);
+    public DriveByTime(double timeInSeconds, double speed, int periodInMillis, boolean verbose) {
+        super(NAME, periodInMillis, verbose);
         this.drive = Robot.drive;
         this.time = timeInSeconds;
         this.speed = speed;
     }
-    public DriveByTime(double timeInSeconds, double speed, String name, int periodInMillis) {
-        this(timeInSeconds, speed, name, periodInMillis, false);
+    public DriveByTime(double timeInSeconds, double speed, int periodInMillis) {
+        this(timeInSeconds, speed, periodInMillis, false);
     }
+    @Override
     protected void onStart() {
         super.onStart();
-        this.startTime = Timer.getFPGATimestamp();
+        lockSubsystem(drive);
     }
+    @Override
     protected void whileRunning() {
         drive.setDriveForward(speed);
     }
+    @Override
     protected boolean isFinished() {
-        return Timer.getFPGATimestamp() - startTime >= time;
+        return getTime() >= time || subsystemTaken(drive);
     }
     @Override
     protected void onFinish() {

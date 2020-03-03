@@ -5,6 +5,8 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
+// TODO: ADD SAFEGUARD SO THAT BALL COUNT CAN BE RESET. OR GIVE IT MANUAL MODE.
+
 package frc.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -84,7 +86,7 @@ public class ConveyorBelt extends AutoSubsystem {
       (new IntakeBall(false)).start();
     }
     if(MechanismsJoystick.getConveyorOverride()) {
-      (new PreloadShooter("Preload shooter", 20, false)).start();
+      (new PreloadShooter(20, false)).start();
     }
     countBalls();
     SmartDashboard.putNumber("Number of Balls in Intake", ballCount);

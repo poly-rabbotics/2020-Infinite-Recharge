@@ -1,6 +1,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.Subsystem;
 
 /***********************************
 Commands are Threads. This is because when
@@ -103,5 +104,13 @@ public abstract class Command extends Thread {
     }
     public double getTime() {
         return Timer.getFPGATimestamp() - startTime;
+    }
+    public boolean lockSubsystem(Subsystem subsystem) {
+        boolean wasLocked = subsystem.getLocked();
+        subsystem.lock(getName());
+        return wasLocked;
+    }
+    public boolean subsystemTaken(Subsystem subsystem) {
+        return subsystem.getLock() != getName();
     }
 }

@@ -1,19 +1,21 @@
 package frc.robot.commands;
 
 public class DriveInRegularPolygonSequence extends Command {
+    public static final String NAME = "drive in regular polygon sequence";
+
     private TurnByDegrees[] turn;
     private DriveByTime[] driveByTime;
     public DriveInRegularPolygonSequence(double timeInSeconds, double speed, 
-                                    double acceptableError, int numVertices, String name, 
+                                    double acceptableError, int numVertices, 
                                     int periodInMillis, boolean verbose) {
-        super(name, periodInMillis, verbose);
+        super(NAME, periodInMillis, verbose);
         driveByTime = new DriveByTime[4];
         for(int i = 0; i < numVertices; i++) {
-            driveByTime[i] = new DriveByTime(timeInSeconds, speed, name + "-drive-" + i, periodInMillis, verbose);
+            driveByTime[i] = new DriveByTime(timeInSeconds, speed, periodInMillis, verbose);
         }
         turn = new TurnByDegrees[4];
         for(int i = 0; i < numVertices; i++) {
-            turn[i] = new TurnByDegrees(360 / numVertices, acceptableError, name + "-turn-" + i, periodInMillis, verbose);
+            turn[i] = new TurnByDegrees(360 / numVertices, acceptableError, periodInMillis, verbose);
         }
     }
     protected void onStart() {

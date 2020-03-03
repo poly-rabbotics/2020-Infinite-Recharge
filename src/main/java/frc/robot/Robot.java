@@ -110,7 +110,7 @@ public class Robot extends TimedRobot {
     Command[] tests = { 
         new IntakeBall(true), 
         new PreloadShooter(true),
-        new Shoot(Shooter.INITIATION_LINE_PRESET, "Shoot from initiation line", 20, true),
+        new Shoot(Shooter.INITIATION_LINE_PRESET, 20, true),
 
         /*new DriveByTime(1, 0.25, "drive for 1 second", 20, true),
         new DriveByDistance(5, 10, "Drive 5 feet for max 10 seconds", 20),

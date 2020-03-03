@@ -4,30 +4,29 @@ import frc.robot.subsystems.Drive;
 import frc.robot.Robot;
 
 public class DriveByDistance extends Command {
+    public static final String NAME = "drive by distance";
+
     private Drive drive;
     double distance;
     double startPosition;
-    double startTime; //time in seconds
     double maxTimeInSeconds;
-    public DriveByDistance(double distance, double maxTimeInSeconds, String name, int periodInMillis, boolean verbose) {
-        super(name, periodInMillis, verbose);
+    public DriveByDistance(double distance, double maxTimeInSeconds, int periodInMillis, boolean verbose) {
+        super(NAME, periodInMillis, verbose);
         this.drive = Robot.drive;
         this.distance = distance;
         this.maxTimeInSeconds = maxTimeInSeconds;
         this.startPosition = -1; //Garbage value
-        this.startTime = -1; //Garbage value
     }
-    public DriveByDistance(double distance, double maxTimeInSeconds, String name, int periodInMillis) {
-        this(distance, maxTimeInSeconds, name, periodInMillis, false);
+    public DriveByDistance(double distance, double maxTimeInSeconds, int periodInMillis) {
+        this(distance, maxTimeInSeconds, periodInMillis, false);
     }
     @Override
-    public void start() {
-        super.start();
+    public void onStart() {
+        super.onStart();
         
         if(!drive.getLocked()) {
-            drive.lock("Drive by distance");
+            lockSubsystem(drive);
             startPosition = drive.getPosition();
-            startTime = Timer.getFPGATimestamp();
             drive.setTranslationalSetpoint(distance);
         }  
     }
@@ -38,8 +37,8 @@ public class DriveByDistance extends Command {
     @Override
     public boolean isFinished() {
         return Math.abs(drive.getPosition() - startPosition) < 0.5 //Within 6 inches of correct position,
-            || Timer.getFPGATimestamp() - startTime > maxTimeInSeconds //or it has been enough time
-            || drive.getLock() != "drive"; //or the subsystem is claimed by another command
+            || getTime() > maxTimeInSeconds //or it has been enough time
+            || subsystemTaken(drive); //or the subsystem is claimed by another command
     }
     @Override
     public void onFinish() {

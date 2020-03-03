@@ -7,22 +7,22 @@ public class TurnPanelToRequestedColor extends Command {
     private static final String NAME = "turn to requested color";
     private static final int MIN_CORRECT_COLOR_COUNT = 5;
 
-    private ControlPanel controlPanelMechanism;
+    private ControlPanel controlPanelSubsystem;
     private int correctColorCount;
 
     public TurnPanelToRequestedColor(boolean verbose) {
         super(NAME, 20, verbose);
-        controlPanelMechanism = Robot.controlPanel;
+        controlPanelSubsystem = Robot.controlPanel;
         correctColorCount = 0;
     }
     @Override
     protected void onStart() {
-        Robot.controlPanel.lock(NAME);
+        lockSubsystem(controlPanelSubsystem);
     }
     @Override
     protected void whileRunning() {
-        Robot.controlPanel.spinSlow();
-        if(Robot.controlPanel.atCorrectColor()) {
+        controlPanelSubsystem.spinSlow();
+        if(controlPanelSubsystem.atCorrectColor()) {
             correctColorCount++;
         }
         else {
@@ -32,6 +32,6 @@ public class TurnPanelToRequestedColor extends Command {
     @Override
     protected boolean isFinished() {
         return correctColorCount >= MIN_CORRECT_COLOR_COUNT ||
-                controlPanelMechanism.getLock() != NAME;
+                subsystemTaken(controlPanelSubsystem);
     }
 }

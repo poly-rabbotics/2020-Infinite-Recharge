@@ -5,10 +5,11 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.VisionLight;
 
 public class CameraSetDriveSetpoint extends Command {
+    public static final String NAME = "camera set drive setpoint";
     private static final int PERIOD = 10; //period in milliseconds
     private static final double TIME_FOR_RELAY_TO_SWITCH = 0.033; // Most relays are 0.005s to 0.020s
     private static final double TIME_FOR_PI_TO_GET = 0.167; //If the pi has 30 frames/second, this is 5 frames
-
+    
     private Drive drive;
     private VisionLight light;
     private boolean finished;
@@ -19,14 +20,15 @@ public class CameraSetDriveSetpoint extends Command {
         finished = false;
     }
     public CameraSetDriveSetpoint(boolean verbose) {
-        super("camera set drive setpoint", PERIOD, verbose);
+        super(NAME, PERIOD, verbose);
         this.drive = Robot.drive;
         this.light = Robot.light;
         finished = false;
     }
     @Override
     protected void onStart() {
-        light.lock("Set drive setpoint");
+        super.onStart();
+        lockSubsystem(light);
         light.turnOn();
     }
     @Override
@@ -36,6 +38,7 @@ public class CameraSetDriveSetpoint extends Command {
     }
     @Override
     protected void whileRunning() {
+        light.turnOn();
         if(getTime() > TIME_FOR_RELAY_TO_SWITCH + TIME_FOR_PI_TO_GET) {
             drive.cameraOrient();
             finished = true;
@@ -43,6 +46,6 @@ public class CameraSetDriveSetpoint extends Command {
     }
     @Override
     protected boolean isFinished() {
-        return finished;
+        return finished || subsystemTaken(light);
     }
 }

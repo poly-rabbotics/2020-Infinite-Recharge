@@ -9,32 +9,35 @@ import frc.robot.subsystems.ConveyorBelt;
 
 public class IntakeBall extends Command {
     private static final int MAX_NUMBER_OF_BALLS = 5;
-    private String name;
     public static final int PERIOD = 20;
+    public static final String NAME = "intake ball";
 
     private ConveyorBelt conveyorBelt;
     private int startingNumberOfBalls;
     public IntakeBall(boolean verbose) {
-        super("intake ball" + Robot.conveyorBelt.getNumberOfBalls(), PERIOD, verbose);
-        name = getName();
+        super(NAME, PERIOD, verbose);
         conveyorBelt = Robot.conveyorBelt;
         startingNumberOfBalls = conveyorBelt.getNumberOfBalls();
     }
     @Override
     protected void onStart() {
-        conveyorBelt.lock(name);
+        super.onStart();
+        lockSubsystem(conveyorBelt);
     }
     @Override
     protected void whileRunning() {
         if(conveyorBelt.ballDetectedAtIntake()) {
             conveyorBelt.moveForIntake();
         }
+        else {
+            conveyorBelt.stop();
+        }
     }
     @Override
     protected boolean isFinished() {
         return conveyorBelt.getNumberOfBalls() > startingNumberOfBalls 
                 || conveyorBelt.getNumberOfBalls() >= MAX_NUMBER_OF_BALLS 
-                || conveyorBelt.getLock() != name;
+                || subsystemTaken(conveyorBelt);
     }
     @Override
     protected void onFinish() {
