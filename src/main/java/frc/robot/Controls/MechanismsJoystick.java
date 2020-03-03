@@ -13,7 +13,7 @@ import frc.robot.RobotMap;
 
 public class MechanismsJoystick {
   public enum PresetNames {
-    TARGET_ZONE, INITIATION_LINE, TRENCH_RUN_CLOSE
+    INITIATION_LINE, TRENCH_RUN, COLOR_WHEEL
   }
   
   private static Joystick joystick = RobotMap.mechanismsJoystick;
@@ -21,11 +21,11 @@ public class MechanismsJoystick {
   public static boolean getShooterPreset(PresetNames presetName) {
     //TODO: change to actual channel numbers
     switch(presetName) {
-      case TARGET_ZONE:
-        return joystick.getRawButton(-1);
       case INITIATION_LINE:
+        return joystick.getRawButton(-1);
+      case COLOR_WHEEL:
         return joystick.getRawButton(-2);
-      case TRENCH_RUN_CLOSE:
+      case TRENCH_RUN:
         return joystick.getRawButton(-3);
       default:
         //default to TRENCHRUNCLOSE. Note that this default should never be used, and is only included for robustness.

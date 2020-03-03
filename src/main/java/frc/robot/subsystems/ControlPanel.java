@@ -27,13 +27,11 @@ import frc.robot.fielddata.ControlPanelData;
 /**
  * THIS IS AN EARLY VERSION, DO NOT MERGE WITH MASTER.
  */
-public class ControlPanel extends Subsystem {
+public class ControlPanel extends AutoSubsystem {
   public static final double FAST_SPEED = 0.75;
   public static final double SLOW_SPEED = 0.30; //TODO: EXPERIMENTALLY DETERMINE OPTIMAL SPEED
   public static final double REQUIRED_ROTATIONS = 4;
   
-
-
   private PWMVictorSPX panelMotor;
   private Encoder encoder;
   private ColorSensor colorSensor;
@@ -62,7 +60,6 @@ public class ControlPanel extends Subsystem {
   }
   public void run() {
     gameData = DriverStation.getInstance().getGameSpecificMessage();
-    //Action that will be taken regardless of whether we are in manual mode
     if(MechanismsJoystick.getManualControlPanel()) {
       unlock();
       spinFast();
@@ -70,13 +67,26 @@ public class ControlPanel extends Subsystem {
     else if (!getLocked()) {
       stop();
     }
-    if(!MechanismsJoystick.isManual()){
-      if(MechanismsJoystick.getColorWheelRotation()) {
-        (new TurnPanel4Rotations(false)).start();
-      }
-      else if(MechanismsJoystick.getTurnToRequestedColor()) {
-        (new TurnPanelToRequestedColor(false)).start();
-      }
+    if(MechanismsJoystick.getColorWheelRotation()) {
+      (new TurnPanel4Rotations(false)).start();
+    }
+    else if(MechanismsJoystick.getTurnToRequestedColor()) {
+      (new TurnPanelToRequestedColor(false)).start();
+    }
+  }
+  public void manualRun() {
+    gameData = DriverStation.getInstance().getGameSpecificMessage();
+    if(MechanismsJoystick.getManualControlPanel()) {
+      unlock();
+      spinFast();
+    }
+    else if (!getLocked()) {
+      stop();
+    }
+  }
+  public void autoRun() {
+    if(!getLocked()) {
+      panelMotor.set(0);
     }
   }
   public String getGameData() {

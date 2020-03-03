@@ -21,6 +21,11 @@ public class Shooter extends AutoSubsystem {
     public static final ShooterPreset COLOR_WHEEL_PRESET = new ShooterPreset(3500, 1.25, false);
     public static final ShooterPreset TRENCH_RUN_PRESET = new ShooterPreset(5000, 1.25, true);
 
+    //Messy presets for manual control setting
+    private static final double BOTH_SPEED = 0.8;
+    private static final double HIGH_SPEED = 0.6;
+    private static final double LOW_SPEED = 0.3;
+
     private static final double ACCEPTABLE_PERCENT_ERROR = 1;
 
     private double desiredMeanRPM;
@@ -81,14 +86,17 @@ public class Shooter extends AutoSubsystem {
     }
     private boolean getUserInput() {
         ShooterPreset chosen = null;
-        if(MechanismsJoystick.getShooterPreset(PresetNames.TARGET_ZONE)) {
-            chosen = TARGET_ZONE_PRESET;
-        }
-        else if(MechanismsJoystick.getShooterPreset(PresetNames.INITIATION_LINE)) {
+        // if(MechanismsJoystick.getShooterPreset(PresetNames.TARGET_ZONE)) {
+        //     chosen = TARGET_ZONE_PRESET;
+        // }
+        if(MechanismsJoystick.getShooterPreset(PresetNames.INITIATION_LINE)) {
             chosen = INITIATION_LINE_PRESET;
         }
-        else if(MechanismsJoystick.getShooterPreset(PresetNames.TRENCH_RUN_CLOSE)) {
-            chosen = TRENCH_RUN_CLOSE_PRESET;
+        else if(MechanismsJoystick.getShooterPreset(PresetNames.COLOR_WHEEL)) {
+            chosen = COLOR_WHEEL_PRESET;
+        }
+        else if(MechanismsJoystick.getShooterPreset(PresetNames.TRENCH_RUN)) {
+            chosen = TRENCH_RUN_PRESET;
         }
         if(chosen != null) {
             preset = chosen;
@@ -106,6 +114,9 @@ public class Shooter extends AutoSubsystem {
             topSpeedDividedByBottomSpeed = preset.getSpeedRatio();
             shallowAnglePosition = preset.getShallowAnglePosition();
         }
+    }
+    public ShooterPreset getPreset() {
+        return preset;
     }
     public boolean getOkayToShoot(boolean verbose) {
         int desiredTopCountsPerPeriod = Falcon500Data.getCountsPerPeriodFromRPM(getDesiredTopSpeed());
@@ -156,6 +167,31 @@ public class Shooter extends AutoSubsystem {
     public void autoRun() {
         applyPreset();
         runMechanism();
+    }
+    public void manualRun() {
+
+            if(MechanismsJoystick.getToggleManShootOne()) {
+              topMotor.set(ControlMode.PercentOutput, -BOTH_SPEED);
+              bottomMotor.set(ControlMode.PercentOutput, BOTH_SPEED);
+            }
+            else if(MechanismsJoystick.getToggleManShootTwo()) {
+              topMotor.set(ControlMode.PercentOutput, -HIGH_SPEED);
+              bottomMotor.set(ControlMode.PercentOutput, LOW_SPEED);
+            }
+            else if(MechanismsJoystick.getToggleManShootThree()) {
+              topMotor.set(ControlMode.PercentOutput, -LOW_SPEED);
+              bottomMotor.set(ControlMode.PercentOutput, HIGH_SPEED);
+            }
+            else {
+              topMotor.set(ControlMode.PercentOutput, 0);
+              bottomMotor.set(ControlMode.PercentOutput, 0);
+            }
+            if(MechanismsJoystick.getToggleManShooterSolenoid()) {
+              solenoid.set(Value.kForward);
+            }
+            else if(!MechanismsJoystick.getToggleManShooterSolenoid()) {
+              solenoid.set(Value.kReverse);
+            }
     }
     public void setStopped() {
         //reset behaviors

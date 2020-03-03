@@ -17,8 +17,16 @@ public class VisionLight extends Subsystem {
     }
     public void run() {
         if(!getLocked()) {
-            //Be controlled by manual controls
+            turnOff();
         }
+    }
+    public void autoRun() {
+        if(!getLocked()) {
+            turnOff();
+        }
+    }
+    public void manualRun() {
+        turnOff();
     }
     public void reset() {
         turnOff(); 

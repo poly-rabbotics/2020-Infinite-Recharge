@@ -17,4 +17,7 @@ public class ShooterPreset {
     public boolean getShallowAnglePosition() {
         return shallowAnglePosition;
     }
+    public String getString() {
+        return "Mean speed: " + meanSpeed + "\nSpeed ratio: " + speedRatio + "\nShallow angle configuration: " + shallowAnglePosition;
+    }
 }

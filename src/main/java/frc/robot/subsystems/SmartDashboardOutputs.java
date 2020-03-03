@@ -13,7 +13,7 @@ import frc.robot.Robot;
 /**
  * Add your docs here.
  */
-public class SmartDashboardOutputs {
+public class SmartDashboardOutputs extends AutoSubsystem {
     double numberOfBalls, numberOfAutoMode; 
     boolean intakeArm;
     public SmartDashboardOutputs() {
@@ -21,14 +21,14 @@ public class SmartDashboardOutputs {
         intakeArm = true;
         numberOfAutoMode = 0;
     }
+    @Override
     public void run() {
 
         // DRIVE VALUES
         SmartDashboard.putString("Front", Robot.drive.getShooterFront() ? "Shooter" : "Intake");
 
         // SHOOTER VALUES
-        SmartDashboard.putNumber("Distance from Shooter:", Shooter.distance);
-        SmartDashboard.putNumber("Preset", Shooter.preset);
+        SmartDashboard.putString("Preset", Robot.shooter.getPreset().getString());
 
         // CONVEYOR/INTAKE VALUES
         SmartDashboard.putNumber("Number of Balls", numberOfBalls);
@@ -66,5 +66,17 @@ public class SmartDashboardOutputs {
         // PRESSURE
         SmartDashboard.putNumber("Pressure", Robot.pressureTransducer.getPSI());
         SmartDashboard.putBoolean("Pressure above 60 PSI", Robot.pressureTransducer.getPSI() > 60);
+    }
+    @Override
+    public void autoRun() {
+        run();
+    }
+    @Override
+    public void manualRun() {
+        run();
+    }
+    @Override
+    public void reset() {
+        // Do nothing
     }
 }

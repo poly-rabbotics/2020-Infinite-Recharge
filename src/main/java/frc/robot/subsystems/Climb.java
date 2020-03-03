@@ -36,6 +36,10 @@ public class Climb extends Subsystem {
         }
     }
     @Override
+    public void manualRun() {
+        run();
+    }
+    @Override
     public void reset() {
         
     }

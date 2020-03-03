@@ -19,8 +19,8 @@ import frc.robot.controls.MechanismsJoystick;
  * Add your docs here.
  */
 public class ConveyorBelt extends AutoSubsystem {
- public static double INTAKE_SPEED = 0.5;
- public static double SHOOT_SPEED = 0.3;
+ public static double INTAKE_SPEED = 0.95;
+ public static double SHOOT_SPEED = 0.95;
  SpeedControllerGroup motors;
  DigitalInput upperSensor, lowerSensor, lowerSensorTwo;
  int ballCount;
@@ -28,6 +28,7 @@ public class ConveyorBelt extends AutoSubsystem {
 
  public ConveyorBelt(){
   motors = new SpeedControllerGroup(RobotMap.lowerConveyorMotor, RobotMap.upperConveyorMotor);
+  RobotMap.upperConveyorMotor.setInverted(true);
   lowerSensor = RobotMap.intakeSensor;
 
   upperSensor = RobotMap.shooterSensor;
@@ -82,6 +83,21 @@ public class ConveyorBelt extends AutoSubsystem {
     countBalls();
     SmartDashboard.putNumber("Number of Balls in Intake", ballCount);
   }
+  public void manualRun() {
+    if (MechanismsJoystick.getToggleManTopConveyor()) {
+      RobotMap.upperConveyorMotor.set(INTAKE_SPEED);
+    }
+    else {
+      RobotMap.upperConveyorMotor.set(0);
+    }
+
+    if (MechanismsJoystick.getToggleManBottomConveyor()) {
+      RobotMap.lowerConveyorMotor.set(INTAKE_SPEED);
+    }
+    else {
+      RobotMap.lowerConveyorMotor.set(0);
+    }
+  }
   public boolean needsToStop() {
     return upperSensor.get();
   }
@@ -100,5 +116,8 @@ public class ConveyorBelt extends AutoSubsystem {
   public void reset() {}
   public void autoRun() {
       countBalls();
+      if(!getLocked()) {
+        stop();
+      }
   }
 }

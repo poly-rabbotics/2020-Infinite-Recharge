@@ -28,20 +28,20 @@ public ConveyorTest(){
 
 public void run(){
   if(MechanismsJoystick.isManual()){
-  if (MechanismsJoystick.getToggleManTopConveyor()) {
-    top.set(speed);
-  }
-  else {
-    top.set(0);
-  }
+    if (MechanismsJoystick.getToggleManTopConveyor()) {
+      top.set(speed);
+    }
+    else {
+      top.set(0);
+    }
 
-  if (MechanismsJoystick.getToggleManBottomConveyor()) {
-    bottom.set(speed);
+    if (MechanismsJoystick.getToggleManBottomConveyor()) {
+      bottom.set(speed);
+    }
+    else {
+      bottom.set(0);
+    }
   }
-  else {
-    bottom.set(0);
-  }
-}
 }
 
 }

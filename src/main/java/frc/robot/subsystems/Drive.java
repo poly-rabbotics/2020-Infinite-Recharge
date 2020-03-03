@@ -116,27 +116,20 @@ public class Drive extends AutoSubsystem {
     setRotationalSetpointRelativeToCurrentPos(camera.getYaw());
   }
   private void getControllerInput() {
-    if(!MechanismsJoystick.isManual()) {
-      // SET COOKED ROTATIONAL SETPOINT
-      if(DriveJoystick.getAdjustRotationLeft()) {
-        setRotationalSetpoint(FINE_ADJUSTMENT_MAGNITUDE);
-      }
-      else if(DriveJoystick.getAdjustRotationRight()) { //Special fine adjustment
-        setRotationalSetpoint(-FINE_ADJUSTMENT_MAGNITUDE);
-      }
-      else if(DriveJoystick.getCameraOrient()) { //Special auto orient
-        (new CameraSetDriveSetpoint("Orient with target")).start();
-      }
-      else if(DriveJoystick.getTurn() != 0) { //This is the manual control
-        setRotationalSetpointRelativeToCurrentPos(TransformationUtils.cubicTransform(DriveJoystick.getTurn()) * MANUAL_TURN_CONSTANT);
-      }
-      applyRotationalPID();
+    // SET COOKED ROTATIONAL SETPOINT
+    if(DriveJoystick.getAdjustRotationLeft()) {
+      setRotationalSetpoint(FINE_ADJUSTMENT_MAGNITUDE);
     }
-    else {
-      // SET RAW (medium rare) ROTATIONAL SETPOINT
-      reset();
-      rotation = TransformationUtils.cubicTransform(DriveJoystick.getTurn());
+    else if(DriveJoystick.getAdjustRotationRight()) { //Special fine adjustment
+      setRotationalSetpoint(-FINE_ADJUSTMENT_MAGNITUDE);
     }
+    else if(DriveJoystick.getCameraOrient()) { //Special auto orient
+      (new CameraSetDriveSetpoint("Orient with target")).start();
+    }
+    else if(DriveJoystick.getTurn() != 0) { //This is the manual control
+      setRotationalSetpointRelativeToCurrentPos(TransformationUtils.cubicTransform(DriveJoystick.getTurn()) * MANUAL_TURN_CONSTANT);
+    }
+    applyRotationalPID();
     
 
     // SET RAW TRANSLATIONAL SPEED (same no matter which mode, just always raw/medium rare rotation)
@@ -145,7 +138,7 @@ public class Drive extends AutoSubsystem {
 
     // CHANGE FRONT/BACK AS REQUESTED
     if(DriveJoystick.getFront()) {
-    shooterFront = !shooterFront;
+      shooterFront = !shooterFront;
     }
   }
   
@@ -153,6 +146,19 @@ public class Drive extends AutoSubsystem {
     if(!getLocked()) {
       getControllerInput();
       move();
+    }
+  }
+  public void manualRun() {
+    reset();
+    rotation = TransformationUtils.cubicTransform(DriveJoystick.getTurn());    
+
+    // SET RAW TRANSLATIONAL SPEED (same no matter which mode, just always raw/medium rare rotation)
+    speed = TransformationUtils.squareTransform(DriveJoystick.getMove());
+    speed = shooterFront ? speed : -speed;
+
+    // CHANGE FRONT/BACK AS REQUESTED
+    if(DriveJoystick.getFront()) {
+      shooterFront = !shooterFront;
     }
   }
   public void autoRun() {

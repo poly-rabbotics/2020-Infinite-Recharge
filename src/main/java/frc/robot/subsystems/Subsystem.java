@@ -3,7 +3,9 @@ package frc.robot.subsystems;
 public abstract class Subsystem {
     String lock;//The value of this variable is the command that has control over this subsystem
     public abstract void run();
+    public abstract void manualRun();
     public abstract void reset();
+    
     public void lock(String command) {
         lock = command;
     }
