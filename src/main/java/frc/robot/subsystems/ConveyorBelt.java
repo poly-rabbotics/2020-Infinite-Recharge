@@ -21,8 +21,8 @@ import frc.robot.controls.MechanismsJoystick;
  * Add your docs here.
  */
 public class ConveyorBelt extends AutoSubsystem {
- public static double INTAKE_SPEED = 0.95;
- public static double SHOOT_SPEED = 0.95;
+ public static double INTAKE_SPEED = 0.5;
+ public static double SHOOT_SPEED = 0.5;
  SpeedControllerGroup motors;
  DigitalInput upperSensor, lowerSensor, lowerSensorTwo;
  int ballCount;
@@ -39,10 +39,10 @@ public class ConveyorBelt extends AutoSubsystem {
   upperBallDetected = false;
  }
  public boolean ballDetectedAtIntake() {
-   return lowerSensor.get();
+   return !lowerSensor.get();
  }
  public boolean ballDetectedAtShooter() {
-   return upperSensor.get();
+   return !upperSensor.get();
  }
   public void countBalls() {
     //Check for balls entering the mechanism
@@ -82,11 +82,11 @@ public class ConveyorBelt extends AutoSubsystem {
 
 
   public void run(){
-    if(getLock() == "") { //If no command has a lock on this subsystem
+    if(!getLocked()) { //If no command has a lock on this subsystem
       (new IntakeBall(false)).start();
     }
     if(MechanismsJoystick.getConveyorOverride()) {
-      (new PreloadShooter(20, false)).start();
+      (new PreloadShooter(false)).start();
     }
     countBalls();
     SmartDashboard.putNumber("Number of Balls in Intake", ballCount);

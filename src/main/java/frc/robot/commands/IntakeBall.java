@@ -11,7 +11,9 @@ public class IntakeBall extends Command {
     private static final int MAX_NUMBER_OF_BALLS = 5;
     public static final int PERIOD = 20;
     public static final String NAME = "intake ball";
-
+    public static final double DELAY_BEFORE_STOP = 0.5;
+    
+    private double lastTimeBallDetected;
     private ConveyorBelt conveyorBelt;
     private int startingNumberOfBalls;
     public IntakeBall(boolean verbose) {
@@ -28,6 +30,7 @@ public class IntakeBall extends Command {
     protected void whileRunning() {
         if(conveyorBelt.ballDetectedAtIntake()) {
             conveyorBelt.moveForIntake();
+            lastTimeBallDetected = getTime();
         }
         else {
             conveyorBelt.stop();
@@ -35,8 +38,8 @@ public class IntakeBall extends Command {
     }
     @Override
     protected boolean isFinished() {
-        return conveyorBelt.getNumberOfBalls() > startingNumberOfBalls 
-                || conveyorBelt.getNumberOfBalls() >= MAX_NUMBER_OF_BALLS 
+        return (getTime() - lastTimeBallDetected > DELAY_BEFORE_STOP && (conveyorBelt.getNumberOfBalls() > startingNumberOfBalls 
+                || conveyorBelt.getNumberOfBalls() >= MAX_NUMBER_OF_BALLS)) 
                 || subsystemTaken(conveyorBelt);
     }
     @Override

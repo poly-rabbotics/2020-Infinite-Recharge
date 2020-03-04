@@ -18,11 +18,11 @@ public class DriveJoystick {
   private static Joystick joystick = RobotMap.driveJoystick;
   private static double lastMoveTime = 0;
   public static double getMove(){
-    double speed = joystick.getRawAxis(1);
+    double speed = joystick.getRawAxis(5);
     return speed;
   }
   public static double getTurn(){
-    double speed = joystick.getRawAxis(4);
+    double speed = joystick.getRawAxis(0);
     return speed;
   }
   public static boolean getCameraOrient() {

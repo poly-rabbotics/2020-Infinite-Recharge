@@ -41,7 +41,7 @@ public class RobotMap {
   public static final AHRS ahrs = new AHRS();
 
 
-  public static final DigitalInput intakeSensor = new DigitalInput(5);
+  public static final DigitalInput intakeSensor = new DigitalInput(2);
   public static final DigitalInput shooterSensor = new DigitalInput(3);
   public static final Relay visionLightRelay = new Relay(3);
 

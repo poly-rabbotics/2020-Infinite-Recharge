@@ -15,8 +15,8 @@ import frc.robot.controls.MechanismsJoystick;
 public class IntakeTest {
     public static double HOLD_SPEED = 0.05;
     public static double MOVE_SPEED = 1;
-    public static double INTAKE_SPEED = 0.25;
-    public static double AVOID_INTAKING_SPEED = -0.05;
+    public static double INTAKE_SPEED = 1;
+    public static double AVOID_INTAKING_SPEED = -0.2;
 
     private PWMVictorSPX motor, armMotor;
     private boolean out;

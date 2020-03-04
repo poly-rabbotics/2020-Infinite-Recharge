@@ -12,15 +12,18 @@ import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.Relay.Value;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.CameraSetDriveSetpoint;
 import frc.robot.controls.DriveJoystick;
 import frc.robot.controls.MechanismsJoystick;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
+
 import frc.robot.utils.*;
 import frc.robot.sensors.ShooterCamera;
-
 
 /**
  * Add your docs here.
@@ -31,21 +34,34 @@ public class Drive extends AutoSubsystem {
 
   private boolean shooterFront = true;
 
-  private DifferentialDrive drive;
+  private CustomDifferentialDrive drive;
   private AHRS ahrs;
   private PIDController turnController;
   private double speed, rotation;
   private ShooterCamera camera;
   private DriveMotor[] leftMotors, rightMotors;
+  private CANSparkMax leftMotorFront, leftMotorBack, rightMotorFront, rightMotorBack;
 
   public Drive() {
     //Initialize left and right motors
+    leftMotorFront = RobotMap.leftFront;
+    leftMotorBack = RobotMap.leftBack;
+    rightMotorFront = RobotMap.rightFront;
+    rightMotorBack = RobotMap.rightBack;
     leftMotors  = new DriveMotor[]{new DriveMotor(RobotMap.leftFront), new DriveMotor(RobotMap.leftBack)};
-    rightMotors = new DriveMotor[]{new DriveMotor(RobotMap.leftFront), new DriveMotor(RobotMap.leftBack)};
+    rightMotors = new DriveMotor[]{new DriveMotor(RobotMap.rightFront), new DriveMotor(RobotMap.rightBack)};
+    for (DriveMotor motor: leftMotors) {
+      motor.setUpConstants();
+    }
+    for (DriveMotor motor: rightMotors) {
+      motor.setUpConstants();
+    }
     //Pass left and right motors on to drive
-    SpeedControllerGroup left = new SpeedControllerGroup(leftMotors[0].getMotor(), leftMotors[1].getMotor());
-    SpeedControllerGroup right = new SpeedControllerGroup(rightMotors[0].getMotor(), rightMotors[1].getMotor());
-    this.drive = new DifferentialDrive(right, left);
+    //SpeedControllerGroup left = new SpeedControllerGroup(leftMotors[0].getMotor(), leftMotors[1].getMotor());
+    //SpeedControllerGroup right = new SpeedControllerGroup(rightMotors[0].getMotor(), rightMotors[1].getMotor());
+    //SpeedControllerGroup left = new SpeedControllerGroup(RobotMap.leftFront, RobotMap.leftBack);
+    //SpeedControllerGroup right = new SpeedControllerGroup(RobotMap.rightFront, RobotMap.rightBack);
+    this.drive = new CustomDifferentialDrive(rightMotors, leftMotors);
     
     //Set up turn controller
     KGains kGains = new KGains(0.01, 0.002, 1, 0);
@@ -100,6 +116,8 @@ public class Drive extends AutoSubsystem {
     return getAngle() - getSetpoint();
   }
   private void move() {
+    //leftMotorFront.set(1);
+    //leftMotorBack.set(1);
     drive.arcadeDrive(speed, rotation);
   }
   public boolean getShooterFront() {
@@ -160,10 +178,9 @@ public class Drive extends AutoSubsystem {
     if(DriveJoystick.getFront()) {
       shooterFront = !shooterFront;
     }
+    move();
   }
   public void autoRun() {
-    if(!getLocked()) {
-      move();
-    }
+    move();
   }
 }

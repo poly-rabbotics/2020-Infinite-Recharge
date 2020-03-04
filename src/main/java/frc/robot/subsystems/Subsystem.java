@@ -13,7 +13,7 @@ public abstract class Subsystem {
         return lock;
     }
     public boolean getLocked() {
-        return lock == "";
+        return lock != "";
     }
     public void unlock() {
         lock = "";

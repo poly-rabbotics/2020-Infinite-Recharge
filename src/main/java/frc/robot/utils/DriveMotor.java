@@ -24,28 +24,30 @@ public class DriveMotor {
     public DriveMotor(CANSparkMax motor) {
         this.motor = motor;
         controller = motor.getPIDController();
-        encoder = motor.getEncoder(EncoderType.kQuadrature, 4096);
+        encoder = motor.getEncoder();
     }
     public void setUpConstants() {
-        motor.restoreFactoryDefaults();
+        //motor.restoreFactoryDefaults();
         //constrain output
-        controller.setOutputRange(-1, 1);
+        //controller.setOutputRange(-1, 1);
         //set zone in which I is active
-        controller.setIZone(5, REGULAR_DRIVE_SLOT);
+        //controller.setIZone(5, REGULAR_DRIVE_SLOT);
         // set PID coefficients for regular drive
-        KGains gains = new KGains(0, 0, 0, 0);
+        KGains gains = new KGains(1.0, 0, 0, 0);
+        controller.setIZone(0);
+        controller.setFF(0);
         inputKGains(controller, gains, REGULAR_DRIVE_SLOT);
         //set PID coefficients for drive set distance
-        gains = new KGains(1, 0, 5, 0); //TODO: calibrate PID
+        gains = new KGains(6e-5, 0, 0, 0.000015); //TODO: calibrate PID
         inputKGains(controller, gains, STOP_DRIVE_SLOT);
         //set PID coefficients for smart translation
         gains = new KGains(5e-5, 1e-6, 0, 0);
-        inputKGains(controller, gains, SMART_TRANSLATION_DRIVE_SLOT);
+        // inputKGains(controller, gains, SMART_TRANSLATION_DRIVE_SLOT);
         //set smart motion specific values
-        controller.setSmartMotionMaxVelocity(SMART_TRANSLATION_MAX_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
-        controller.setSmartMotionMinOutputVelocity(SMART_TRANSLATION_MIN_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
-        controller.setSmartMotionMaxAccel(SMART_TRANSLATION_MIN_ACCELERATION, SMART_TRANSLATION_DRIVE_SLOT);
-        controller.setSmartMotionAllowedClosedLoopError(SMART_TRANSLATION_ALLOWED_ERROR, SMART_TRANSLATION_DRIVE_SLOT);
+        // controller.setSmartMotionMaxVelocity(SMART_TRANSLATION_MAX_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
+        // controller.setSmartMotionMinOutputVelocity(SMART_TRANSLATION_MIN_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
+        // controller.setSmartMotionMaxAccel(SMART_TRANSLATION_MIN_ACCELERATION, SMART_TRANSLATION_DRIVE_SLOT);
+        // controller.setSmartMotionAllowedClosedLoopError(SMART_TRANSLATION_ALLOWED_ERROR, SMART_TRANSLATION_DRIVE_SLOT);
     }
     private static void inputKGains(CANPIDController controller, KGains gains, int slot) {
         controller.setP(gains.kP, slot);
@@ -69,5 +71,8 @@ public class DriveMotor {
     }
     public double getPosition() {
         return encoder.getPosition() * DISTANCE_PER_ROTATION;
+    }
+    public void setVoltage(double voltage) {
+        controller.setReference(voltage, ControlType.kVoltage, REGULAR_DRIVE_SLOT);
     }
 }

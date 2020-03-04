@@ -9,13 +9,10 @@ import frc.robot.subsystems.ConveyorBelt;
 
 public class PreloadShooter extends Command {
     public static String NAME = "preload shooter";
+    public static int PERIOD = 20;
     private ConveyorBelt conveyorBelt;
-    public PreloadShooter(int periodInMillis, boolean verbose) {
-        super(NAME, periodInMillis, verbose);
-        conveyorBelt = Robot.conveyorBelt;
-    }
     public PreloadShooter(boolean verbose) {
-        super(NAME, 20, verbose);
+        super(NAME, PERIOD, verbose);
         conveyorBelt = Robot.conveyorBelt;
     }
     @Override
@@ -32,6 +29,7 @@ public class PreloadShooter extends Command {
     }
     @Override
     protected void onFinish() {
+        conveyorBelt.stop();
         conveyorBelt.unlock();
     }
 }

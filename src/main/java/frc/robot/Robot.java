@@ -41,11 +41,11 @@ public class Robot extends TimedRobot {
   @Override
   public void robotInit() {
     CameraServer.getInstance().startAutomaticCapture();
-    subsystems = new Subsystem[] {};
+    subsystems = new Subsystem[] {conveyorBelt, drive};
     for (Subsystem subsystem : subsystems) {
       subsystem.reset();
     }
-    autoSubsystems = new AutoSubsystem[] {};
+    autoSubsystems = new AutoSubsystem[] {conveyorBelt, drive};
     for (Subsystem auto : autoSubsystems) {
       auto.reset();
     }
@@ -103,23 +103,27 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testPeriodic() {
+    // for (AutoSubsystem auto : autoSubsystems) {
+    //   auto.autoRun();
+    // }
+    //drive.manualRun();
   }
 
   @Override
   public void testInit() {
     Command[] tests = { 
-        new IntakeBall(true), 
-        new PreloadShooter(true),
-        new Shoot(Shooter.INITIATION_LINE_PRESET, 20, true),
+        //new IntakeBall(true), 
+        //new PreloadShooter(true),
+        //new Shoot(Shooter.INITIATION_LINE_PRESET, 20, true),
 
-        /*new DriveByTime(1, 0.25, "drive for 1 second", 20, true),
-        new DriveByDistance(5, 10, "Drive 5 feet for max 10 seconds", 20),
-        new TurnByDegrees(5, 1, "turn by degrees", 20, true), new TurnPanel4Rotations(true),
+         new DriveByTime(2, 0.5, 20, true),
+        // new DriveByDistance(5, 10, 20),
+        // new TurnByDegrees(5, 1, 20, true), new TurnPanel4Rotations(true),
 
-        new TurnPanelToRequestedColor(true),
-        new TurnPanel4Rotations(true),
+        // new TurnPanelToRequestedColor(true),
+        // new TurnPanel4Rotations(true),
 
-        new CameraSetDriveSetpoint(true)*/
+        // new CameraSetDriveSetpoint(true)
         };
     new Thread(() -> {
       for (Command command : tests) {
