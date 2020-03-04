@@ -9,9 +9,15 @@ public class VisionLight extends Subsystem {
     public VisionLight() {
         relay = RobotMap.visionLightRelay;
     }
+    /**
+     * Turns on the light for vision.
+    */
     public void turnOn() {
         relay.set(Relay.Value.kForward); //TODO: choose this value such that the lights turn off when reset
     }
+    /**
+     * Turns off the light for vision.
+    */
     public void turnOff() {
         relay.set(Relay.Value.kOff);
     }
@@ -28,6 +34,9 @@ public class VisionLight extends Subsystem {
     public void manualRun() {
         turnOff();
     }
+    /**
+     * Turns off the light.
+    */
     public void reset() {
         turnOff(); 
     }
