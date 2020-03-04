@@ -24,32 +24,44 @@ public class ConveyorBelt extends AutoSubsystem {
  public static double INTAKE_SPEED = 0.5;
  public static double SHOOT_SPEED = 0.5;
  SpeedControllerGroup motors;
- DigitalInput upperSensor, lowerSensor, lowerSensorTwo;
+ DigitalInput upperSensor, lowerSensor;
  int ballCount;
  boolean lowerBallDetected, upperBallDetected;
 
- public ConveyorBelt(){
+ public ConveyorBelt() {
+  // Upper and lower conveyor belt always move together, so they are in the same group.
   motors = new SpeedControllerGroup(RobotMap.lowerConveyorMotor, RobotMap.upperConveyorMotor);
-  RobotMap.upperConveyorMotor.setInverted(true);
+  RobotMap.upperConveyorMotor.setInverted(true); //The upper conveyor motor spins the opposite direction
   lowerSensor = RobotMap.intakeSensor;
 
   upperSensor = RobotMap.shooterSensor;
-  ballCount = 0;
+  ballCount = 3; //TODO: set this to the appropriate number of balls at the beginning of each match.
   lowerBallDetected = false;
   upperBallDetected = false;
  }
+ /**
+  * @return whether or not there is a ball at the opening of the intake
+ */
  public boolean ballDetectedAtIntake() {
    return !lowerSensor.get();
  }
+ /**
+  * @return whether or not there is a ball just below where it would touch the shooter
+ */
  public boolean ballDetectedAtShooter() {
    return !upperSensor.get();
  }
+ /**
+  * Must be called frequently (like, every 20ms) to keep track of the balls entering and leaving the mechanism.
+  * Edits the number of balls as a member var.
+ */
   public void countBalls() {
     //Check for balls entering the mechanism
     if(ballDetectedAtIntake()) {
       lowerBallDetected = true;
     }
-    if(lowerBallDetected && !lowerSensor.get()){
+    if(lowerBallDetected && !ballDetectedAtIntake()) {
+      //Last cycle there was a ball detected, but now there is no ball detected.
       ballCount += 1;
       lowerBallDetected = false;
     }
@@ -57,7 +69,7 @@ public class ConveyorBelt extends AutoSubsystem {
     if(ballDetectedAtShooter()) {
       upperBallDetected = true;
     }
-    if(upperBallDetected && !upperSensor.get()){
+    if(upperBallDetected && !ballDetectedAtShooter()) {
       ballCount -= 1;
       upperBallDetected = false;
     }
@@ -82,16 +94,17 @@ public class ConveyorBelt extends AutoSubsystem {
 
 
   public void run(){
-    if(!getLocked()) { //If no command has a lock on this subsystem
-      (new IntakeBall(false)).start();
+    if(!getLocked()) { //If no command has a lock on this subsystem,
+      (new IntakeBall(false)).start(); //then the default behavior is to intake another ball
     }
-    if(MechanismsJoystick.getConveyorOverride()) {
+    if(MechanismsJoystick.getConveyorOverride()) { //Request to preload the shooter
       (new PreloadShooter(false)).start();
     }
-    countBalls();
+    countBalls(); //Update the number of balls in the mechanism as needed
     SmartDashboard.putNumber("Number of Balls in Intake", ballCount);
   }
   public void manualRun() {
+    //Top conveyor and bottom conveyor are controlled by separate buttons
     if (MechanismsJoystick.getToggleManTopConveyor()) {
       RobotMap.upperConveyorMotor.set(INTAKE_SPEED);
     }
@@ -106,18 +119,33 @@ public class ConveyorBelt extends AutoSubsystem {
       RobotMap.lowerConveyorMotor.set(0);
     }
   }
+ /**
+  * @return whether or not the mechanism must stop in order to prevent accidentally shooting or dropping a power cell
+ */
   public boolean needsToStop() {
     return ballDetectedAtShooter();
   }
+  /**
+   * @return the number of balls in the mechanism
+  */
   public int getNumberOfBalls() {
     return ballCount;
   }
+  /**
+   * Make everything in the mechanism stop.
+  */
   public void stop() {
     motors.set(0);
   }
+  /**
+   * Moves at the appropriate speed for shooting.
+  */
   public void moveForShoot() {
       motors.set(SHOOT_SPEED);
   }
+  /**
+   * Moves at the appropriate speed for intaking a power cell.
+  */
   public void moveForIntake() {
     motors.set(INTAKE_SPEED);
   }

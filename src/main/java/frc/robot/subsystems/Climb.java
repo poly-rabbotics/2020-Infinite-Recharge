@@ -6,6 +6,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.RobotMap;
 import frc.robot.controls.MechanismsJoystick;
 
+/**
+ * Class that controls the pneumatic actuator and hook used for climbing on the generator switch.
+*/
 public class Climb extends Subsystem {
     DoubleSolenoid solenoid;
     boolean on;
@@ -13,8 +16,10 @@ public class Climb extends Subsystem {
     public Climb() {
         solenoid = RobotMap.climbSolenoid;
         solenoid.set(Value.kReverse);
-        
     }
+    /**
+     * Simple toggle extend/retract the climbing system using a button.
+    */
     public void run() {
         boolean toggleClimbingSystem = MechanismsJoystick.getToggleClimbingSystem();
         boolean allowClimbingSystem  = MechanismsJoystick.getAllowClimbingSystem();

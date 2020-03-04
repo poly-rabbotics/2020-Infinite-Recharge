@@ -42,6 +42,9 @@ public class Drive extends AutoSubsystem {
   private DriveMotor[] leftMotors, rightMotors;
   private CANSparkMax leftMotorFront, leftMotorBack, rightMotorFront, rightMotorBack;
 
+  /**
+   * Initializes left and right motors, drive, turncontroller, and drivetrain-related sensors.
+  */
   public Drive() {
     //Initialize left and right motors
     leftMotorFront = RobotMap.leftFront;
@@ -73,24 +76,46 @@ public class Drive extends AutoSubsystem {
     camera = new ShooterCamera(RobotMap.shooterCameraName);
     reset();
   }
+  /**
+   * Resets the turn controller.
+  */
   public void reset() {
     turnController.reset();
     turnController.setSetpoint(ahrs.getAngle());
   }
+  /**
+   * Adjusts the rotational setpoint with respect to what the setpoint is right now.
+   * @param change the amount by which the setpoint itself should be changed (positive in the counterclockwise direction)
+  */
   public void setRotationalSetpoint(double change) {
     turnController.setSetpoint(turnController.getSetpoint() + change);
   }
+  /**
+   * Adjusts the desired rotation based on the current turning setpoint and PID.
+  */
   public void applyRotationalPID() {
     rotation = turnController.calculate(ahrs.getAngle());
   }
+  /**
+   * Adjusts the rotational setpoint with respect to the robot's current orientation.
+   * @param change the amount by which the setpoint should differ from the robot's current orientation (positive in the counterclockwise direction)
+  */
   public void setRotationalSetpointRelativeToCurrentPos(double change) {
     turnController.setSetpoint(ahrs.getAngle() + change);
   }
+  /**
+   * Sets the desired translational speed.
+   * @param speed a number in the interval [-1, +1], of which translational speed should be a function.
+  */
   public void setDriveForward(double speed) {
     //System.out.print("Setting drive forward to ");
     //System.out.println(speed);
     this.speed = speed;
   }
+  /**
+   * Sets a translational position setpoint, which should be approached using SmartMotion.
+   * @param change the desired translational displaacement of the robot from its current location
+  */
   public void setTranslationalSetpoint(double change) {
     for(DriveMotor motor : leftMotors) {
       motor.setSmartTranslationSetpoint(change);
@@ -99,30 +124,61 @@ public class Drive extends AutoSubsystem {
       motor.setSmartTranslationSetpoint(change);
     }
   }
+  /**
+   * Returns the integral from t=0 to present of the dot product of the displacement 
+   * vector of the corresponding side of the robot and the unit vector for the direction
+   * in which the robot is facing.
+   * @return a value that is (basically but not exactly) the mean displacement of both 
+              sides of the robot since t=0
+  */
   public double getPosition() { //return mean position of all drive motors
     return (leftMotors[0].getPosition() + leftMotors[1].getPosition() 
             + rightMotors[0].getPosition() + rightMotors[1].getPosition()) / 4;
   }
+  /**
+   * @param tolerance the maximum allowable difference between current position and desired position.
+   * @return whether or not the robot has rotated to the correct rotational position.
+  */
   public boolean aligned(double tolerance) {
     return Math.abs(ahrs.getAngle() - turnController.getSetpoint()) < tolerance;
   }
+  /**
+   * @return the difference between the current angle of the robot and the angle in which it was 
+   * facing when the robot code started.
+  */
   public double getAngle() {
     return ahrs.getAngle();
   }
+  /**
+   * @return the rotational setpoint of the robot.
+  */
   public double getSetpoint() {
     return turnController.getSetpoint();
   }
+  /**
+   * @return the current distance from the current rotational position to the rotational setpoint.
+  */
   public double getError() {
     return getAngle() - getSetpoint();
   }
+  /**
+   * Moves the robot based on the desirable translational and rotational speeds determined by other 
+   * functions.
+  */
   private void move() {
     //leftMotorFront.set(1);
     //leftMotorBack.set(1);
     drive.arcadeDrive(speed, rotation);
   }
+  /**
+   * @return whether or not the shooter side of the robot is to be treated as the front.
+  */
   public boolean getShooterFront() {
     return shooterFront;
   }
+  /**
+   * Reports information about the current state of the drivetrain to the SmartDashboard.
+  */
   public void printState() {
     SmartDashboard.putNumber("Turn", -1);
     SmartDashboard.putNumber("Angle", ahrs.getAngle());
@@ -130,18 +186,24 @@ public class Drive extends AutoSubsystem {
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
     SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
   }
+  /**
+   * Sets the rotational setpoint based on data from the camera.
+  */
   public void cameraOrient() {
     setRotationalSetpointRelativeToCurrentPos(camera.getYaw());
   }
+  /**
+   * Uses data from the DriveController to determine the desirable rotation and translation values.
+  */
   private void getControllerInput() {
     // SET COOKED ROTATIONAL SETPOINT
-    if(DriveJoystick.getAdjustRotationLeft()) {
+    if(DriveJoystick.getAdjustRotationLeft()) { //Request to make a small rotation to the left.
       setRotationalSetpoint(FINE_ADJUSTMENT_MAGNITUDE);
     }
-    else if(DriveJoystick.getAdjustRotationRight()) { //Special fine adjustment
+    else if(DriveJoystick.getAdjustRotationRight()) { //Request to make a small rotation to the right.
       setRotationalSetpoint(-FINE_ADJUSTMENT_MAGNITUDE);
     }
-    else if(DriveJoystick.getCameraOrient()) { //Special auto orient
+    else if(DriveJoystick.getCameraOrient()) { //Request to orient the robot toward the goal using the camera.
       (new CameraSetDriveSetpoint("Orient with target")).start();
     }
     else if(DriveJoystick.getTurn() != 0) { //This is the manual control
