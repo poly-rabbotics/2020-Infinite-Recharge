@@ -99,17 +99,33 @@ public abstract class Command extends Thread {
         }
         onFinish();
     }
+    /**
+    * @return whether or not this Command should be printing a lot of debugging information to the console.
+    */
     public boolean getVerbose() {
         return verbose;
     }
+    /**
+     * @return the time since this Command started.
+    */
     public double getTime() {
         return Timer.getFPGATimestamp() - startTime;
     }
+    /**
+     * Places a lock on a given subsystem. The name of the lock is the name of this Command.
+     * @param subsystem the subsystem to be locked by this command.
+     * @return whether or not the subsystem was locked before this method placed a lock on it.
+    */
     public boolean lockSubsystem(Subsystem subsystem) {
         boolean wasLocked = subsystem.getLocked();
         subsystem.lock(getName());
         return wasLocked;
     }
+    /**
+     * @param subsystem the subsystem which could have been "taken from" the current subsystem.
+     * @return whether or not the given subsystem is NOT claimed by the current Command (perhaps
+     * because another Command claimed it, or because all locks on it were canceled for some reason)
+    */
     public boolean subsystemTaken(Subsystem subsystem) {
         return subsystem.getLock() != getName();
     }
