@@ -24,6 +24,7 @@ public class DriveByTime extends Command {
     @Override
     protected void whileRunning() {
         drive.setDriveForward(speed);
+        drive.move();
     }
     @Override
     protected boolean isFinished() {

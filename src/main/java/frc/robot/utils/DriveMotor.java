@@ -16,7 +16,7 @@ public class DriveMotor {
     public static final int SMART_TRANSLATION_MAX_VELOCITY = 1000;
     public static final int SMART_TRANSLATION_MIN_VELOCITY = 6;
     public static final int SMART_TRANSLATION_MIN_ACCELERATION = 500;
-    public static final int SMART_TRANSLATION_ALLOWED_ERROR = 1;
+    public static final int SMART_TRANSLATION_ALLOWED_ERROR = 0;
     public static final double DISTANCE_PER_ROTATION = 6 * Math.PI / 12 / 8.45; //6in wheels, 12in per foot, 8.45
     CANSparkMax motor;
     CANPIDController controller;
@@ -27,7 +27,7 @@ public class DriveMotor {
         encoder = motor.getEncoder();
     }
     public void setUpConstants() {
-        //motor.restoreFactoryDefaults();
+        motor.restoreFactoryDefaults();
         //constrain output
         //controller.setOutputRange(-1, 1);
         //set zone in which I is active
@@ -42,12 +42,12 @@ public class DriveMotor {
         inputKGains(controller, gains, STOP_DRIVE_SLOT);
         //set PID coefficients for smart translation
         gains = new KGains(5e-5, 1e-6, 0, 0);
-        // inputKGains(controller, gains, SMART_TRANSLATION_DRIVE_SLOT);
+        inputKGains(controller, gains, SMART_TRANSLATION_DRIVE_SLOT);
         //set smart motion specific values
-        // controller.setSmartMotionMaxVelocity(SMART_TRANSLATION_MAX_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
-        // controller.setSmartMotionMinOutputVelocity(SMART_TRANSLATION_MIN_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
-        // controller.setSmartMotionMaxAccel(SMART_TRANSLATION_MIN_ACCELERATION, SMART_TRANSLATION_DRIVE_SLOT);
-        // controller.setSmartMotionAllowedClosedLoopError(SMART_TRANSLATION_ALLOWED_ERROR, SMART_TRANSLATION_DRIVE_SLOT);
+        controller.setSmartMotionMaxVelocity(SMART_TRANSLATION_MAX_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
+        controller.setSmartMotionMinOutputVelocity(SMART_TRANSLATION_MIN_VELOCITY, SMART_TRANSLATION_DRIVE_SLOT);
+        controller.setSmartMotionMaxAccel(SMART_TRANSLATION_MIN_ACCELERATION, SMART_TRANSLATION_DRIVE_SLOT);
+        controller.setSmartMotionAllowedClosedLoopError(SMART_TRANSLATION_ALLOWED_ERROR, SMART_TRANSLATION_DRIVE_SLOT);
     }
     private static void inputKGains(CANPIDController controller, KGains gains, int slot) {
         controller.setP(gains.kP, slot);
@@ -67,7 +67,9 @@ public class DriveMotor {
         controller.setReference(encoder.getPosition() + value / DISTANCE_PER_ROTATION, ControlType.kPosition, STOP_DRIVE_SLOT);
     }
     public void setSmartTranslationSetpoint(double value) {
-        controller.setReference(encoder.getPosition() + value / DISTANCE_PER_ROTATION, ControlType.kSmartMotion, SMART_TRANSLATION_DRIVE_SLOT);
+        System.out.print("Setting smart translation setpoint: ");
+        System.out.println(value);
+        controller.setReference(value / DISTANCE_PER_ROTATION, ControlType.kSmartMotion, SMART_TRANSLATION_DRIVE_SLOT);
     }
     public double getPosition() {
         return encoder.getPosition() * DISTANCE_PER_ROTATION;

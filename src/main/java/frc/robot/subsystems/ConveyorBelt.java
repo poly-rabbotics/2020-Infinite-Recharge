@@ -93,7 +93,7 @@ public class ConveyorBelt extends AutoSubsystem {
   // }
 
 
-  public void run(){
+  public void advancedRun(){
     if(!getLocked()) { //If no command has a lock on this subsystem,
       (new IntakeBall(false)).start(); //then the default behavior is to intake another ball
     }

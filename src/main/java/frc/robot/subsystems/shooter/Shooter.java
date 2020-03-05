@@ -160,14 +160,17 @@ public class Shooter extends AutoSubsystem {
     public void setPreset(ShooterPreset preset) {
         this.preset = preset;
     }
-    public void run() {
+    @Override
+    public void advancedRun() {
         getUserInput();
         runMechanism();
     }
+    @Override
     public void autoRun() {
         applyPreset();
         runMechanism();
     }
+    @Override
     public void manualRun() {
 
             if(MechanismsJoystick.getToggleManShootOne()) {

@@ -20,7 +20,7 @@ public class Climb extends Subsystem {
     /**
      * Simple toggle extend/retract the climbing system using a button.
     */
-    public void run() {
+    public void advancedRun() {
         boolean toggleClimbingSystem = MechanismsJoystick.getToggleClimbingSystem();
         boolean allowClimbingSystem  = MechanismsJoystick.getAllowClimbingSystem();
         if(allowClimbingSystem) {
@@ -42,7 +42,7 @@ public class Climb extends Subsystem {
     }
     @Override
     public void manualRun() {
-        run();
+        advancedRun();
     }
     @Override
     public void reset() {

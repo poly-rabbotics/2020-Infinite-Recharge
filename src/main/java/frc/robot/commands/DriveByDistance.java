@@ -5,11 +5,12 @@ import frc.robot.Robot;
 
 public class DriveByDistance extends Command {
     public static final String NAME = "drive by distance";
-
+    public static final double TRANSLATION_ALLOWABLE_ERROR = 0.5;
     private Drive drive;
     double distance;
     double startPosition;
     double maxTimeInSeconds;
+    double leftSetpoint, rightSetpoint;
     public DriveByDistance(double distance, double maxTimeInSeconds, int periodInMillis, boolean verbose) {
         super(NAME, periodInMillis, verbose);
         this.drive = Robot.drive;
@@ -24,19 +25,22 @@ public class DriveByDistance extends Command {
     public void onStart() {
         super.onStart();
         
-        if(!drive.getLocked()) {
+        //if(!drive.getLocked()) {
             lockSubsystem(drive);
             startPosition = drive.getPosition();
-            drive.setTranslationalSetpoint(distance);
-        }  
+            leftSetpoint = drive.getLeftPosition() + distance;
+            rightSetpoint = drive.getRightPosition() + distance;
+        //}  
     }
     @Override
     public void whileRunning() {
-        //do nothing; CAN motor controllers are doing everything
+        System.out.println(drive.getLeftPosition());
+        System.out.println(leftSetpoint);
+        drive.setTranslationalSetpoint(leftSetpoint, rightSetpoint);
     }
     @Override
     public boolean isFinished() {
-        return Math.abs(drive.getPosition() - startPosition) < 0.5 //Within 6 inches of correct position,
+        return (Math.abs(drive.getLeftPosition() - leftSetpoint) + Math.abs(drive.getRightPosition() - rightSetpoint)) / 2 < TRANSLATION_ALLOWABLE_ERROR //Within 6 inches of correct position,
             || getTime() > maxTimeInSeconds //or it has been enough time
             || subsystemTaken(drive); //or the subsystem is claimed by another command
     }

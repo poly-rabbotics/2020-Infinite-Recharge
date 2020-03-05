@@ -21,7 +21,7 @@ public class VisionLight extends Subsystem {
     public void turnOff() {
         relay.set(Relay.Value.kOff);
     }
-    public void run() {
+    public void advancedRun() {
         if(!getLocked()) {
             turnOff();
         }

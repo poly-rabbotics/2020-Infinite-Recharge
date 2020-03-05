@@ -11,7 +11,7 @@ public class CameraServo extends AutoSubsystem {
     public CameraServo() {
         cameraServo = RobotMap.cameraServo;
     }
-    public void run() {
+    public void advancedRun() {
         if(Robot.drive.getShooterFront()) {
             cameraServo.set(0.27);
         }
@@ -23,7 +23,7 @@ public class CameraServo extends AutoSubsystem {
      * No special functionality is necessary, so manualRun and advancedRun perform the same function.
     */
     public void manualRun() {
-        run();
+        advancedRun();
     }
     /**
      * Fix the camera in one place for the duration of the autonomous period.

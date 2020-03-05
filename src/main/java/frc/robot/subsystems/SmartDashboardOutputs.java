@@ -22,7 +22,7 @@ public class SmartDashboardOutputs extends AutoSubsystem {
         numberOfAutoMode = 0;
     }
     @Override
-    public void run() {
+    public void advancedRun() {
 
         // DRIVE VALUES
         SmartDashboard.putString("Front", Robot.drive.getShooterFront() ? "Shooter" : "Intake");
@@ -69,11 +69,11 @@ public class SmartDashboardOutputs extends AutoSubsystem {
     }
     @Override
     public void autoRun() {
-        run();
+        advancedRun();
     }
     @Override
     public void manualRun() {
-        run();
+        advancedRun();
     }
     @Override
     public void reset() {

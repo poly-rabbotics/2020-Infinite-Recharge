@@ -92,31 +92,27 @@ public class Robot extends TimedRobot {
   @Override
   public void teleopPeriodic() {
     for (Subsystem subsystem : subsystems) {
-      if(MechanismsJoystick.isManual()) {
-        subsystem.manualRun();
-      }
-      else {
-        subsystem.run();
-      }
+      subsystem.setIsManual(MechanismsJoystick.isManual());
+      subsystem.run();
     }
   }
 
   @Override
   public void testPeriodic() {
-    // for (AutoSubsystem auto : autoSubsystems) {
-    //   auto.autoRun();
-    // }
+    for (AutoSubsystem auto : autoSubsystems) {
+      auto.autoRun();
+    }
     //drive.manualRun();
   }
 
   @Override
   public void testInit() {
     Command[] tests = { 
-        //new IntakeBall(true), 
-        //new PreloadShooter(true),
-        //new Shoot(Shooter.INITIATION_LINE_PRESET, 20, true),
+        new IntakeBall(true), 
+        new PreloadShooter(true),
+        new Shoot(Shooter.INITIATION_LINE_PRESET, 20, true),
 
-         new DriveByTime(2, 0.5, 20, true),
+        // new DriveByTime(2, 0.1, 20, true),
         // new DriveByDistance(5, 10, 20),
         // new TurnByDegrees(5, 1, 20, true), new TurnPanel4Rotations(true),
 

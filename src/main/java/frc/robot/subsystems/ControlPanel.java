@@ -71,7 +71,7 @@ public class ControlPanel extends AutoSubsystem {
   public void stop() {
     panelMotor.set(0);
   }
-  public void run() {
+  public void advancedRun() {
     gameData = DriverStation.getInstance().getGameSpecificMessage(); //Constantly try to get the game data.
     if(MechanismsJoystick.getManualControlPanel()) { //the user is trying to control the mechanism manually
       unlock(); //Request a stop to any command that may be using this subsystem by ending its lock on this subsystem

@@ -114,14 +114,14 @@ public class Drive extends AutoSubsystem {
   }
   /**
    * Sets a translational position setpoint, which should be approached using SmartMotion.
-   * @param change the desired translational displaacement of the robot from its current location
+   * @param setpoint the desired translational displacement of the robot from its starting location
   */
-  public void setTranslationalSetpoint(double change) {
+  public void setTranslationalSetpoint(double leftSetpoint, double rightSetpoint) {
     for(DriveMotor motor : leftMotors) {
-      motor.setSmartTranslationSetpoint(change);
+      motor.setSmartTranslationSetpoint(leftSetpoint);
     }
     for(DriveMotor motor : rightMotors) {
-      motor.setSmartTranslationSetpoint(change);
+      motor.setSmartTranslationSetpoint(-rightSetpoint);
     }
   }
   /**
@@ -134,6 +134,12 @@ public class Drive extends AutoSubsystem {
   public double getPosition() { //return mean position of all drive motors
     return (leftMotors[0].getPosition() + leftMotors[1].getPosition() 
             + rightMotors[0].getPosition() + rightMotors[1].getPosition()) / 4;
+  }
+  public double getLeftPosition() { //return mean position of all drive motors
+    return (leftMotors[0].getPosition() + leftMotors[1].getPosition()) / 2;
+  }
+  public double getRightPosition() { //return mean position of all drive motors
+    return -(rightMotors[0].getPosition() + rightMotors[1].getPosition()) / 2;
   }
   /**
    * @param tolerance the maximum allowable difference between current position and desired position.
@@ -165,7 +171,7 @@ public class Drive extends AutoSubsystem {
    * Moves the robot based on the desirable translational and rotational speeds determined by other 
    * functions.
   */
-  private void move() {
+  public void move() {
     //leftMotorFront.set(1);
     //leftMotorBack.set(1);
     drive.arcadeDrive(speed, rotation);
@@ -204,7 +210,7 @@ public class Drive extends AutoSubsystem {
       setRotationalSetpoint(-FINE_ADJUSTMENT_MAGNITUDE);
     }
     else if(DriveJoystick.getCameraOrient()) { //Request to orient the robot toward the goal using the camera.
-      (new CameraSetDriveSetpoint("Orient with target")).start();
+      (new CameraSetDriveSetpoint(false)).start();
     }
     else if(DriveJoystick.getTurn() != 0) { //This is the manual control
       setRotationalSetpointRelativeToCurrentPos(TransformationUtils.cubicTransform(DriveJoystick.getTurn()) * MANUAL_TURN_CONSTANT);
@@ -222,7 +228,7 @@ public class Drive extends AutoSubsystem {
     }
   }
   
-  public void run() {
+  public void advancedRun() {
     if(!getLocked()) {
       getControllerInput();
       move();
@@ -243,6 +249,5 @@ public class Drive extends AutoSubsystem {
     move();
   }
   public void autoRun() {
-    move();
   }
 }

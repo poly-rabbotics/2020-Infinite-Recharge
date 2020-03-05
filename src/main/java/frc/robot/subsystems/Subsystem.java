@@ -11,7 +11,7 @@ public abstract class Subsystem {
      * defined in manualRun() or advancedRun().
     */
     public void run() {//Called from Robot. Please do not override this method.
-        if(getIsManual) {
+        if(getIsManual()) {
             manualRun();
         }
         else {
