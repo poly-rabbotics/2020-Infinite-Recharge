@@ -7,19 +7,20 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.RobotState;
 import edu.wpi.first.wpilibj.smartdashboard.*;
+import frc.robot.controls.DriveJoystick;
 import frc.robot.controls.MechanismsJoystick;
 import frc.robot.Robot;
 /**
  * Add your docs here.
  */
 public class SmartDashboardOutputs {
-    double numberOfBalls, numberOfAutoMode; 
+    double numberOfBalls; 
     boolean intakeArm;
     public SmartDashboardOutputs() {
         numberOfBalls = 0;
         intakeArm = true;
-        numberOfAutoMode = 0;
     }
     public void run() {
 
@@ -59,7 +60,7 @@ public class SmartDashboardOutputs {
         Robot.controlPanel.showRotations();
 
         // AUTONOMOUS MODE
-        SmartDashboard.putNumber("Automode ", numberOfAutoMode);
+        SmartDashboard.putNumber("Automode ", AutoModes.autoMode);
 
         // CONTROLS
         SmartDashboard.putString("Controls", MechanismsJoystick.controlState);
@@ -67,5 +68,7 @@ public class SmartDashboardOutputs {
         // PRESSURE
         SmartDashboard.putNumber("Pressure", Robot.pressureTransducer.getPSI());
         SmartDashboard.putBoolean("Pressure above 60 PSI", Robot.pressureTransducer.getPSI() > 60);
+
+        SmartDashboard.putNumber("POV", DriveJoystick.joystick.getPOV());
     }
 }

@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.DigitalOutput;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Robot;
 import frc.robot.RobotMap;
 import frc.robot.commands.CameraSetDriveSetpoint;
 import frc.robot.controls.DriveJoystick;
@@ -28,7 +29,7 @@ public class Drive extends AutoSubsystem {
   private KGains kGains;
   private PIDController turnController;
   static boolean shooterFront;
-  private double speed, rotation;
+  private double speed, rotation, slowSpeed;
   private ShooterCamera camera;
   public static String front;
   private DigitalOutput relay;
@@ -43,6 +44,9 @@ public class Drive extends AutoSubsystem {
     kGains = new KGains(0.01, 0.002, 1, 0);
     turnController = new PIDController(kGains, true);
     camera = new ShooterCamera(RobotMap.shooterCameraName);
+    speed = 0.3;
+    slowSpeed = 0.1;
+    rotation = 0.1;
     front = "Shooter";
     reset();
   }
@@ -111,22 +115,93 @@ public class Drive extends AutoSubsystem {
    
     if(shooterFront){
       front = "Shooter";
+      
     }
     else{
       front = "Intake";
+      
     }
   }
 
   public void run() {
     System.out.println(camera.getYaw());
    // printState();
-    getControllerInput();
+    //getControllerInput();
+
+    // MAKE THIS MAKE SENSE
+
+    
+    if(DriveJoystick.dPad()){
+       //  FIX FOUR CASES
+       slowSpeed = 0.1;
+       if(!shooterFront){
+        slowSpeed = -slowSpeed;
+      }
+      if(DriveJoystick.getPreciseFront()){
+        left.set(slowSpeed);
+        right.set(-slowSpeed);
+      }
+      else if(DriveJoystick.getPreciseRight()){
+        left.set(slowSpeed);
+        right.set(slowSpeed);
+      }
+      else if(DriveJoystick.getPreciseBack()){
+        left.set(-slowSpeed);
+        right.set(slowSpeed);
+      }
+      else if (DriveJoystick.getPreciseLeft()){
+        left.set(-slowSpeed);
+        right.set(-slowSpeed);
+      }
+    }
+
+    // MAKE THIS MAKE SENSE
+
+    else{
+    speed = DriveJoystick.getMove();
+    rotation = DriveJoystick.getTurn();
+    if(rotation < 0)
+      rotation = -0.7*rotation*rotation;
+      else
+      rotation = 0.7*rotation*rotation;
+    if(DriveJoystick.getFront()) {
+      shooterFront = !shooterFront;
+    }
+    if(!shooterFront){
+      speed = -speed;
+    }
+    if(Climb.on == true){
+      LEDLights.pattern = 5;
+    }
+    else if(!shooterFront){
+      LEDLights.pattern = 4;
+    }
+    else{
+      LEDLights.pattern = 3;
+      relay.set(false);
+    }
+  
     move();
+  }
 
   }
   public void autoRun() {
     //System.out.println(speed);
     autoOrient();
     move();
+  }
+// F I X   T H I S
+  public void altAutoRun(double startTime, double endTime, double driveSpeed, double driveRotation){
+    if(Robot.timer.get() > startTime && Robot.timer.get() < endTime){
+      speed = -driveSpeed;
+      rotation = driveRotation;
+      move();
+    }
+   /* else {
+      speed = 0;
+      rotation = 0;
+      move();
+    }
+    */
   }
 }

@@ -8,6 +8,8 @@ package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.DriveByTime;
 import frc.robot.commands.DriveInRegularPolygonSequence;
@@ -31,11 +33,14 @@ public class Robot extends TimedRobot {
   public static Climb climb;
   public static CameraServo cameraServo;
   public static ControlPanel controlPanel;
+  public static ConveyorBelt conveyor;
   public static SmartDashboardOutputs outputs;
-  public static ConveyorTest conveyor;
   public static IntakeTest intake;
   public static VisionLight light;
   public static PressureTransducer pressureTransducer;
+  public static Timer timer;
+  public static AutoModes autoModes;
+  public static LEDLights led;
 
   @Override
   public void robotInit() {
@@ -43,14 +48,17 @@ public class Robot extends TimedRobot {
     drive = new Drive(); 
     shooter = new Shooter();
     climb = new Climb();
+    conveyor = new ConveyorBelt();
     cameraServo = new CameraServo();
     controlPanel = new ControlPanel();
     outputs = new SmartDashboardOutputs();
-    conveyor = new ConveyorTest();
     intake = new IntakeTest();
     light = new VisionLight();
     pressureTransducer = new PressureTransducer();
-    subsystems = new Subsystem[]{drive, shooter, climb, cameraServo, light};
+    timer = new Timer();
+    autoModes = new AutoModes();
+    led = new LEDLights();
+    subsystems = new Subsystem[]{ shooter, climb, light};
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
@@ -70,10 +78,20 @@ public class Robot extends TimedRobot {
    */
   @Override
   public void robotPeriodic() {
-  }
+    autoModes.setMode();
+    outputs.run();
+    led.runLEDs();
+    if(isDisabled()){
+      LEDLights.pattern = 2;
+    }
+    else if(isAutonomous()){
+      LEDLights.pattern = 1;
+    }
+    }
 
   @Override
   public void autonomousInit() {
+    timer.start();
     for(AutoSubsystem auto: autoSubsystems) {
       auto.reset();
     }
@@ -85,6 +103,9 @@ public class Robot extends TimedRobot {
     for(Subsystem subsystem: subsystems) {
       subsystem.reset();
     }
+   // drive.reset();
+    timer.start();
+ 
   }
 
   @Override
@@ -92,6 +113,7 @@ public class Robot extends TimedRobot {
     for(AutoSubsystem auto: autoSubsystems) {
       auto.autoRun();
     }
+    autoModes.run();
   }
 
   @Override
@@ -99,10 +121,13 @@ public class Robot extends TimedRobot {
     for(Subsystem subsystem: subsystems) {
       subsystem.run();
     }
+    drive.run();
     controlPanel.run();
     outputs.run();
-    conveyor.run();
     intake.run();
+    conveyor.run();
+    cameraServo.run();
+    light.run();
   }
 
   @Override

@@ -63,16 +63,16 @@ public class ControlPanel {
       switch (gameData.charAt(0))
       {
         case 'B' :
-          colorCalled = 1;
-          break;
-        case 'G' :
-          colorCalled = 2;
-          break;
-        case 'R' :
           colorCalled = 3;
           break;
-        case 'Y' :
+        case 'G' :
           colorCalled = 4;
+          break;
+        case 'R' :
+          colorCalled = 1;
+          break;
+        case 'Y' :
+          colorCalled = 2;
           break;
         default :
           //This is corrupt data
@@ -262,6 +262,10 @@ public class ControlPanel {
     }
   }
 
+  public void stop(){
+    currentSpeed = 0;
+  }
+
   public void checkGameData(){
     if(gameData.length() > 0)
     {
@@ -295,6 +299,10 @@ public class ControlPanel {
     checkGameData();
     getColorCalled();
 
+    if(MechanismsJoystick.getStopMotor()){
+      stop();
+    }
+    else{
     currentSpeed = 100;
     System.out.println("start sequence");
     startThreeRotation();
@@ -308,6 +316,7 @@ public class ControlPanel {
       currentSpeed = 0;
     }
     panelMotor.set(currentSpeed);
+  }
   }
   else{
     manualMotorM();

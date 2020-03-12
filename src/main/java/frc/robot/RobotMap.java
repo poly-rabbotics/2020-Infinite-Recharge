@@ -18,6 +18,7 @@ import com.revrobotics.ColorSensorV3;
 import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DigitalOutput;
@@ -45,7 +46,8 @@ public class RobotMap {
   public static final PWMVictorSPX upperConveyorMotor = new PWMVictorSPX(1);
   public static final PWMVictorSPX lowerConveyorMotor = new PWMVictorSPX(2);
   public static final PWMVictorSPX intakeMotor = new PWMVictorSPX(3);
-  public static final PWMVictorSPX armMotor = new PWMVictorSPX(4);
+  public static final PWMVictorSPX armMotorLeft = new PWMVictorSPX(4);
+  public static final PWMVictorSPX armMotorRight = new PWMVictorSPX(5);
 
   public static final Encoder controlPanelEncoder = new Encoder(0,1); 
 
@@ -63,8 +65,10 @@ public class RobotMap {
   public static final DoubleSolenoid climbSolenoid = new DoubleSolenoid(3, 2);
   public static final DoubleSolenoid shooterSolenoid = new DoubleSolenoid(0, 1);
   //public static final DoubleSolenoid intakeSolenoid = new DoubleSolenoid(4,5);
-  public static final Servo camera = new Servo(9);
+  public static final Servo camera = new Servo(8);
 
   public static final String shooterCameraName = "Microsoft LifeCam HD-3000";
   public static final Relay visionLightRelay = new Relay(0);
+
+  public static final AddressableLED led = new AddressableLED(9);
 }

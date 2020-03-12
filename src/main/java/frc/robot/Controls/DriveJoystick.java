@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class DriveJoystick {
   
-  private static Joystick joystick = RobotMap.driveJoystick;
+  public static Joystick joystick = RobotMap.driveJoystick;
   private static double lastMoveTime = 0;
   public static double getMove(){
     double speed = joystick.getRawAxis(1);
@@ -50,6 +50,58 @@ public class DriveJoystick {
 
   public static boolean getToggleLight(){
     return joystick.getRawButton(3);
+  }
+
+  // SLOW MODE
+
+  public static boolean dPad(){
+    if(getPreciseFront() || getPreciseRight() || getPreciseBack() || getPreciseLeft()){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+
+  public static boolean getPreciseFront(){
+    if(joystick.getPOV() == 0){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  public static boolean getPreciseRight(){
+    if(joystick.getPOV() == 90){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  public static boolean getPreciseBack(){
+    if(joystick.getPOV() == 180){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+  public static boolean getPreciseLeft(){
+    if(joystick.getPOV() == 270){
+      return true;
+    }
+    else{
+      return false;
+    }
+  }
+   
+  public static boolean getDriveAllowClimb(){
+    return joystick.getRawButton(8);
+  }
+
+  public static boolean getDriveToggleClimb(){
+    return joystick.getRawButtonPressed(7);
   }
 
 
