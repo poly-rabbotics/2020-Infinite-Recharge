@@ -14,6 +14,8 @@ import edu.wpi.first.wpilibj.Relay;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANEncoder;
+import com.revrobotics.EncoderType;
 import com.revrobotics.ColorSensorV3;
 import com.revrobotics.SparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
@@ -50,6 +52,8 @@ public class RobotMap {
   public static final PWMVictorSPX armMotorRight = new PWMVictorSPX(5);
 
   public static final Encoder controlPanelEncoder = new Encoder(0,1); 
+
+  public static final CANEncoder leftFrontEncoder = new CANEncoder(leftFront, EncoderType.kQuadrature, 42); 
 
   public static final ColorSensorV3 controlPanelColorSensor = new ColorSensorV3(I2C.Port.kOnboard);
   public static final DigitalInput intakeSensorOne = new DigitalInput(2);

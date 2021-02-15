@@ -33,6 +33,8 @@ public class Drive extends AutoSubsystem {
   private ShooterCamera camera;
   public static String front;
   private DigitalOutput relay;
+  private CANEncoder testEncoder;
+  
   public Drive() {
     left = new SpeedControllerGroup(RobotMap.leftFront, RobotMap.leftBack);
     right = new SpeedControllerGroup(RobotMap.rightFront, RobotMap.rightBack);
@@ -48,6 +50,7 @@ public class Drive extends AutoSubsystem {
     slowSpeed = 0.1;
     rotation = 0.1;
     front = "Shooter";
+    testEncoder = RobotMap.testEncoder;
     reset();
   }
   public void reset() {
@@ -86,6 +89,7 @@ public class Drive extends AutoSubsystem {
     SmartDashboard.putNumber("setpoint", turnController.getSetpoint());
     SmartDashboard.putNumber("Accumulated Error", turnController.getAccumulatedError());
     SmartDashboard.putBoolean("Shooter is Front: ", shooterFront);
+    SmartDashboard.putNumber("Encoder Counts", testEncoder.getPosition());
   }
   public void cameraOrient() {
     setRotationalSetpoint(camera.getYaw());
@@ -125,7 +129,7 @@ public class Drive extends AutoSubsystem {
 
   public void run() {
     System.out.println(camera.getYaw());
-   // printState();
+    printState();
     //getControllerInput();
 
     // MAKE THIS MAKE SENSE
